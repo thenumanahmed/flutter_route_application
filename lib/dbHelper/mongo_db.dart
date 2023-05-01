@@ -360,12 +360,20 @@ class MongoDatabase {
     final result = await tracksCollection!.replaceOne(filter, track.toJson());
   }
 
-  static Future<void> updateStop(Stop stop) async {
+  static Future<bool> updateStop(Stop stop) async {
     // Define the filter to identify the document you want to update
     final filter = where.eq('_id', stop.id);
 
     // Perform the update operation
     final result = await stopsCollection!.replaceOne(filter, stop.toJson());
+
+    if (result.isSuccess) {
+      print("debug: update of Stop successful.");
+      return true;
+    } else {
+      print("debug: update of Stop failed.");
+      return false;
+    }
   }
 
   static Future<void> updateRoute(Route route) async {

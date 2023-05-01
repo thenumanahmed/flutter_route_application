@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
@@ -72,14 +73,24 @@ class _EditStopState extends State<EditStop> {
               ElevatedButton(
                   onPressed: () {
                     print(location.text);
+                    // updated Stop locally
+                    Stop toUpdateStop =
+                        tc.tracks[widget.tIndex].stops[widget.sIndex];
                     LatLng p1 = stringToLatLng(location.text);
-                    stop.latitude = p1.latitude;
-                    stop.longitude = p1.longitude;
-                    print(p1.latitude);
-                    print(p1.longitude);
-                    stop.time = stringToTimeOfDay(time.text);
-                    stop.name = name.text;
-                    ec.doUpdate();
+                    toUpdateStop.latitude = p1.latitude;
+                    toUpdateStop.longitude = p1.longitude;
+                    print(toUpdateStop.latitude);
+                    print(toUpdateStop.longitude);
+                    toUpdateStop.time = stringToTimeOfDay(time.text);
+                    toUpdateStop.name = name.text;
+
+                    // update Stop in mongodb
+                    if (MongoDatabase.updateStop(stop) == true) {
+                      tc.tracks[widget.tIndex].stops[widget.sIndex] =
+                          toUpdateStop;
+                      ec.doUpdate();
+                    }
+                    ;
                   },
                   child: const Text('Save')),
             ],
