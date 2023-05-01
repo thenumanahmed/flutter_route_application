@@ -1,19 +1,16 @@
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../../dbHelper/mongo_db.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../functions/custom_scafold.dart';
 import '../../../../functions/latlng_string.dart';
 import '../../../../functions/time.dart';
 import '../../../../models/track.dart';
-import '../../../../widgets/edit_text.dart';
 import '../../../../controllers/track/edit_controller.dart';
 import '../../../../controllers/track/tracks_controller.dart';
-import '../../../../widgets/custom_icon_button.dart';
-import 'set_location.dart';
-import 'stop_form.dart';
+import './stop_form.dart';
 
 class EditStop extends StatefulWidget {
   const EditStop({
@@ -29,24 +26,13 @@ class EditStop extends StatefulWidget {
 }
 
 class _EditStopState extends State<EditStop> {
-  void updateScreen() {
-    // setState(() {});
-  }
-
   final TextEditingController location = TextEditingController();
   final TextEditingController name = TextEditingController();
   final TextEditingController time = TextEditingController();
 
   @override
   void initState() {
-    final tc = Get.find<TracksController>();
-    final ec = Get.find<EditController>();
-    final Stop stop = tc.tracks[widget.tIndex].stops[widget.sIndex];
-    print('hi');
-    location.text = "${stop.latitude},${stop.longitude}";
-    name.text = stop.name;
-    time.text = timeOfDayToString(stop.time);
-
+    initializeData();
     super.initState();
   }
 
@@ -54,8 +40,6 @@ class _EditStopState extends State<EditStop> {
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>();
     final ec = Get.find<EditController>();
-    const textStyle = TextStyle(color: Colors.black);
-    final Stop stop = tc.tracks[widget.tIndex].stops[widget.sIndex];
 
     return Container(
       color: Colors.white,
@@ -72,32 +56,9 @@ class _EditStopState extends State<EditStop> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                  onPressed: () async {
-                    print(location.text);
-                    // updated Stop locally
-                    Stop toUpdateStop =
-                        tc.tracks[widget.tIndex].stops[widget.sIndex];
-                    LatLng p1 = stringToLatLng(location.text);
-                    toUpdateStop.latitude = p1.latitude;
-                    toUpdateStop.longitude = p1.longitude;
-                    print(toUpdateStop.latitude);
-                    print(toUpdateStop.longitude);
-                    toUpdateStop.time = stringToTimeOfDay(time.text);
-                    toUpdateStop.name = name.text;
-
-                    MongoDatabase.updateStop(stop).then((value) {
-                      if (value == true) {
-                        tc.tracks[widget.tIndex].stops[widget.sIndex] =
-                            toUpdateStop;
-                        customSnackbar(context, 'Success: Stop Updated!');
-                        ec.doUpdate();
-                      } else {
-                        customSnackbar(context, 'Error: Stop not Updated!');
-                      }
-                    });
-                    // update Stop in mongodb
-                  },
-                  child: const Text('Save')),
+                onPressed: () => editStop(tc, ec),
+                child: const Text('Save'),
+              ),
             ],
           )
         ],
@@ -105,28 +66,35 @@ class _EditStopState extends State<EditStop> {
     );
   }
 
-  onSaveName(String name, TracksController tc, EditController ec) {
-    tc.tracks[widget.tIndex].stops[widget.sIndex].name = name;
-    ec.doUpdate();
-    updateScreen();
+  void initializeData() {
+    final tc = Get.find<TracksController>();
+    final Stop stop = tc.tracks[widget.tIndex].stops[widget.sIndex];
+    location.text = "${stop.latitude},${stop.longitude}";
+    name.text = stop.name;
+    time.text = timeOfDayToString(stop.time);
   }
 
-  onSaveTime(TimeOfDay time, TracksController tc, EditController ec) {
-    tc.tracks[widget.tIndex].stops[widget.sIndex].time = time;
-    ec.doUpdate();
-  }
+  void editStop(TracksController tc, EditController ec) async {
+    // updated Stop locally
+    Stop toUpdateStop = tc.tracks[widget.tIndex].stops[widget.sIndex];
+    LatLng p1 = stringToLatLng(location.text);
+    toUpdateStop.latitude = p1.latitude;
+    toUpdateStop.longitude = p1.longitude;
+    toUpdateStop.time = stringToTimeOfDay(time.text);
+    toUpdateStop.name = name.text;
 
-  onSaveLattitude(String val, TracksController tc, EditController ec) {
-    double lat = double.parse(val);
-    tc.tracks[widget.tIndex].stops[widget.sIndex].latitude = lat;
-    ec.doUpdate();
-    updateScreen();
-  }
-
-  onSaveLongitude(String val, TracksController tc, EditController ec) {
-    double lon = double.parse(val);
-    tc.tracks[widget.tIndex].stops[widget.sIndex].longitude = lon;
-    ec.doUpdate();
-    updateScreen();
+    // try to update on MongoDb
+    MongoDatabase.updateStop(toUpdateStop).then((value) {
+      if (value == true) {
+        // Update Localy
+        tc.tracks[widget.tIndex].stops[widget.sIndex] = toUpdateStop;
+        customSnackbar(context, 'Success: Stop Updated!');
+        ec.doUpdate();
+      } else {
+        // Error
+        customSnackbar(context, 'Error: Stop not Updated!');
+      }
+    });
+    // update Stop in mongodb
   }
 }
