@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -68,17 +69,22 @@ class _AddMemberState extends State<AddMember> {
           kHeightSpace,
           CustomAlertButton(
             title: 'Add',
-            onTap: () {
+            onTap: () async {
               if (key.currentState!.validate()) {
-                uc.members.add(User(
+                User newMember = User(
                   id: mongo.ObjectId(),
                   password: password.text,
                   phoneNo: phoneNo.text,
                   username: username.text,
                   email: email.text,
-                ));
-
-                Navigator.pop(context);
+                );
+                bool res = await MongoDatabase.addMember(newMember);
+                if (res == true) {
+                  uc.members.add(newMember);
+                  Navigator.pop(context);
+                } else {
+                  //TODO: show error on scafold messenger
+                }
               }
             },
           ),
