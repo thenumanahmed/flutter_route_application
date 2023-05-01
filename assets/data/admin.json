@@ -1,6 +1,7 @@
 [
     {
-        "_id": "644a8a29d494d5c1c20693e3",
+        "_id":{
+    "$oid":  "644a8a29d494d5c1c20693e3"},
         "email": "",
         "username": "admin1",
         "password": "a001",
@@ -8,7 +9,8 @@
         "is_blocked": false
     },
     {
-        "_id": "644a8a29d494d5c1c20693e4",
+        "_id":{
+    "$oid":  "644a8a29d494d5c1c20693e4"},
         "email": "",
         "username": "admin2",
         "password": "a002",
@@ -16,7 +18,8 @@
         "is_blocked": false
     },
     {
-        "_id": "644a8a29d494d5c1c20693e5",
+        "_id":{
+    "$oid":  "644a8a29d494d5c1c20693e5"},
         "email": "",
         "username": "admin3",
         "password": "a003",
@@ -24,7 +27,8 @@
         "is_blocked": false
     },
     {
-        "_id": "644a8a29d494d5c1c20693e6",
+        "_id":{
+    "$oid":  "644a8a29d494d5c1c20693e6"},
         "email": "",
         "username": "admin4",
         "password": "a004",
@@ -32,7 +36,8 @@
         "is_blocked": false
     },
     {
-        "_id": "644a8a29d494d5c1c20693e7",
+        "_id":{
+    "$oid":  "644a8a29d494d5c1c20693e7"},
         "email": "",
         "username": "admin5",
         "password": "a005",
@@ -40,7 +45,8 @@
         "is_blocked": false
     },
     {
-        "_id": "644a8a29d494d5c1c20693e8",
+        "_id":{
+    "$oid":  "644a8a29d494d5c1c20693e8"},
         "email": "",
         "username": "admin6",
         "password": "a006",

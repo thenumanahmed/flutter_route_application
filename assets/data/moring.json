@@ -1,6 +1,8 @@
 [
     {
-        "_id": "644a8a2ad494d5c1c20693fa",
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c20693fa"
+        },
         "name": "4",
         "type": "Morning",
         "track_id": "644a8a29d494d5c1c2069338",
@@ -8,7 +10,9 @@
         "bus_id": "644a8a29d494d5c1c20693f0"
     },
     {
-        "_id": "644a8a2ad494d5c1c20693fc",
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c20693fc"
+        },
         "name": "5",
         "type": "Morning",
         "track_id": "644a8a29d494d5c1c206935b",
@@ -16,7 +20,9 @@
         "bus_id": "644a8a29d494d5c1c20693f2"
     },
     {
-        "_id": "644a8a2ad494d5c1c20693fe",
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c20693fe"
+        },
         "name": "6",
         "type": "Morning",
         "track_id": "644a8a29d494d5c1c206937f",
@@ -24,7 +30,9 @@
         "bus_id": "644a8a29d494d5c1c20693f4"
     },
     {
-        "_id": "644a8a2ad494d5c1c2069400",
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c2069400"
+        },
         "name": "Rana Town",
         "type": "Morning",
         "track_id": "644a8a29d494d5c1c20693a3",

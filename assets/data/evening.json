@@ -1,6 +1,7 @@
 [
     {
-        "_id": "644a8a2ad494d5c1c20693fb",
+        "_id":{
+    "$oid":  "644a8a2ad494d5c1c20693fb"},
         "name": "4",
         "type": "Evening",
         "track_id": "644a8a29d494d5c1c2069349",
@@ -8,7 +9,8 @@
         "bus_id": "644a8a29d494d5c1c20693f1"
     },
     {
-        "_id": "644a8a2ad494d5c1c20693fd",
+        "_id":{
+    "$oid":  "644a8a2ad494d5c1c20693fd"},
         "name": "5",
         "type": "Evening",
         "track_id": "644a8a29d494d5c1c206936d",
@@ -16,7 +18,8 @@
         "bus_id": "644a8a29d494d5c1c20693f3"
     },
     {
-        "_id": "644a8a2ad494d5c1c20693ff",
+        "_id":{
+    "$oid":  "644a8a2ad494d5c1c20693ff"},
         "name": "6",
         "type": "Evening",
         "track_id": "644a8a29d494d5c1c2069391",
