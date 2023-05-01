@@ -19,6 +19,9 @@ class TrackingController extends GetxController {
   final trackings = <Tracking>[].obs;
   // final
 
+  //TODO: mongo getTrackings()
+  //TODO: mongo stopTracking(mongo.ObjectId trackingId)
+
   @override
   void onReady() {
     // initAuth();
@@ -33,7 +36,25 @@ class TrackingController extends GetxController {
         .then((v) => print('data Copied'));
   }
 
+  void stopTracking(List<int> index) {
+    index.sort();
+    for (int i = index.length - 1; i >= 0; i--) {
+      // TODO: mongo stopTracking(monog.ObjectId trackingId)
+      // if success delete then execute trackings.removeAt(index[i]);
+      trackings.removeAt(index[i]);
+    }
+    indexes.clear();
+    trackingState.value = TrackingState.map;
+  }
+
   void initializeValues() {
+    //TODO: mongodatebase getTracking()
+    // kia ab har jagah batah diya ha idher nahi batah raha
+
+    localInitialize();
+  }
+
+  void localInitialize() {
     final rc = Get.find<RouteController>();
 
     final tTracking = [
@@ -93,14 +114,5 @@ class TrackingController extends GetxController {
       }
     }
     return list;
-  }
-
-  void stopTracking(List<int> index) {
-    index.sort();
-    for (int i = index.length - 1; i >= 0; i--) {
-      trackings.removeAt(index[i]);
-    }
-    indexes.clear();
-    trackingState.value = TrackingState.map;
   }
 }

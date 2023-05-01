@@ -6,6 +6,11 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../models/bus.dart';
 
+//TODO mongo getBusses()
+//TODO: mongo addBus(Bus b)
+//TODO: mongo deleteBus(mongo.ObjectId id)
+//TODO: mogno updateBus(mongo.ObjectID id, Bus b)
+
 class BusController extends GetxController {
   final indexes = <int>[].obs;
   final buses = <Bus>[
@@ -37,6 +42,24 @@ class BusController extends GetxController {
     super.onReady();
   }
 
+  void initilizedData() {
+    // TODO: getBuses()
+    // set fetching.value = FetchingState.loading
+    // get data from mongo db
+    // if success store values in buses list and set fetching.value = FetchingState.completed
+    // else set fetching.value = LoadingState.Error
+    //
+  }
+  void deleteBuses(List<int> index) {
+    index.sort();
+    for (int i = index.length - 1; i >= 0; i--) {
+      // TODO: Mongo delteBus(mongo.ObjectId busId)
+      // if succes then delete local buses.removeAt(index[i]);
+      buses.removeAt(index[i]);
+    }
+    indexes.clear();
+  }
+
   void setIndexes(List<int> index) {
     indexes.value = index;
   }
@@ -56,13 +79,5 @@ class BusController extends GetxController {
       if (buses[i].id == id) return buses[i];
     }
     return null;
-  }
-
-  void deleteBuses(List<int> index) {
-    index.sort();
-    for (int i = index.length - 1; i >= 0; i--) {
-      buses.removeAt(index[i]);
-    }
-    indexes.clear();
   }
 }

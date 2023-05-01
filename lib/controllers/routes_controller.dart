@@ -20,6 +20,11 @@ class RouteController extends GetxController {
   final speacial = <r.Route>[].obs;
   final updateScreen = false.obs;
 
+  // TDOD: mongo getRoutes()
+  // TDOD: mongo addRoute(Route r)
+  // TDOD: mongo deleteRoute(mongo.Objectid routeId)
+  // TDOD: mongo updateRoute(mongo.Objectid routeId,Route r)
+
   // final
   void copyMorningToClipboard() {
     final jsonList = morning.map((track) => track.toJson()).toList();
@@ -72,6 +77,21 @@ class RouteController extends GetxController {
   @override
   void onReady() {
     // initAuth();
+    initializeData();
+    super.onReady();
+  }
+
+  void initializeData() {
+    // TODO: mongodatase getRoutes()
+    // fetching.value = FetchingState.loading
+    // get all routes from mongodb
+    // seperate them in three list morning, evening , speacial
+    // store them in respected Rx<Route> list
+    // also  handle error and
+    // in error set FetchingState.Error
+    // in success set FetchingState.Completed after assigning values
+    // insetead of fetching i have user intiliazig.value
+
     initializing.value = true;
     List<List<r.Route>> route = getDefaultValues();
     morning.assignAll(route[0]);
@@ -83,27 +103,32 @@ class RouteController extends GetxController {
     print(route[2].length);
 
     initializing.value = false;
-
-    super.onReady();
   }
 
   void selectionDelete(List<int> indexes) {
     indexes.sort();
     if (routeState.value == RouteType.morning) {
       for (int i = indexes.length - 1; i >= 0; i--) {
+        // TODO: Mongo deleteRoute(mongo.ObjectId routeId)
+        // get id
+        // if succes then delete local morning.removeAt(indexes[i]);
         morning.removeAt(indexes[i]);
       }
     } else if (routeState.value == RouteType.evening) {
       for (int i = indexes.length - 1; i >= 0; i--) {
+        // TODO: Mongo deleteRoute(mongo.ObjectId routeId)
+        // get id
+        // if succes then delete local morning.removeAt(indexes[i]);
         evening.removeAt(indexes[i]);
       }
     } else {
       for (int i = indexes.length - 1; i >= 0; i--) {
+        // TODO: Mongo deleteRoute(mongo.ObjectId routeId)
+        // get id
+        // if succes then delete local morning.removeAt(indexes[i]);
         speacial.removeAt(indexes[i]);
       }
     }
-
-    //TODO Remove route from mongodb
 
     // update table
     doUpdate();
@@ -116,6 +141,9 @@ class RouteController extends GetxController {
     required mongo.ObjectId? driverId,
     required mongo.ObjectId? busId,
   }) {
+    // TODO: updateRoute(mongo.ObjectId routeId, Route route)
+    // if succes then change it form here as well
+
     if (routeState.value == RouteType.morning) {
       morning[index].name = name;
       morning[index].trackId = trackId;
@@ -140,6 +168,9 @@ class RouteController extends GetxController {
   }
 
   void addRoute(Route r) {
+    // TODO: addRoute(mongo.ObjectId routeId, Route route)
+    // if succes then change run bellow code
+
     if (r.type == RouteType.morning) {
       morning.add(r);
     } else if (r.type == RouteType.evening) {
@@ -147,8 +178,6 @@ class RouteController extends GetxController {
     } else {
       speacial.add(r);
     }
-
-    // code to add route in mongodb as well
   }
 
   List<int> searchByName(String s) {

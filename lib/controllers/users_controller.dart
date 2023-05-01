@@ -16,6 +16,22 @@ class UsersController extends GetxController {
   final admins = <User>[...kAdmins].obs;
   final drivers = <User>[...kDrivers].obs;
 
+  //TODO mongo getAdmin()
+  //TODO: mongo deleteAdmin(mongo.ObjectId id)
+  //TODO: mongo addAdmin(mongo.ObjectId id)
+  //TODO: mogno updateAdmin(mongo.ObjectID id, User a)
+
+  //TODO mongo getDriver()
+  //TODO: mongo deleteDriver(mongo.ObjectId id)
+  //TODO: mongo addDriver(mongo.ObjectId id)
+  //TODO: mogno updateDriver(mongo.ObjectID id, User d)
+
+  //TODO mongo getMember()
+  //TODO: mongo deleteMember(mongo.ObjectId id)
+  //TODO: mongo addMember(mongo.ObjectId id)
+  //TODO: mogno updateMember(mongo.ObjectID id, User u)
+  // is key thorugh hum us ki koi aik detail be ager change karty toh yeah use kar keh pura document kar dein gey save
+
   void copyMembersToClipboard() {
     final jsonList = members.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
@@ -122,10 +138,13 @@ class UsersController extends GetxController {
       print('Removed  {members[tIndex].name}');
     }
     if (userType == UserType.driver) {
+      //TODO: mongo deleteMember(mongo.ObjectID memberId),
       drivers.removeAt(index);
     } else if (userType == UserType.member) {
+      //TODO: mongo deleteMember(mongo.ObjectID memberId),
       members.removeAt(index);
     } else {
+      //TODO: mongo deleteMember(mongo.ObjectID memberId),
       admins.removeAt(index);
     }
   }

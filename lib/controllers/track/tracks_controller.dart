@@ -16,6 +16,16 @@ import '../tracks_data/track5.dart';
 import '../tracks_data/track6.dart';
 import '../tracks_data/track7.dart';
 
+// TODO: getTracks() - done
+// TODO: mongo addTrack(Track t);
+// TODO: mongo delteTrack(mongoObjectId trackID)
+// TODO: mongo updateTrack(mongoObjectId trackID,Track t);
+
+// TODO: getStops() - done
+// TODO: mongo addStop(Stop t);
+// TODO: mongo delteStop(mongoObjectId StopID)
+// TODO: mongo updateStop(mongoObjectId StopID);
+
 enum TrackState { tracks, view, add, edit, delete, map }
 
 enum SelectionState { active, inActive }
@@ -43,15 +53,49 @@ class TracksController extends GetxController {
   }
 
   void getTracks() async {
+    // TODO: Mongo deleteTrack(mongoObjectId trackID)
+    // working fine note here i have use loading.value true and false so no error occue
+
     final value = await MongoDatabase.getTracks();
     List<Track> tTracks = value.map((track) => Track.fromJson(track)).toList();
     tracks.value = tTracks;
 
-    if (kDebugMode) {
-      print(value.runtimeType);
-    }
-    print(tracks.length);
     loading.value = false;
+  }
+
+  void deleteTrack(int tIndex) {
+    // TODO: Mongo deleteTrack(mongoObjectId trackID)
+    // you can get track id to delte by tracks[tIndex].id
+    // if fail return 0;
+    // else remove track local by track.removeAt(tIndex)
+
+    if (kDebugMode) {
+      print('Removed ${tracks[tIndex].name}');
+    }
+
+    // Delete Success in mongo delete from here
+    tracks.removeAt(tIndex);
+  }
+
+  void deleteTrackById(mongo.ObjectId id) {
+    final index = tracks.indexWhere((element) => element.id == id);
+
+    // TODO Mongo delteTrack(mongoObjectId trackID)
+    // if index -1 return
+    // perform delete from mongo
+    // if succes then remove local tracks.removeAt(index)
+
+    tracks.removeAt(index);
+  }
+
+  void deleteStops(int tIndex, List<int> tStopIndex) {
+    tStopIndex.sort();
+    final tc = Get.find<TracksController>();
+    for (int i = tStopIndex.length - 1; i >= 0; i--) {
+      // TODO Mongo delteStop(mongo.ObjectId trackID,mongo.ObjectId stopID)
+      // if succes then delete local tc.tracks[tIndex].deleteStop(tStopIndex[i]);
+      tc.tracks[tIndex].deleteStop(tStopIndex[i]);
+    }
   }
 
   void setTrackState(TrackState value) {
@@ -74,26 +118,6 @@ class TracksController extends GetxController {
 
   bool getStopIsSelected(int tIndex, int sIndex) {
     return tracks[tIndex].stops[sIndex].isSelected.value;
-  }
-
-  void deleteTrack(int tIndex) {
-    if (kDebugMode) {
-      print('Removed {tracks[tIndex].name}');
-    }
-    tracks.removeAt(tIndex);
-  }
-
-  void deleteTrackById(mongo.ObjectId id) {
-    final index = tracks.indexWhere((element) => element.id == id);
-    tracks.removeAt(index);
-  }
-
-  void deleteStops(int tIndex, List<int> tStopIndex) {
-    tStopIndex.sort();
-    final tc = Get.find<TracksController>();
-    for (int i = tStopIndex.length - 1; i >= 0; i--) {
-      tc.tracks[tIndex].deleteStop(tStopIndex[i]);
-    }
   }
 
   List<int> searchByName(String s) {
