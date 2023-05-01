@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -45,17 +46,21 @@ class _AddTrackState extends State<AddTrack> {
         kHeightSpace,
         CustomAlertButton(
           title: 'Add',
-          onTap: () {
-            tc.tracks.add(
-              Track(
-                id: mongo.ObjectId(),
-                name: name.text,
-                isAssigned: false,
-                path: [],
-                stops: [],
-              ),
+          onTap: () async {
+            Track newTrack = Track(
+              id: mongo.ObjectId(),
+              name: name.text,
+              isAssigned: false,
+              path: [],
+              stops: [],
             );
-            Navigator.pop(context);
+            bool res = await MongoDatabase.addTrack(newTrack);
+            if (res == true) {
+              tc.tracks.add(newTrack);
+              Navigator.pop(context);
+            } else {
+              //  TODO: show error on scaffold messenger
+            }
           },
         ),
       ],
