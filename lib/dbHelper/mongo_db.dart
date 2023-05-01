@@ -22,8 +22,7 @@ class MongoDatabase {
   static DbCollection? stopsCollection;
 
   static connect() async {
-    // db = await Db.create(MONGO_CONN_URL);
-    db = await Db.create("mongodb://localhost:27017/routeapp");
+    db = await Db.create(MONGO_CONN_URL);
     await db!.open();
     inspect(db);
     membersCollection = db!.collection(MEMBERS_COLLECTION);
@@ -56,10 +55,22 @@ class MongoDatabase {
     List<Map<String, Object?>> arrData =
         await tracksCollection!.find().toList();
 
-    if (kDebugMode) {
-      print(arrData.length);
-      print(arrData[0]['name']);
+    for (int i = 0; i < arrData.length; i++) {
+      List<Map<String, Object?>> stop =
+          await getTrackStops(arrData[i]['_id'] as ObjectId);
+      arrData[i]['stops'] = stop;
     }
+    if (kDebugMode) {}
+    return arrData;
+  }
+
+  static Future<List<Map<String, Object?>>> getTrackStops(
+      ObjectId trackId) async {
+    final query = where.eq('track_id', trackId);
+    List<Map<String, Object?>> arrData =
+        await stopsCollection!.find(query).toList();
+
+    if (kDebugMode) {}
     return arrData;
   }
 
