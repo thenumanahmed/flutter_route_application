@@ -288,6 +288,7 @@ class MongoDatabase {
   }
 
   static Future<void> deleteTrack(ObjectId id) async {
+    await stopsCollection?.deleteMany({'track_id': id});
     await tracksCollection?.remove(where.id(id));
     print('track with id $id deleted');
     // return true;
