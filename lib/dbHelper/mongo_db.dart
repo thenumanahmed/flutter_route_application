@@ -35,6 +35,16 @@ class MongoDatabase {
     stopsCollection = db!.collection(STOPS_COLLECTION);
   }
 
+  static bool mongoResult(WriteResult result, String message) {
+    if (result.isSuccess) {
+      print("debug: $message successful.");
+      return true;
+    } else {
+      print("debug: $message failed.");
+      return false;
+    }
+  }
+
   static Future<String> insertTrack(Track data) async {
     try {
       var result = await tracksCollection!.insertOne(data.toJson());
@@ -367,13 +377,7 @@ class MongoDatabase {
     // Perform the update operation
     final result = await stopsCollection!.replaceOne(filter, stop.toJson());
 
-    if (result.isSuccess) {
-      print("debug: update of Stop successful.");
-      return true;
-    } else {
-      print("debug: update of Stop failed.");
-      return false;
-    }
+    return mongoResult(result, 'Stop');
   }
 
   static Future<void> updateRoute(Route route) async {
