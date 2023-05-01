@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -68,17 +69,22 @@ class AddDriverState extends State<AddDriver> {
           kHeightSpace,
           CustomAlertButton(
             title: 'Add',
-            onTap: () {
+            onTap: () async {
               if (key.currentState!.validate()) {
-                uc.drivers.add(User(
+                var newDriver = User(
                   id: mongo.ObjectId(),
                   password: password.text,
                   phoneNo: phoneNo.text,
                   username: username.text,
                   email: email.text,
-                ));
-
-                Navigator.pop(context);
+                );
+                var res = await MongoDatabase.addDriver(newDriver);
+                if (res == true) {
+                  uc.drivers.add(newDriver);
+                  Navigator.pop(context);
+                } else {
+                  // TODO: show error message on scffold messneger
+                }
               }
             },
           ),
