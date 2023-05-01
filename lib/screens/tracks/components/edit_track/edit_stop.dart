@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../functions/custom_scafold.dart';
 import '../../../../functions/latlng_string.dart';
 import '../../../../functions/time.dart';
 import '../../../../models/track.dart';
@@ -71,7 +72,7 @@ class _EditStopState extends State<EditStop> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     print(location.text);
                     // updated Stop locally
                     Stop toUpdateStop =
@@ -84,13 +85,17 @@ class _EditStopState extends State<EditStop> {
                     toUpdateStop.time = stringToTimeOfDay(time.text);
                     toUpdateStop.name = name.text;
 
+                    MongoDatabase.updateStop(stop).then((value) {
+                      if (value == true) {
+                        tc.tracks[widget.tIndex].stops[widget.sIndex] =
+                            toUpdateStop;
+                        customSnackbar(context, 'Success: Stop Updated!');
+                        ec.doUpdate();
+                      } else {
+                        customSnackbar(context, 'Error: Stop not Updated!');
+                      }
+                    });
                     // update Stop in mongodb
-                    if (MongoDatabase.updateStop(stop) == true) {
-                      tc.tracks[widget.tIndex].stops[widget.sIndex] =
-                          toUpdateStop;
-                      ec.doUpdate();
-                    }
-                    ;
                   },
                   child: const Text('Save')),
             ],

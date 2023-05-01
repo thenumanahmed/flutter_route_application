@@ -1,13 +1,3 @@
-//   final snackBar = SnackBar(
-//   content: const Text('Yay! A SnackBar!'),
-//   action: SnackBarAction(
-//     label: 'Undo',
-//     onPressed: () {
-//       // Some code to undo the change.
-//     },
-//   ),
-// );
-// ScaffoldMessenger.of(context).showSnackBar(snackBar)
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
