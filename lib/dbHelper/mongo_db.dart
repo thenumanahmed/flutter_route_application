@@ -35,10 +35,28 @@ class MongoDatabase {
 
   static bool mongoResult(WriteResult result, String message) {
     if (result.isSuccess) {
-      print("debug: $message successful.");
+      if (kDebugMode) {
+        print("debug: $message successful.");
+      }
       return true;
     } else {
-      print("debug: $message failed.");
+      if (kDebugMode) {
+        print("debug: $message failed.");
+      }
+      return false;
+    }
+  }
+
+  static bool mongoDeleteResult(Map<String, dynamic>? result, String message) {
+    if (result != null) {
+      if (kDebugMode) {
+        print("debug: $message successful.");
+      }
+      return true;
+    } else {
+      if (kDebugMode) {
+        print("debug: $message failed.");
+      }
       return false;
     }
   }
@@ -264,108 +282,85 @@ class MongoDatabase {
     }
   }
 
-  static Future<void> deleteBus(ObjectId id) async {
-    await busesCollection?.remove(where.id(id));
-    print('Bus eith id $id deleted');
-    // return true;
+  static Future<bool> deleteBus(ObjectId busId) async {
+    final result = await busesCollection?.remove(where.id(busId));
+    return mongoDeleteResult(result, 'Delete Bus'); // return true;
   }
 
-  static Future<void> deleteTrack(ObjectId id) async {
-    final stopQuery = {'track_id': id};
-    final trackQuery = where.id(id);
+  static Future<bool> deleteTrack(ObjectId trackId) async {
+    final stopQuery = {'track_id': trackId};
+    final trackQuery = where.id(trackId);
+    final stopResult = await stopsCollection!.deleteMany(stopQuery);
+    if (mongoResult(stopResult, 'Deleted Stop') == true) {
+      final trackReult = await tracksCollection?.remove(trackQuery);
+      return mongoDeleteResult(trackReult, 'Delted Track');
+    }
 
-    await stopsCollection?.deleteMany(stopQuery);
-    await tracksCollection?.remove(trackQuery);
-    print('track with id $id deleted');
-    // return true;
+    return false;
   }
 
-  static Future<void> deleteStop(ObjectId id) async {
-    await stopsCollection?.remove(where.id(id));
-    print('stop with id $id deleted');
-    // return true;
+  static Future<bool> deleteStop(ObjectId stopId) async {
+    final result = await stopsCollection?.remove(where.id(stopId));
+    return mongoDeleteResult(result, 'Delete Stop'); // return true;
   }
 
-  static Future<void> deleteRoute(ObjectId id) async {
-    await routesCollection?.remove(where.id(id));
-    print('route with id $id deleted');
-    // return true;
+  static Future<bool> deleteRoute(ObjectId routeId) async {
+    final result = await routesCollection?.remove(where.id(routeId));
+    return mongoDeleteResult(result, 'Delete Route'); // return true;
   }
 
-  static Future<void> stopTracking(ObjectId id) async {
-    await trackingCollection?.remove(where.id(id));
-    print('tracking with id $id deleted');
-    // return true;
+  static Future<bool> stopTracking(ObjectId trackingId) async {
+    final result = await trackingCollection?.remove(where.id(trackingId));
+    return mongoDeleteResult(result, 'Stop Tracking'); // return true;
   }
 
-  static Future<void> deleteAdmin(ObjectId id) async {
-    await adminsCollection?.remove(where.id(id));
-    print('admin with id $id deleted');
-    // return true;
+  static Future<bool> deleteAdmin(ObjectId adminId) async {
+    final result = await adminsCollection?.remove(where.id(adminId));
+    return mongoDeleteResult(result, 'Delete ADmin'); // return true;
   }
 
-  static Future<void> deleteDriver(ObjectId id) async {
-    await driversCollection?.remove(where.id(id));
-    print('driver with id $id deleted');
-    // return true;
+  static Future<bool> deleteDriver(ObjectId driverId) async {
+    final result = await driversCollection?.remove(where.id(driverId));
+    return mongoDeleteResult(result, 'Delete Driver'); // return true;
   }
 
-  static Future<void> deleteMember(ObjectId id) async {
-    await membersCollection?.remove(where.id(id));
-    print('member with id $id deleted');
-    // return true;
+  static Future<bool> deleteMember(ObjectId memberId) async {
+    final result = await membersCollection?.remove(where.id(memberId));
+    return mongoDeleteResult(result, 'Delete Member'); // return true;
   }
 
-  static Future<void> updateBus(Bus bus) async {
-    // Define the filter to identify the document you want to update
+  static Future<bool> updateBus(Bus bus) async {
     final filter = where.eq('_id', bus.id);
-
-    // Perform the update operation
     final result = await busesCollection!.replaceOne(filter, bus.toJson());
+    return mongoResult(result, 'Bus Updated');
   }
 
   static Future<bool> updateTrack(Track track) async {
-    // Define the filter to identify the document you want to update
     final filter = where.eq('_id', track.id);
-
-    // Perform the update operation
     final result = await tracksCollection!.replaceOne(filter, track.toJson());
-
     return mongoResult(result, 'Update Track');
   }
 
   static Future<bool> updateRoute(r.Route route) async {
-    // Define the filter to identify the document you want to update
     final filter = where.eq('_id', route.id);
-
-    // Perform the update operation
     final result = await routesCollection!.replaceOne(filter, route.toJson());
     return mongoResult(result, 'Update Route ');
   }
 
   static Future<bool> updateAdmin(User admin) async {
-    // Define the filter to identify the document you want to update
     final filter = where.eq('_id', admin.id);
-
-    // Perform the update operation
     final result = await adminsCollection!.replaceOne(filter, admin.toJson());
     return mongoResult(result, 'Update Admin');
   }
 
   static Future<bool> updateMembers(User member) async {
-    // Define the filter to identify the document you want to update
     final filter = where.eq('_id', member.id);
-
-    // Perform the update operation
     final result = await membersCollection!.replaceOne(filter, member.toJson());
     return mongoResult(result, 'Update Member');
   }
 
   static Future<bool> updateDriver(User driver) async {
-    // Define the filter to identify the document you want to update
     final filter = where.eq('_id', driver.id);
-
-    // Perform the update operation
     final result = await driversCollection!.replaceOne(filter, driver.toJson());
     return mongoResult(result, 'Update Driver');
   }
