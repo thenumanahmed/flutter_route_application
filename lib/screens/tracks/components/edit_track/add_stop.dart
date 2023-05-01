@@ -88,6 +88,7 @@ class _AddStopState extends State<AddStop> {
               tc.tracks[ec.tIndex.value].stops.add(
                 Stop(
                     id: mongo.ObjectId(),
+                    trackId: tc.tracks[ec.tIndex.value].id,
                     name: name.text,
                     time: stringToTimeOfDay(time.text),
                     isStop: true,

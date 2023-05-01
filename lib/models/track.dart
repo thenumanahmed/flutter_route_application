@@ -29,13 +29,16 @@ class Track {
   }
 
   Track.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['_id'] as mongo.ObjectId,
         name = json['name'],
         isAssigned = json['is_assigned'],
         stops = <Stop>[],
         path = <List<double>>[] {
+    // code to assign stops as well
+
     if (json['stops'] != null) {
       stops = <Stop>[];
+      // add code here to get json of Stops
       json['stops'].forEach((v) {
         stops.add(Stop.fromJson(v));
       });
@@ -83,6 +86,7 @@ class Track {
 
 class Stop {
   mongo.ObjectId id;
+  mongo.ObjectId trackId;
   String name;
   TimeOfDay time;
   bool isStop;
@@ -93,6 +97,7 @@ class Stop {
 
   Stop({
     required this.id,
+    required this.trackId,
     required this.name,
     required this.time,
     required this.isStop,
@@ -102,16 +107,18 @@ class Stop {
   });
 
   Stop.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['_id'] as mongo.ObjectId,
+        trackId = json['track_id'] as mongo.ObjectId,
         name = json['name'],
         time = stringToTimeOfDay(json['time'] as String),
-        isStop = json['isStop'],
+        isStop = json['is_stop'],
         stopNo = json['stop_no'],
         latitude = json['latitude'],
         longitude = json['longitude'];
 
   Map<String, dynamic> toJson() => {
         "_id": id,
+        "track_id": trackId,
         "name": name,
         "time": timeOfDayToString(time),
         "is_stop": isStop,

@@ -53,13 +53,9 @@ class TracksController extends GetxController {
   }
 
   void getTracks() async {
-    // TODO: Mongo deleteTrack(mongoObjectId trackID)
-    // working fine note here i have use loading.value true and false so no error occue
-
     final value = await MongoDatabase.getTracks();
     List<Track> tTracks = value.map((track) => Track.fromJson(track)).toList();
     tracks.value = tTracks;
-
     loading.value = false;
   }
 

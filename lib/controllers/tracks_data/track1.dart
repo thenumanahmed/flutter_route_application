@@ -2,13 +2,15 @@ import '../../models/track.dart';
 import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
+final t1ID = mongo.ObjectId();
 final track1 = Track(
-  id: mongo.ObjectId(),
+  id: t1ID,
   name: 'Route 4 Morning',
   isAssigned: false,
   stops: [
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Muslim Town Mor",
         time: const TimeOfDay(hour: 14, minute: 50),
         isStop: true,
@@ -17,6 +19,7 @@ final track1 = Track(
         longitude: 74.32548),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Muslim Town Mor",
         time: const TimeOfDay(hour: 6, minute: 50),
         isStop: true,
@@ -25,6 +28,7 @@ final track1 = Track(
         longitude: 74.32548),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Naqsha Stop",
         time: const TimeOfDay(hour: 06, minute: 51),
         isStop: true,
@@ -33,6 +37,7 @@ final track1 = Track(
         longitude: 74.31495641365117),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "",
         time: const TimeOfDay(hour: 6, minute: 52),
         isStop: true,
@@ -41,6 +46,7 @@ final track1 = Track(
         longitude: 74.31116610208386),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "",
         time: const TimeOfDay(hour: 06, minute: 53),
         isStop: true,
@@ -49,6 +55,7 @@ final track1 = Track(
         longitude: 74.30546749588095),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Bhekewal Morr",
         time: const TimeOfDay(hour: 06, minute: 54),
         isStop: true,
@@ -57,6 +64,7 @@ final track1 = Track(
         longitude: 74.30095038651243),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Kareem Block Stop",
         time: const TimeOfDay(hour: 06, minute: 58),
         isStop: true,
@@ -65,6 +73,7 @@ final track1 = Track(
         longitude: 74.28026748058),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Mustafa Town",
         time: const TimeOfDay(hour: 06, minute: 59),
         isStop: true,
@@ -73,6 +82,7 @@ final track1 = Track(
         longitude: 74.2737166033416),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Awan Town ",
         time: const TimeOfDay(hour: 07, minute: 03),
         isStop: true,
@@ -81,6 +91,7 @@ final track1 = Track(
         longitude: 74.26793484752756),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Kharak Stop",
         time: const TimeOfDay(hour: 07, minute: 05),
         isStop: true,
@@ -89,6 +100,7 @@ final track1 = Track(
         longitude: 74.27212475774462),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "PSO Petrol Pump",
         time: const TimeOfDay(hour: 07, minute: 07),
         isStop: true,
@@ -97,6 +109,7 @@ final track1 = Track(
         longitude: 74.27591024302575),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Liaqat Chowk",
         time: const TimeOfDay(hour: 07, minute: 09),
         isStop: true,
@@ -105,6 +118,7 @@ final track1 = Track(
         longitude: 74.26946774070564),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Main Blvd Sabzazar",
         time: const TimeOfDay(hour: 07, minute: 11),
         isStop: true,
@@ -113,6 +127,7 @@ final track1 = Track(
         longitude: 74.26523624077748),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Main Blvd Sabzazar",
         time: const TimeOfDay(hour: 7, minute: 02),
         isStop: true,
@@ -121,6 +136,7 @@ final track1 = Track(
         longitude: 74.26298476776134),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Babu Sahbu Bus Stop",
         time: const TimeOfDay(hour: 07, minute: 14),
         isStop: true,
@@ -129,6 +145,7 @@ final track1 = Track(
         longitude: 74.26707144906402),
     Stop(
         id: mongo.ObjectId(),
+        trackId: t1ID,
         name: "Uet-Ksk",
         time: const TimeOfDay(hour: 07, minute: 49),
         isStop: true,
