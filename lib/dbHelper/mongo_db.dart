@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-import '../../dbHelper/mongo_db_models.dart';
-import '../models/track.dart';
+import '../models/users.dart';
 import './db_constants.dart';
+import '../models/track.dart';
+import '../models/bus.dart';
 
 class MongoDatabase {
   static Db? db;
@@ -16,6 +17,7 @@ class MongoDatabase {
   static DbCollection? trackingCollection;
   static DbCollection? routesCollection;
   static DbCollection? busesCollection;
+  static DbCollection? stopsCollection;
 
   static connect() async {
     // db = await Db.create(MONGO_CONN_URL);
@@ -29,6 +31,7 @@ class MongoDatabase {
     tracksCollection = db!.collection(TRACKS_COLLECTION);
     routesCollection = db!.collection(ROUTES_COLLECTION);
     trackingCollection = db!.collection(TRACKING_COLLECTION);
+    stopsCollection = db!.collection(STOPS_COLLECTION);
   }
 
   static Future<String> insertTrack(Track data) async {
@@ -58,7 +61,83 @@ class MongoDatabase {
     return arrData;
   }
 
-  static getMembers() async {
+  static Future<bool> addBus(Bus data) async {
+    try {
+      var result = await busesCollection!.insertOne(data.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of bus successful.");
+        return true;
+      } else {
+        print("debug: insertion of bus failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<bool> addAdmin(User data) async {
+    try {
+      var result = await adminsCollection!.insertOne(data.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of admin successful.");
+        return true;
+      } else {
+        print("debug: insertion of admin failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<bool> addDriver(User data) async {
+    try {
+      var result = await driversCollection!.insertOne(data.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of driver successful.");
+        return true;
+      } else {
+        print("debug: insertion of driver failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('debug: $e');
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<bool> addMember(User data) async {
+    try {
+      var result = await membersCollection!.insertOne(data.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of member successful.");
+        return true;
+      } else {
+        print("debug: insertion of member failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('debug: $e');
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<List<Map<String, Object?>>> getMembers() async {
     List<Map<String, Object?>> arrData =
         await membersCollection!.find().toList();
 

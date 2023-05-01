@@ -1,0 +1,35 @@
+// TODO: getTracks() - done
+// TODO: mongo addTrack(Track t);
+// TODO: mongo delteTrack(mongoObjectId trackID)
+// TODO: mongo updateTrack(mongoObjectId trackID,Track t);
+
+// TODO: getStops() - done
+// TODO: mongo addStop(Stop t);
+// TODO: mongo delteStop(mongoObjectId StopID)
+// TODO: mongo updateStop(mongoObjectId StopID);
+
+// TODO mongo getBusses()
+// TODO: mongo addBus(Bus b)
+// TODO: mongo deleteBus(mongo.ObjectId id)
+// TODO: mogno updateBus(mongo.ObjectID id, Bus b)
+
+// TDOD: mongo getRoutes()
+// TDOD: mongo addRoute(Route r)
+// TDOD: mongo deleteRoute(mongo.Objectid routeId)
+// TDOD: mongo updateRoute(mongo.Objectid routeId,Route r)
+
+//TODO: mongo getTrackings()
+//TODO: mongo stopTracking(mongo.ObjectId trackingId)
+
+//TODO mongo getAdmin()
+//TODO: mongo deleteAdmin(mongo.ObjectId id)
+//TODO: mongo addAdmin(mongo.ObjectId id)
+//TODO: mogno updateAdmin(mongo.ObjectID id, User a)
+//TODO mongo getDriver()
+//TODO: mongo deleteDriver(mongo.ObjectId id)
+//TODO: mongo addDriver(mongo.ObjectId id)
+//TODO: mogno updateDriver(mongo.ObjectID id, User d)
+//TODO mongo getMember()
+//TODO: mongo deleteMember(mongo.ObjectId id)
+//TODO: mongo addMember(mongo.ObjectId id)
+//TODO: mogno updateMember(mongo.ObjectID id, User u)
