@@ -9,12 +9,12 @@ import '../../../../models/track.dart';
 import '../../../../widgets/custom_data_table/action_buttons.dart';
 import '../../../../widgets/custom_data_table/table_header.dart';
 import '../../../../widgets/custom_list/custom_list.dart';
-import '../view_track/view_track_map.dart';
 import '../../../../widgets/edit_text.dart';
 import '../../../../widgets/header_list_area.dart';
+import '../view_track/view_track_map.dart';
 
 import './edit_stop.dart';
-import 'add_stop.dart';
+import './add_stop.dart';
 
 class EditTrack extends StatelessWidget {
   const EditTrack({super.key});

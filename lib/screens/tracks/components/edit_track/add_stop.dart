@@ -1,3 +1,6 @@
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:dashboard_route_app/functions/custom_scafold.dart';
+import 'package:dashboard_route_app/screens/tracks/components/edit_track/stop_form.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:flutter/material.dart';
@@ -10,6 +13,7 @@ import '../../../../configs/map/flutter_map.dart';
 import '../../../../configs/themes/custom_text_styles.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/track/edit_controller.dart';
+import '../../../../functions/latlng_string.dart';
 import '../../../../models/track.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../widgets/custom_icon_button.dart';
@@ -43,6 +47,29 @@ class _AddStopState extends State<AddStop> {
     super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final tc = Get.find<TracksController>();
+    final ec = Get.find<EditController>();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        StopForm(
+          name: name,
+          time: time,
+          location: location,
+          formKey: GlobalKey(),
+        ),
+        kHeightSpace,
+        CustomAlertButton(
+          title: 'Add',
+          onTap: () => addStop(tc, ec),
+        ),
+      ],
+    );
+  }
+
   void initializeValues() {
     final tc = Get.find<TracksController>();
     final ec = Get.find<EditController>();
@@ -61,97 +88,29 @@ class _AddStopState extends State<AddStop> {
       center = kUetMainPoint;
       time.text = timeOfDayToString(TimeOfDay.now());
     }
+    location.text = latLngToString(center);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final tc = Get.find<TracksController>();
-    final ec = Get.find<EditController>();
+  void addStop(TracksController tc, EditController ec) {
+    Stop toAddStop = Stop(
+        id: mongo.ObjectId(),
+        trackId: tc.tracks[ec.tIndex.value].id,
+        name: name.text,
+        time: stringToTimeOfDay(time.text),
+        isStop: true,
+        stopNo: tc.tracks[ec.tIndex.value].stops.length,
+        latitude: center.latitude,
+        longitude: center.longitude);
 
-    return Form(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          nameField(name, defaultName),
-          kHeightSpace,
-          timeField(time, context),
-          kHeightSpace,
-          Flexible(
-            child: SetLocation(
-              location: location,
-            ),
-          ),
-          kHeightSpace,
-          CustomAlertButton(
-            title: 'Add',
-            onTap: () {
-              tc.tracks[ec.tIndex.value].stops.add(
-                Stop(
-                    id: mongo.ObjectId(),
-                    trackId: tc.tracks[ec.tIndex.value].id,
-                    name: name.text,
-                    time: stringToTimeOfDay(time.text),
-                    isStop: true,
-                    stopNo: tc.tracks[ec.tIndex.value].stops.length,
-                    latitude: center.latitude,
-                    longitude: center.longitude),
-              );
-              ec.doUpdate();
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Flexible timeField(TextEditingController time, BuildContext context) {
-    return Flexible(
-      child: TextFormField(
-        controller: time,
-        style: kTextStyle,
-        decoration: InputDecoration(
-          labelText: 'Time of Arrival',
-          hintText: '8:40 AM',
-          hintStyle: kHintStyle,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: CustomSuffixButton(
-            onTap: () {
-              showTimePicker(
-                context: context,
-                initialTime: stringToTimeOfDay(time.text),
-              ).then((value) {
-                if (value != null) {
-                  time.text = value.format(context);
-                }
-              });
-            },
-            message: 'Set Time',
-            icon: Icons.access_time_rounded,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Flexible nameField(TextEditingController name, String defaultName) {
-    return Flexible(
-        child: TextFormField(
-      controller: name,
-      style: kTextStyle,
-      decoration: InputDecoration(
-        labelText: 'Name',
-        hintText: 'Chan Da Qila',
-        hintStyle: kHintStyle,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSuffixButton(
-          icon: Icons.hdr_auto_sharp,
-          onTap: () {
-            name.text = defaultName;
-          },
-          message: 'Auto Genrate Name',
-        ),
-      ),
-    ));
+    MongoDatabase.addStop(toAddStop).then((value) {
+      if (value == true) {
+        tc.tracks[ec.tIndex.value].stops.add(toAddStop);
+        ec.doUpdate();
+        Navigator.pop(context);
+        customSnackbar(context, true, 'Stop Added');
+      } else {
+        customSnackbar(context, false, 'Stop not Added');
+      }
+    });
   }
 }

@@ -38,11 +38,13 @@ class _SetLocationState extends State<SetLocation> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixButton(
           onTap: () {
+            print('hi');
             customDialog(
               context: context,
               title: 'Set Marker',
               widget: setMarker(context, widget.location),
             );
+            print('hi');
           },
           message: 'Set Location by Map',
           icon: Icons.add_location,

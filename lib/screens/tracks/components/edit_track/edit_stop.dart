@@ -88,11 +88,11 @@ class _EditStopState extends State<EditStop> {
       if (value == true) {
         // Update Localy
         tc.tracks[widget.tIndex].stops[widget.sIndex] = toUpdateStop;
-        customSnackbar(context, 'Success: Stop Updated!');
+        customSnackbar(context, true, 'Stop Updated!');
         ec.doUpdate();
       } else {
         // Error
-        customSnackbar(context, 'Error: Stop not Updated!');
+        customSnackbar(context, true, 'Stop not Updated!');
       }
     });
     // update Stop in mongodb
