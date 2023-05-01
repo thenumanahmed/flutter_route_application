@@ -1,0 +1,151 @@
+// ignore_for_file: invalid_use_of_protected_member
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../controllers/users_controller.dart';
+import '../../../../models/users.dart';
+import '../../../../responsive.dart';
+import '../../../../widgets/custom_data_table/custom_data_table.dart';
+import '../../../../widgets/custom_icon_button.dart';
+import 'add_admin.dart';
+
+class AdminTable extends StatelessWidget {
+  const AdminTable({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final uc = Get.find<UsersController>();
+    final avaliableWidth = Responsive.avaliableWidth(context);
+    final tableWidth =
+        avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
+    return Obx(
+      () => CustomDataTable(
+        add: const AddAdmin(),
+        import: const Text('Import'),
+        export: const Text('Export'),
+        selectionImport: selectionImport,
+        selectionDelete: selectionDelete,
+        title: 'Admins',
+        tableWidth: tableWidth,
+        dataColumn: getAdminDataColumn(context),
+        getDataCell: getAdminDataCells,
+        searchBy: searchByName,
+        list: uc.admins.value,
+      ),
+    );
+  }
+
+  List<DataColumn> getAdminDataColumn(BuildContext context) {
+    return [
+      const DataColumn(
+        label: Text(
+          'Username',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Email',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Phone No',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Blocked',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Operations',
+        ),
+      ),
+    ];
+  }
+
+  List<DataCell> getAdminDataCells(
+    dynamic data,
+    int index,
+  ) {
+    final admin = data as User;
+    return [
+      DataCell(
+        Text(admin.username, softWrap: true),
+      ),
+      DataCell(Text(admin.email)),
+      DataCell(Text(admin.password)),
+      DataCell(Text(admin.isBlocked ? "Yes" : "No")),
+      DataCell(Row(
+        children: [
+          CustomIconButton(
+            onTap: () => editAdmin(index),
+            message: 'Edit Admin',
+            icon: Icons.edit,
+            color: Colors.blue,
+          ),
+          CustomIconButton(
+            onTap: () => deleteAdmin(index),
+            message: 'Delete Admin',
+            icon: Icons.delete,
+            color: Colors.redAccent,
+          ),
+        ],
+      )),
+    ];
+  }
+
+  void add() {
+    if (kDebugMode) {
+      print('Add');
+    }
+  }
+
+  void import() {
+    if (kDebugMode) {
+      print('Import');
+    }
+  }
+
+  void export() {
+    if (kDebugMode) {
+      print('Export');
+    }
+  }
+
+  void selectionImport(List<int> indexes) {
+    if (kDebugMode) {
+      print('Selection Import : ${indexes.toString()}');
+    }
+  }
+
+  void selectionDelete(List<int> indexes) {
+    if (kDebugMode) {
+      print('Selection Delete : ${indexes.toString()}');
+    }
+  }
+
+  void editAdmin(int index) {}
+
+  void deleteAdmin(int index) {
+    final uc = Get.find<UsersController>();
+    uc.deleteUser(index, UserType.admin);
+  }
+
+  List<int> searchByName(String s) {
+    List<int> list = [];
+    final bc = Get.find<UsersController>();
+    for (int i = 0; i < bc.admins.length; i++) {
+      if (bc.admins[i].username.capitalize!.contains(s.capitalize!) ||
+          bc.admins[i].email.capitalize!.contains(s.capitalize!) ||
+          bc.admins[i].phoneNo.capitalize!.contains(s.capitalize!)) {
+        list.add(i);
+      }
+    }
+    return list;
+  }
+}

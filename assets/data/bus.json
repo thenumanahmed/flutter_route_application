@@ -1,0 +1,62 @@
+[
+    {
+        "_id": "644a8a29d494d5c1c20693f0",
+        "number_plate": "LEK001",
+        "model_no": 1,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f1",
+        "number_plate": "LEK002",
+        "model_no": 2,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f2",
+        "number_plate": "LEK003",
+        "model_no": 3,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f3",
+        "number_plate": "LEK004",
+        "model_no": 4,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f4",
+        "number_plate": "LEK005",
+        "model_no": 5,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f5",
+        "number_plate": "LEK006",
+        "model_no": 6,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f6",
+        "number_plate": "LEK007",
+        "model_no": 7,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f7",
+        "number_plate": "LEK008",
+        "model_no": 8,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f8",
+        "number_plate": "LEK009",
+        "model_no": 9,
+        "is_working": true
+    },
+    {
+        "_id": "644a8a29d494d5c1c20693f9",
+        "number_plate": "LEK010",
+        "model_no": 10,
+        "is_working": true
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "_id": "644a8a2ad494d5c1c2069401",
+        "route_id": "644a8a2ad494d5c1c20693fa",
+        "latitude": 31.514566547816308,
+        "longitude": 74.31116610208386,
+        "stop_covered": 3,
+        "update_time": "7:35 AM"
+    },
+    {
+        "_id": "644a8a2ad494d5c1c2069402",
+        "route_id": "644a8a2ad494d5c1c20693fc",
+        "latitude": 31.52116503656235,
+        "longitude": 74.27002656429153,
+        "stop_covered": 4,
+        "update_time": "7:35 AM"
+    },
+    {
+        "_id": "644a8a2ad494d5c1c2069403",
+        "route_id": "644a8a2ad494d5c1c20693fe",
+        "latitude": 31.52116503656235,
+        "longitude": 74.27002656429153,
+        "stop_covered": 4,
+        "update_time": "7:35 AM"
+    },
+    {
+        "_id": "644a8a2ad494d5c1c2069404",
+        "route_id": "644a8a2ad494d5c1c2069400",
+        "latitude": 31.51802532974909,
+        "longitude": 74.2720469780678,
+        "stop_covered": 5,
+        "update_time": "7:35 AM"
+    }
+]

@@ -1,0 +1,150 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../controllers/users_controller.dart';
+import '../../../../models/users.dart';
+import '../../../../responsive.dart';
+import '../../../../widgets/custom_data_table/custom_data_table.dart';
+import '../../../../widgets/custom_icon_button.dart';
+import 'add_member.dart';
+
+class MemberTable extends StatelessWidget {
+  const MemberTable({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final uc = Get.find<UsersController>();
+    final avaliableWidth = Responsive.avaliableWidth(context);
+    final tableWidth =
+        avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
+    return Obx(
+      () => CustomDataTable(
+        add: const AddMember(),
+        import: const Text('Import'),
+        export: const Text('Export'),
+        selectionImport: selectionImport,
+        selectionDelete: selectionDelete,
+        title: 'Members',
+        tableWidth: tableWidth,
+        dataColumn: getMemberDataColumn(context),
+        getDataCell: getMemberDataCells,
+        searchBy: searchByName,
+        // ignore: invalid_use_of_protected_member
+        list: uc.members.value,
+      ),
+    );
+  }
+
+  List<DataColumn> getMemberDataColumn(BuildContext context) {
+    return [
+      const DataColumn(
+        label: Text(
+          'Username',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Email',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Phone No',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Blocked',
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Operations',
+        ),
+      ),
+    ];
+  }
+
+  List<DataCell> getMemberDataCells(
+    dynamic data,
+    int index,
+  ) {
+    final member = data as User;
+    return [
+      DataCell(
+        Text(member.username, softWrap: true),
+      ),
+      DataCell(Text(member.email)),
+      DataCell(Text(member.password)),
+      DataCell(Text(member.isBlocked ? "Yes" : "No")),
+      DataCell(Row(
+        children: [
+          CustomIconButton(
+            onTap: () => editMember(index),
+            message: 'Edit Member',
+            icon: Icons.edit,
+            color: Colors.blue,
+          ),
+          CustomIconButton(
+            onTap: () => deleteMember(index),
+            message: 'Delete Member',
+            icon: Icons.delete,
+            color: Colors.redAccent,
+          ),
+        ],
+      )),
+    ];
+  }
+
+  void add() {
+    if (kDebugMode) {
+      print('Add');
+    }
+  }
+
+  void import() {
+    if (kDebugMode) {
+      print('Import');
+    }
+  }
+
+  void export() {
+    if (kDebugMode) {
+      print('Export');
+    }
+  }
+
+  void selectionImport(List<int> indexes) {
+    if (kDebugMode) {
+      print('Selection Import : ${indexes.toString()}');
+    }
+  }
+
+  void selectionDelete(List<int> indexes) {
+    if (kDebugMode) {
+      print('Selection Delete : ${indexes.toString()}');
+    }
+  }
+
+  void editMember(int index) {}
+
+  void deleteMember(int index) {
+    final uc = Get.find<UsersController>();
+    uc.deleteUser(index, UserType.member);
+  }
+
+  List<int> searchByName(String s) {
+    List<int> list = [];
+    final bc = Get.find<UsersController>();
+    for (int i = 0; i < bc.members.length; i++) {
+      if (bc.members[i].username.capitalize!.contains(s.capitalize!) ||
+          bc.members[i].email.capitalize!.contains(s.capitalize!) ||
+          bc.members[i].phoneNo.capitalize!.contains(s.capitalize!)) {
+        list.add(i);
+      }
+    }
+    return list;
+  }
+}
