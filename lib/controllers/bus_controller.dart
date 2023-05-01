@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -50,12 +51,18 @@ class BusController extends GetxController {
     // else set fetching.value = LoadingState.Error
     //
   }
-  void deleteBuses(List<int> index) {
+  Future<void> deleteBuses(List<int> index) async {
     index.sort();
     for (int i = index.length - 1; i >= 0; i--) {
       // TODO: Mongo delteBus(mongo.ObjectId busId)
       // if succes then delete local buses.removeAt(index[i]);
+      // bool res = true;
+      await MongoDatabase.deleteBus(buses[index[i]].id);
+      // if (res == true) {
       buses.removeAt(index[i]);
+      // } else {
+      // TODO:  show error on scaffold messenger
+      // }
     }
     indexes.clear();
   }

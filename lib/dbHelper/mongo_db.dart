@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:dashboard_route_app/controllers/track/tracks_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
+import '../models/route.dart';
 import '../models/users.dart';
 import './db_constants.dart';
 import '../models/track.dart';
@@ -147,4 +149,275 @@ class MongoDatabase {
     }
     return arrData;
   }
+  ///////////////////////////////
+  ///////////////////////////////
+  ///////////////////////////////
+  ///////////////////////////////
+  ///////////////////////////////
+  ///////////////////////////////
+  ///////////////////////////////
+  ///////////////////////////////
+
+  static Future<List<Map<String, Object?>>> getDrivers() async {
+    List<Map<String, Object?>> driversList =
+        await driversCollection!.find().toList();
+
+    if (kDebugMode) {
+      print(driversList.length);
+      print(driversList[0]['name']);
+    }
+    return driversList;
+  }
+
+  static Future<List<Map<String, Object?>>> getRoutes() async {
+    List<Map<String, Object?>> routesList =
+        await routesCollection!.find().toList();
+
+    if (kDebugMode) {
+      print(routesList.length);
+      print(routesList[0]['name']);
+    }
+    return routesList;
+  }
+
+  static Future<List<Map<String, Object?>>> getBuses() async {
+    List<Map<String, Object?>> busesList =
+        await busesCollection!.find().toList();
+
+    if (kDebugMode) {
+      print(busesList.length);
+      print(busesList[0]['name']);
+    }
+    return busesList;
+  }
+
+  static Future<List<Map<String, Object?>>> getTrackings() async {
+    List<Map<String, Object?>> trackingsList =
+        await trackingCollection!.find().toList();
+
+    if (kDebugMode) {
+      print(trackingsList.length);
+      print(trackingsList[0]['name']);
+    }
+    return trackingsList;
+  }
+
+  static Future<List<Map<String, Object?>>> getAdmins() async {
+    List<Map<String, Object?>> adminsList =
+        await adminsCollection!.find().toList();
+
+    if (kDebugMode) {
+      print(adminsList.length);
+      print(adminsList[0]['name']);
+    }
+    return adminsList;
+  }
+
+  static Future<List<Map<String, Object?>>> getStops() async {
+    List<Map<String, Object?>> adminsList =
+        await stopsCollection!.find().toList();
+
+    if (kDebugMode) {
+      print(adminsList.length);
+      print(adminsList[0]['name']);
+    }
+    return adminsList;
+  }
+
+  static Future<bool> addTrack(Track track) async {
+    try {
+      var result = await tracksCollection!.insertOne(track.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of track successful.");
+        return true;
+      } else {
+        print("debug: insertion of track failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('debug: $e');
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<bool> addStop(Stop stop) async {
+    try {
+      var result = await stopsCollection!.insertOne(stop.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of stop successful.");
+        return true;
+      } else {
+        print("debug: insertion of stop failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('debug: $e');
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<bool> addRoute(Route route) async {
+    try {
+      var result = await routesCollection!.insertOne(route.toJson());
+      if (result.isSuccess) {
+        print("debug: insertion of route successful.");
+        return true;
+      } else {
+        print("debug: insertion of route failed.");
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('debug: $e');
+      }
+      // return e.toString();
+      return false;
+    }
+  }
+
+  static Future<void> deleteBus(ObjectId id) async {
+    await busesCollection?.remove(where.id(id));
+    print('Bus eith id $id deleted');
+    // return true;
+  }
+
+  static Future<void> deleteTrack(ObjectId id) async {
+    await tracksCollection?.remove(where.id(id));
+    print('track with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> deleteStop(ObjectId id) async {
+    await stopsCollection?.remove(where.id(id));
+    print('stop with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> deleteRoute(ObjectId id) async {
+    await routesCollection?.remove(where.id(id));
+    print('route with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> stopTracking(ObjectId id) async {
+    await trackingCollection?.remove(where.id(id));
+    print('tracking with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> deleteAdmin(ObjectId id) async {
+    await adminsCollection?.remove(where.id(id));
+    print('admin with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> deleteDriver(ObjectId id) async {
+    await driversCollection?.remove(where.id(id));
+    print('driver with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> deleteMember(ObjectId id) async {
+    await membersCollection?.remove(where.id(id));
+    print('member with id $id deleted');
+    // return true;
+  }
+
+  static Future<void> updateBus(Bus bus) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', bus.id);
+
+    // Perform the update operation
+    final result = await busesCollection!.replaceOne(filter, bus.toJson());
+  }
+
+  static Future<void> updateTrack(Track track) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', track.id);
+
+    // Perform the update operation
+    final result = await tracksCollection!.replaceOne(filter, track.toJson());
+  }
+
+  static Future<void> updateStop(Stop stop) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', stop.id);
+
+    // Perform the update operation
+    final result = await stopsCollection!.replaceOne(filter, stop.toJson());
+  }
+
+  static Future<void> updateRoute(Route route) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', route.id);
+
+    // Perform the update operation
+    final result = await routesCollection!.replaceOne(filter, route.toJson());
+  }
+
+  static Future<void> updateAdmin(User admin) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', admin.id);
+
+    // Perform the update operation
+    final result = await adminsCollection!.replaceOne(filter, admin.toJson());
+  }
+
+  static Future<void> updateMembers(User member) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', member.id);
+
+    // Perform the update operation
+    final result = await membersCollection!.replaceOne(filter, member.toJson());
+  }
+
+  static Future<void> updateDriver(User driver) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', driver.id);
+
+    // Perform the update operation
+    final result = await driversCollection!.replaceOne(filter, driver.toJson());
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//TODO: mongo stopTracking(mongo.ObjectId trackingId)
+//TODO: mogno updateAdmin(mongo.ObjectID id, User a)
+//TODO: mogno updateDriver(mongo.ObjectID id, User d)
+//TODO: mogno updateMember(mongo.ObjectID id, User u)
+// TDOD: mongo addRoute(Route r)
+//TODO: mongo deleteDriver(mongo.ObjectId id)
+//TODO: mongo deleteMember(mongo.ObjectId id)
+//TODO: mongo deleteAdmin(mongo.ObjectId id)
+//TODO mongo getAdmin()  
+//TODO mongo getMember()
+//TODO mongo getDriver()
+// TDOD: mongo getRoutes()
+// TODO mongo getBusses()
+//TODO: mongo getTrackings()
+// TODO: mongo addStop(Stop t);
+// TODO: getStops() - done
+// TODO: mongo deleteBus(mongo.ObjectId id)
+// TODO: mongo deleteTrack(mongoObjectId trackID)
+// TODO: mongo delteStop(mongoObjectId StopID) 
+// TDOD: mongo deleteRoute(mongo.Objectid routeId)
+// TODO: mogno updateBus(mongo.ObjectID id, Bus b)
+// TODO: mongo updateTrack(mongoObjectId trackID,Track t);
+// TODO: mongo updateStop(mongoObjectId StopID);
+// TDOD: mongo updateRoute(mongo.Objectid routeId,Route r)
