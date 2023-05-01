@@ -1,10 +1,18 @@
+//   final snackBar = SnackBar(
+//   content: const Text('Yay! A SnackBar!'),
+//   action: SnackBarAction(
+//     label: 'Undo',
+//     onPressed: () {
+//       // Some code to undo the change.
+//     },
+//   ),
+// );
+// ScaffoldMessenger.of(context).showSnackBar(snackBar)
 import 'dart:developer';
-
-import 'package:dashboard_route_app/controllers/track/tracks_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-import '../models/route.dart';
+import '../models/route.dart' as r;
 import '../models/users.dart';
 import './db_constants.dart';
 import '../models/track.dart';
@@ -45,19 +53,25 @@ class MongoDatabase {
     }
   }
 
-  static Future<String> insertTrack(Track data) async {
+  static Future<bool> updateStop(Stop stop) async {
+    // Define the filter to identify the document you want to update
+    final filter = where.eq('_id', stop.id);
+
+    // Perform the update operation
+    final result = await stopsCollection!.replaceOne(filter, stop.toJson());
+
+    return mongoResult(result, 'Update Stop ');
+  }
+
+  static Future<bool> insertTrack(Track data) async {
     try {
       var result = await tracksCollection!.insertOne(data.toJson());
-      if (result.isSuccess) {
-        return "Data Inserted";
-      } else {
-        return "Something WentWrong with Inserting Data";
-      }
+      return mongoResult(result, 'add track');
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
       }
-      return e.toString();
+      return false;
     }
   }
 
@@ -87,13 +101,7 @@ class MongoDatabase {
   static Future<bool> addBus(Bus data) async {
     try {
       var result = await busesCollection!.insertOne(data.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of bus successful.");
-        return true;
-      } else {
-        print("debug: insertion of bus failed.");
-        return false;
-      }
+      return mongoResult(result, 'add bus');
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
@@ -106,13 +114,7 @@ class MongoDatabase {
   static Future<bool> addAdmin(User data) async {
     try {
       var result = await adminsCollection!.insertOne(data.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of admin successful.");
-        return true;
-      } else {
-        print("debug: insertion of admin failed.");
-        return false;
-      }
+      return mongoResult(result, 'add admin');
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
@@ -125,13 +127,7 @@ class MongoDatabase {
   static Future<bool> addDriver(User data) async {
     try {
       var result = await driversCollection!.insertOne(data.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of driver successful.");
-        return true;
-      } else {
-        print("debug: insertion of driver failed.");
-        return false;
-      }
+      return mongoResult(result, 'add driver');
     } catch (e) {
       if (kDebugMode) {
         print('debug: $e');
@@ -144,13 +140,7 @@ class MongoDatabase {
   static Future<bool> addMember(User data) async {
     try {
       var result = await membersCollection!.insertOne(data.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of member successful.");
-        return true;
-      } else {
-        print("debug: insertion of member failed.");
-        return false;
-      }
+      return mongoResult(result, 'add Member');
     } catch (e) {
       if (kDebugMode) {
         print('debug: $e');
@@ -248,13 +238,7 @@ class MongoDatabase {
   static Future<bool> addTrack(Track track) async {
     try {
       var result = await tracksCollection!.insertOne(track.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of track successful.");
-        return true;
-      } else {
-        print("debug: insertion of track failed.");
-        return false;
-      }
+      return mongoResult(result, 'add track');
     } catch (e) {
       if (kDebugMode) {
         print('debug: $e');
@@ -267,13 +251,7 @@ class MongoDatabase {
   static Future<bool> addStop(Stop stop) async {
     try {
       var result = await stopsCollection!.insertOne(stop.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of stop successful.");
-        return true;
-      } else {
-        print("debug: insertion of stop failed.");
-        return false;
-      }
+      return mongoResult(result, 'add stop');
     } catch (e) {
       if (kDebugMode) {
         print('debug: $e');
@@ -283,16 +261,10 @@ class MongoDatabase {
     }
   }
 
-  static Future<bool> addRoute(Route route) async {
+  static Future<bool> addRoute(r.Route route) async {
     try {
       var result = await routesCollection!.insertOne(route.toJson());
-      if (result.isSuccess) {
-        print("debug: insertion of route successful.");
-        return true;
-      } else {
-        print("debug: insertion of route failed.");
-        return false;
-      }
+      return mongoResult(result, 'insert route');
     } catch (e) {
       if (kDebugMode) {
         print('debug: $e');
@@ -362,54 +334,50 @@ class MongoDatabase {
     final result = await busesCollection!.replaceOne(filter, bus.toJson());
   }
 
-  static Future<void> updateTrack(Track track) async {
+  static Future<bool> updateTrack(Track track) async {
     // Define the filter to identify the document you want to update
     final filter = where.eq('_id', track.id);
 
     // Perform the update operation
     final result = await tracksCollection!.replaceOne(filter, track.toJson());
+
+    return mongoResult(result, 'Update Track');
   }
 
-  static Future<bool> updateStop(Stop stop) async {
-    // Define the filter to identify the document you want to update
-    final filter = where.eq('_id', stop.id);
-
-    // Perform the update operation
-    final result = await stopsCollection!.replaceOne(filter, stop.toJson());
-
-    return mongoResult(result, 'Stop');
-  }
-
-  static Future<void> updateRoute(Route route) async {
+  static Future<bool> updateRoute(r.Route route) async {
     // Define the filter to identify the document you want to update
     final filter = where.eq('_id', route.id);
 
     // Perform the update operation
     final result = await routesCollection!.replaceOne(filter, route.toJson());
+    return mongoResult(result, 'Update Route ');
   }
 
-  static Future<void> updateAdmin(User admin) async {
+  static Future<bool> updateAdmin(User admin) async {
     // Define the filter to identify the document you want to update
     final filter = where.eq('_id', admin.id);
 
     // Perform the update operation
     final result = await adminsCollection!.replaceOne(filter, admin.toJson());
+    return mongoResult(result, 'Update Admin');
   }
 
-  static Future<void> updateMembers(User member) async {
+  static Future<bool> updateMembers(User member) async {
     // Define the filter to identify the document you want to update
     final filter = where.eq('_id', member.id);
 
     // Perform the update operation
     final result = await membersCollection!.replaceOne(filter, member.toJson());
+    return mongoResult(result, 'Update Member');
   }
 
-  static Future<void> updateDriver(User driver) async {
+  static Future<bool> updateDriver(User driver) async {
     // Define the filter to identify the document you want to update
     final filter = where.eq('_id', driver.id);
 
     // Perform the update operation
     final result = await driversCollection!.replaceOne(filter, driver.toJson());
+    return mongoResult(result, 'Update Driver');
   }
 }
 
