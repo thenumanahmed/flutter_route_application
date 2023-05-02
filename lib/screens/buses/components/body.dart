@@ -74,22 +74,24 @@ class Body extends StatelessWidget {
       ),
       DataCell(Text(bus.modelNo.toString())),
       DataCell(Text(bus.isWorking ? "Yes" : "No")),
-      DataCell(Row(
-        children: [
-          CustomIconButton(
-            onTap: () => editBus(index),
-            message: 'Edit Track',
-            icon: Icons.edit,
-            color: Colors.blue,
-          ),
-          CustomIconButton(
-            onTap: () => deleteBus(index),
-            message: 'Delete Track',
-            icon: Icons.delete,
-            color: Colors.redAccent,
-          ),
-        ],
-      )),
+      DataCell(
+        Row(
+          children: [
+            CustomIconButton(
+              onTap: () => editBus(index),
+              message: 'Edit Track',
+              icon: Icons.edit,
+              color: Colors.blue,
+            ),
+            CustomIconButton(
+              onTap: () => deleteBus(index),
+              message: 'Delete Track',
+              icon: Icons.delete,
+              color: Colors.redAccent,
+            ),
+          ],
+        ),
+      ),
     ];
   }
 

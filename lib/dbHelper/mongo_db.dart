@@ -116,7 +116,6 @@ class MongoDatabase {
       if (kDebugMode) {
         print(e.toString());
       }
-      // return e.toString();
       return false;
     }
   }
@@ -129,7 +128,6 @@ class MongoDatabase {
       if (kDebugMode) {
         print(e.toString());
       }
-      // return e.toString();
       return false;
     }
   }
