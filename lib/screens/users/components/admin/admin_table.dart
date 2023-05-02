@@ -31,7 +31,7 @@ class AdminTable extends StatelessWidget {
         title: 'Admins',
         tableWidth: tableWidth,
         dataColumn: getAdminDataColumn(context),
-        getDataCell: getAdminDataCells,
+        getDataCell: (data, index) => getAdminDataCells(context, data, index),
         searchBy: searchByName,
         list: uc.admins.value,
       ),
@@ -69,6 +69,7 @@ class AdminTable extends StatelessWidget {
   }
 
   List<DataCell> getAdminDataCells(
+    BuildContext context,
     dynamic data,
     int index,
   ) {
@@ -89,7 +90,7 @@ class AdminTable extends StatelessWidget {
             color: Colors.blue,
           ),
           CustomIconButton(
-            onTap: () => deleteAdmin(index),
+            onTap: () => deleteAdmin(context, index),
             message: 'Delete Admin',
             icon: Icons.delete,
             color: Colors.redAccent,
@@ -131,9 +132,9 @@ class AdminTable extends StatelessWidget {
 
   void editAdmin(int index) {}
 
-  void deleteAdmin(int index) {
+  void deleteAdmin(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
-    uc.deleteUser(index, UserType.admin);
+    uc.deleteUser(context, index, UserType.admin);
   }
 
   List<int> searchByName(String s) {

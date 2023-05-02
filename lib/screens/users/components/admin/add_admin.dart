@@ -1,4 +1,5 @@
 import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:dashboard_route_app/functions/custom_scafold.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -78,13 +79,15 @@ class _AddAdminState extends State<AddAdmin> {
                   username: username.text,
                   email: email.text,
                 );
-                var res = await MongoDatabase.addAdmin(newAdmin);
-                if (res == true) {
-                  uc.admins.add(newAdmin);
-                  Navigator.pop(context);
-                } else {
-                  //show error on scaffold messenger
-                }
+                MongoDatabase.addAdmin(newAdmin).then((value) {
+                  if (value == true) {
+                    uc.admins.add(newAdmin);
+                    Navigator.pop(context);
+                    customSnackbar(context, value, 'Add Admin');
+                  } else {
+                    customSnackbar(context, value, 'Add Admin');
+                  }
+                });
               }
             },
           ),

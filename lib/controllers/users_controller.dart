@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:dashboard_route_app/functions/custom_scafold.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -11,26 +14,58 @@ enum UserType { admin, driver, member }
 
 class UsersController extends GetxController {
   final usersState = UserType.member.obs;
+  final fetchingMembers = FetchingState.getting.obs;
+  final fetchingDrivers = FetchingState.getting.obs;
+  final fetchingAdmins = FetchingState.getting.obs;
+  final members = <User>[].obs;
+  final admins = <User>[].obs;
+  final drivers = <User>[].obs;
 
-  final members = <User>[...kMembers].obs;
-  final admins = <User>[...kAdmins].obs;
-  final drivers = <User>[...kDrivers].obs;
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    initiliazeUsers();
+    super.onInit();
+  }
 
-  //TODO mongo getAdmin()
-  //TODO: mongo deleteAdmin(mongo.ObjectId id)
-  //TODO: mongo addAdmin(mongo.ObjectId id)
+  void initiliazeUsers() {
+    fetchingMembers.value = FetchingState.getting;
+    fetchingAdmins.value = FetchingState.getting;
+    fetchingDrivers.value = FetchingState.getting;
+
+    getAdminsFromDatabase();
+    print('GET ADMINS');
+    getDriversFromDatabase();
+    getMembersFromDatabase();
+  }
+
+  void getAdminsFromDatabase() async {
+    final value = await MongoDatabase.getAdmins();
+    List<User> dAdmins = value.map((admin) => User.fromJson(admin)).toList();
+    print('Emails  ${dAdmins[0].email}');
+    admins.value = dAdmins;
+    fetchingAdmins.value = FetchingState.done;
+  }
+
+  void getDriversFromDatabase() async {
+    final value = await MongoDatabase.getDrivers();
+    List<User> dDrivers = value.map((driver) => User.fromJson(driver)).toList();
+    drivers.value = dDrivers;
+    fetchingDrivers.value = FetchingState.done;
+  }
+
+  void getMembersFromDatabase() async {
+    final value = await MongoDatabase.getMembers();
+    List<User> dMembers = value.map((member) => User.fromJson(member)).toList();
+    members.value = dMembers;
+    fetchingMembers.value = FetchingState.done;
+  }
+
   //TODO: mogno updateAdmin(mongo.ObjectID id, User a)
 
-  //TODO mongo getDriver()
-  //TODO: mongo deleteDriver(mongo.ObjectId id)
-  //TODO: mongo addDriver(mongo.ObjectId id)
   //TODO: mogno updateDriver(mongo.ObjectID id, User d)
 
-  //TODO mongo getMember()
-  //TODO: mongo deleteMember(mongo.ObjectId id)
-  //TODO: mongo addMember(mongo.ObjectId id)
   //TODO: mogno updateMember(mongo.ObjectID id, User u)
-  // is key thorugh hum us ki koi aik detail be ager change karty toh yeah use kar keh pura document kar dein gey save
 
   void copyMembersToClipboard() {
     final jsonList = members.map((track) => track.toJson()).toList();
@@ -133,275 +168,26 @@ class UsersController extends GetxController {
     }
   }
 
-  void deleteUser(int index, UserType userType) {
-    if (kDebugMode) {
-      print('Removed  {members[tIndex].name}');
-    }
+  Future<bool> deleteUser(
+      BuildContext context, int index, UserType userType) async {
     if (userType == UserType.driver) {
-      //TODO: mongo deleteMember(mongo.ObjectID memberId),
-      drivers.removeAt(index);
+      final result = await MongoDatabase.deleteDriver(drivers[index].id);
+      if (result) {
+        drivers.removeAt(index);
+      }
+      return result;
     } else if (userType == UserType.member) {
-      //TODO: mongo deleteMember(mongo.ObjectID memberId),
-      members.removeAt(index);
+      final result = await MongoDatabase.deleteMember(members[index].id);
+      if (result) {
+        members.removeAt(index);
+      }
+      return result;
     } else {
-      //TODO: mongo deleteMember(mongo.ObjectID memberId),
-      admins.removeAt(index);
+      final result = await MongoDatabase.deleteAdmin(admins[index].id);
+      if (result) {
+        admins.removeAt(index);
+      }
+      return result;
     }
   }
 }
-
-final kAdmins = <User>[
-  User(id: mongo.ObjectId(), username: 'admin1', password: 'a001'),
-  User(id: mongo.ObjectId(), username: 'admin2', password: 'a002'),
-  User(id: mongo.ObjectId(), username: 'admin3', password: 'a003'),
-  User(id: mongo.ObjectId(), username: 'admin4', password: 'a004'),
-  User(id: mongo.ObjectId(), username: 'admin5', password: 'a005'),
-  User(id: mongo.ObjectId(), username: 'admin6', password: 'a006'),
-];
-
-final kDrivers = <User>[
-  User(id: mongo.ObjectId(), username: 'driver1', password: 'd001'),
-  User(id: mongo.ObjectId(), username: 'driver2', password: 'd002'),
-  User(id: mongo.ObjectId(), username: 'driver3', password: 'd003'),
-  User(id: mongo.ObjectId(), username: 'driver4', password: 'd004'),
-  User(id: mongo.ObjectId(), username: 'driver5', password: 'd005'),
-  User(id: mongo.ObjectId(), username: 'driver6', password: 'd006'),
-  User(id: mongo.ObjectId(), username: 'driver7', password: 'd007'),
-];
-
-final kMembers = <User>[
-  User(
-    id: mongo.ObjectId(),
-    username: 'aliha',
-    password: 'u001',
-    email: '2021se1',
-  ),
-  User(
-    id: mongo.ObjectId(),
-    username: 'kokab',
-    password: 'u003',
-    email: '2021se3',
-  ),
-  User(
-    id: mongo.ObjectId(),
-    username: 'salman',
-    password: 'u004',
-    email: '2021se4',
-  ),
-  User(
-    id: mongo.ObjectId(),
-    username: 'aiza',
-    password: 'u005',
-    email: '2021se5',
-  ),
-  User(
-      id: mongo.ObjectId(),
-      username: 'hashim',
-      password: 'u006',
-      email: '2021se6'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'husnain',
-      password: 'u007',
-      email: '2021se7'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'armab',
-      password: 'u009',
-      email: '2021se9'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Emaan',
-      password: 'u010',
-      email: '2021se10'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'areeba',
-      password: 'u011',
-      email: '2021se1'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'sehrish',
-      password: 'u012',
-      email: '2021se12'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'areej',
-      password: 'u013',
-      email: '2021se13'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'labeeb',
-      password: 'u015',
-      email: '2021se15'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'gazanfar',
-      password: 'u016',
-      email: '2021se16'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'areeba',
-      password: 'u017',
-      email: '2021se17'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'afaq',
-      password: 'u018',
-      email: '2021se18'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'hira',
-      password: 'u019',
-      email: '2021se19'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'waqas',
-      password: 'u021',
-      email: '2021se21'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'haseeb',
-      password: 'u022',
-      email: '2021se22'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'zain',
-      password: 'u023',
-      email: '2021se23'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'nouman',
-      password: 'u024',
-      email: '2021se24'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Kausar',
-      password: 'u025',
-      email: '2021se25'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Ume',
-      password: 'u027',
-      email: '2021se27'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Umer',
-      password: 'u028',
-      email: '2021se28'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Zara',
-      password: 'u029',
-      email: '2021se29'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Nimra',
-      password: 'u030',
-      email: '2021se30'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Moeez',
-      password: 'u031',
-      email: '2021se31'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Saad',
-      password: 'u032',
-      email: '2021se32'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Samiha',
-      password: 'u033',
-      email: '2021se33'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Surooj',
-      password: 'u034',
-      email: '2021se34'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Mohsina',
-      password: 'u035',
-      email: '2021se35'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Hammad',
-      password: 'u036',
-      email: '2021se36'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'Laiba',
-      password: 'u037',
-      email: '2021se37'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'wali',
-      password: 'u039',
-      email: '2021se39'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'aysha',
-      password: 'u040',
-      email: '2021se40'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'usama',
-      password: 'u041',
-      email: '2021se41'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'abdul-Rehman',
-      password: 'u043',
-      email: '2021se43'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'haroon',
-      password: 'u044',
-      email: '2021se44'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'rehan',
-      password: 'u046',
-      email: '2021se46'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'rizwanullah',
-      password: 'u047',
-      email: '2021se47'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'sadaam',
-      password: 'u048',
-      email: '2021se48'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'nouman',
-      password: 'u049',
-      email: '2021se49'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'samsoor',
-      password: 'u050',
-      email: '2021se50'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'khadija',
-      password: 'u053',
-      email: '2021se53'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'faqeed',
-      password: 'u054',
-      email: '2021se54'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'sameer',
-      password: 'u055',
-      email: '2021se55'),
-  User(
-      id: mongo.ObjectId(),
-      username: 'farjad',
-      password: 'u056',
-      email: '2021se56'),
-];

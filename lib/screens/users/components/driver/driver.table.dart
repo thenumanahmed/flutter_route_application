@@ -29,7 +29,7 @@ class DriverTable extends StatelessWidget {
         title: 'Drivers',
         tableWidth: tableWidth,
         dataColumn: getDriverDataColumn(context),
-        getDataCell: getDriverDataCells,
+        getDataCell: (data, index) => getDriverDataCells(context, data, index),
         searchBy: searchByName,
         // ignore: invalid_use_of_protected_member
         list: uc.drivers.value,
@@ -68,6 +68,7 @@ class DriverTable extends StatelessWidget {
   }
 
   List<DataCell> getDriverDataCells(
+    BuildContext context,
     dynamic data,
     int index,
   ) {
@@ -82,13 +83,13 @@ class DriverTable extends StatelessWidget {
       DataCell(Row(
         children: [
           CustomIconButton(
-            onTap: () => editDriver(index),
+            onTap: () => editDriver(context, index),
             message: 'Edit Driver',
             icon: Icons.edit,
             color: Colors.blue,
           ),
           CustomIconButton(
-            onTap: () => deleteDriver(index),
+            onTap: () => deleteDriver(context, index),
             message: 'Delete Driver',
             icon: Icons.delete,
             color: Colors.redAccent,
@@ -110,11 +111,11 @@ class DriverTable extends StatelessWidget {
     }
   }
 
-  void editDriver(int index) {}
+  void editDriver(BuildContext context, int index) {}
 
-  void deleteDriver(int index) {
+  void deleteDriver(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
-    uc.deleteUser(index, UserType.driver);
+    uc.deleteUser(context, index, UserType.driver).then((value) => null);
   }
 
   List<int> searchByName(String s) {

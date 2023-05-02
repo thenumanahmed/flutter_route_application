@@ -5,6 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../../../../configs/themes/custom_text_styles.dart';
 import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../functions/custom_scafold.dart';
 import '../../../../models/users.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../widgets/custom_icon_button.dart';
@@ -78,13 +79,15 @@ class AddDriverState extends State<AddDriver> {
                   username: username.text,
                   email: email.text,
                 );
-                var res = await MongoDatabase.addDriver(newDriver);
-                if (res == true) {
-                  uc.drivers.add(newDriver);
-                  Navigator.pop(context);
-                } else {
-                  // TODO: show error message on scffold messneger
-                }
+                MongoDatabase.addDriver(newDriver).then((value) {
+                  if (value == true) {
+                    uc.admins.add(newDriver);
+                    Navigator.pop(context);
+                    customSnackbar(context, value, 'Add Driver');
+                  } else {
+                    customSnackbar(context, value, 'Add Driver');
+                  }
+                });
               }
             },
           ),

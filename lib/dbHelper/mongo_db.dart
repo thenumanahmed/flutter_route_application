@@ -8,6 +8,8 @@ import './db_constants.dart';
 import '../models/track.dart';
 import '../models/bus.dart';
 
+enum FetchingState { getting, done, error, toUpdate, idol }
+
 class MongoDatabase {
   static Db? db;
   static DbCollection? tracksCollection;

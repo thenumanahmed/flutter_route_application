@@ -29,7 +29,7 @@ class MemberTable extends StatelessWidget {
         title: 'Members',
         tableWidth: tableWidth,
         dataColumn: getMemberDataColumn(context),
-        getDataCell: getMemberDataCells,
+        getDataCell: (data, index) => getMemberDataCells(context, data, index),
         searchBy: searchByName,
         // ignore: invalid_use_of_protected_member
         list: uc.members.value,
@@ -68,6 +68,7 @@ class MemberTable extends StatelessWidget {
   }
 
   List<DataCell> getMemberDataCells(
+    BuildContext context,
     dynamic data,
     int index,
   ) {
@@ -88,7 +89,7 @@ class MemberTable extends StatelessWidget {
             color: Colors.blue,
           ),
           CustomIconButton(
-            onTap: () => deleteMember(index),
+            onTap: () => deleteMember(context, index),
             message: 'Delete Member',
             icon: Icons.delete,
             color: Colors.redAccent,
@@ -130,9 +131,9 @@ class MemberTable extends StatelessWidget {
 
   void editMember(int index) {}
 
-  void deleteMember(int index) {
+  void deleteMember(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
-    uc.deleteUser(index, UserType.member);
+    uc.deleteUser(context, index, UserType.member);
   }
 
   List<int> searchByName(String s) {

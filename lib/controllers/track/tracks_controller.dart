@@ -90,7 +90,11 @@ class TracksController extends GetxController {
     for (int i = tStopIndex.length - 1; i >= 0; i--) {
       // TODO Mongo delteStop(mongo.ObjectId trackID,mongo.ObjectId stopID)
       final stopId = tc.tracks[tIndex].stops[tStopIndex[i]].id;
-      MongoDatabase.deleteStop();
+
+      MongoDatabase.deleteStop(stopId).then((value) {
+        if (value == true) {
+        } else {}
+      });
       // if succes then delete local tc.tracks[tIndex].deleteStop(tStopIndex[i]);
       tc.tracks[tIndex].deleteStop(tStopIndex[i]);
     }
