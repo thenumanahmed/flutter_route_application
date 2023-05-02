@@ -29,7 +29,6 @@ class Body extends StatelessWidget {
         () {
           // ignore: invalid_use_of_protected_member
           tgc.indexes.value;
-          print(tgc.trackings.length);
           return CustomList(
             deleteMessage: 'Stop Tracking',
             searchMessage: 'Search Routes',
@@ -49,8 +48,6 @@ class Body extends StatelessWidget {
       main: Obx(() {
         int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : -1;
         tgc.indexes.value;
-        print('hi');
-        print('index $index');
         return CustomHideArea(
             height: height,
             // hideSize: messageHeight,

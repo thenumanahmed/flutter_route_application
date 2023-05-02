@@ -13,7 +13,6 @@ class TrackingDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tgc = Get.find<TrackingController>();
-    final tc = Get.find<TracksController>();
 
     // return Obx(() {
     tgc.trackingState.value;

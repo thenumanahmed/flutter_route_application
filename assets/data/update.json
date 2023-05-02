@@ -1,0 +1,51 @@
+[
+  {
+    "_id": {
+      "$oid": "6451949c61993ced159ee49b"
+    },
+    "type": "routes",
+    "count": 0
+  },
+  {
+    "_id": {
+      "$oid": "6451950461993ced159ee49d"
+    },
+    "type": "tracks",
+    "count": 0
+  },
+  {
+    "_id": {
+      "$oid": "6451951e61993ced159ee49e"
+    },
+    "type": "tracking",
+    "count": 0
+  },
+  {
+    "_id": {
+      "$oid": "6451953161993ced159ee49f"
+    },
+    "type": "members",
+    "count": 0
+  },
+  {
+    "_id": {
+      "$oid": "6451955061993ced159ee4a0"
+    },
+    "type": "buses",
+    "count": 0
+  },
+  {
+    "_id": {
+      "$oid": "6451955f61993ced159ee4a1"
+    },
+    "type": "admins",
+    "count": 0
+  },
+  {
+    "_id": {
+      "$oid": "6451956d61993ced159ee4a2"
+    },
+    "type": "drivers",
+    "count": 0
+  }
+]
