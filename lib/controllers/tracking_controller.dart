@@ -7,9 +7,6 @@ import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../models/tracking.dart';
-import 'tracks_data/track1.dart';
-import 'tracks_data/track2.dart';
-import 'tracks_data/track3.dart';
 
 enum TrackingState { map, single, multiple }
 
