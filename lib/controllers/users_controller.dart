@@ -1,14 +1,18 @@
-import 'dart:convert';
-
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
-import 'package:dashboard_route_app/functions/custom_scafold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
+import '../dbHelper/mongo_db.dart';
 import '../models/users.dart';
+
+//TODO: mogno updateAdmin(mongo.ObjectID id, User a)
+
+//TODO: mogno updateDriver(mongo.ObjectID id, User d)
+
+//TODO: mogno updateMember(mongo.ObjectID id, User u)
 
 enum UserType { admin, driver, member }
 
@@ -61,12 +65,6 @@ class UsersController extends GetxController {
     fetchingMembers.value = FetchingState.done;
   }
 
-  //TODO: mogno updateAdmin(mongo.ObjectID id, User a)
-
-  //TODO: mogno updateDriver(mongo.ObjectID id, User d)
-
-  //TODO: mogno updateMember(mongo.ObjectID id, User u)
-
   void copyMembersToClipboard() {
     final jsonList = members.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
@@ -77,15 +75,21 @@ class UsersController extends GetxController {
   void copyDriversToClipboard() {
     final jsonList = drivers.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   void copyAdminsToClipboard() {
     final jsonList = admins.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   List<String> get driverUsername =>

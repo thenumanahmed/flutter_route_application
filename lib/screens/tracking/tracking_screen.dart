@@ -23,7 +23,7 @@ class TrackingScreen extends StatelessWidget {
             kHeightSpace,
             Obx(() {
               final rc = Get.find<RouteController>();
-              if (rc.initializing.value == true) {
+              if (rc.fetching.value == true) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

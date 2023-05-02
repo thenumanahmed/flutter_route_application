@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -11,7 +12,7 @@ import './track/tracks_controller.dart';
 import './bus_controller.dart';
 
 class RouteController extends GetxController {
-  final initializing = true.obs;
+  final fetching = FetchingState.getting.obs;
 
   final routeState = RouteType.morning.obs;
   final indexes = <int>[].obs;
@@ -20,10 +21,31 @@ class RouteController extends GetxController {
   final speacial = <r.Route>[].obs;
   final updateScreen = false.obs;
 
-  // TDOD: mongo getRoutes()
+  @override
+  void onReady() {
+    // initAuth();
+    initializeData();
+    super.onReady();
+  }
+
+  void initializeData() async {
+    fetching.value = FetchingState.getting;
+    final value = await MongoDatabase.getRoutes();
+    List<Route> dRoutes = value.map((route) => Route.fromJson(route)).toList();
+    for (int i = 0; i < dRoutes.length; i++) {
+      if (dRoutes[i].type == RouteType.morning) {
+        morning.add(dRoutes[i]);
+      } else if (dRoutes[i].type == RouteType.evening) {
+        evening.add(dRoutes[i]);
+      } else {
+        speacial.add(dRoutes[i]);
+      }
+    }
+    fetching.value = FetchingState.done;
+  }
+
   // TDOD: mongo addRoute(Route r)
   // TDOD: mongo deleteRoute(mongo.Objectid routeId)
-  // TDOD: mongo updateRoute(mongo.Objectid routeId,Route r)
 
   // final
   void copyMorningToClipboard() {
@@ -74,110 +96,94 @@ class RouteController extends GetxController {
     updateScreen.value = !updateScreen.value;
   }
 
-  @override
-  void onReady() {
-    // initAuth();
-    initializeData();
-    super.onReady();
-  }
-
-  void initializeData() {
-    // TODO: mongodatase getRoutes()
-    // fetching.value = FetchingState.loading
-    // get all routes from mongodb
-    // seperate them in three list morning, evening , speacial
-    // store them in respected Rx<Route> list
-    // also  handle error and
-    // in error set FetchingState.Error
-    // in success set FetchingState.Completed after assigning values
-    // insetead of fetching i have user intiliazig.value
-
-    initializing.value = true;
-    List<List<r.Route>> route = getDefaultValues();
-    morning.assignAll(route[0]);
-    evening.assignAll(route[1]);
-    speacial.assignAll(route[2]);
-
-    print(route[0].length);
-    print(route[1].length);
-    print(route[2].length);
-
-    initializing.value = false;
-  }
-
-  void selectionDelete(List<int> indexes) {
+  Future<bool> selectionDelete(List<int> indexes) async {
     indexes.sort();
+    print('hi');
+    bool deleted = true;
     if (routeState.value == RouteType.morning) {
       for (int i = indexes.length - 1; i >= 0; i--) {
-        // TODO: Mongo deleteRoute(mongo.ObjectId routeId)
-        // get id
-        // if succes then delete local morning.removeAt(indexes[i]);
-        morning.removeAt(indexes[i]);
+        final res = await MongoDatabase.deleteRoute(morning[indexes[i]].id);
+        if (res == true) {
+          morning.removeAt(indexes[i]);
+        } else {
+          deleted = false;
+        }
       }
     } else if (routeState.value == RouteType.evening) {
       for (int i = indexes.length - 1; i >= 0; i--) {
-        // TODO: Mongo deleteRoute(mongo.ObjectId routeId)
-        // get id
-        // if succes then delete local morning.removeAt(indexes[i]);
-        evening.removeAt(indexes[i]);
+        final res = await MongoDatabase.deleteRoute(evening[indexes[i]].id);
+        if (res == true) {
+          evening.removeAt(indexes[i]);
+        } else {
+          deleted = false;
+        }
       }
     } else {
       for (int i = indexes.length - 1; i >= 0; i--) {
-        // TODO: Mongo deleteRoute(mongo.ObjectId routeId)
-        // get id
-        // if succes then delete local morning.removeAt(indexes[i]);
-        speacial.removeAt(indexes[i]);
+        final res = await MongoDatabase.deleteRoute(speacial[indexes[i]].id);
+        if (res == true) {
+          speacial.removeAt(indexes[i]);
+        } else {
+          deleted = false;
+        }
       }
     }
 
     // update table
     doUpdate();
+
+    return deleted;
   }
 
-  void updateRoute({
+  Future<bool> updateRoute({
     required int index,
     required String name,
     required mongo.ObjectId? trackId,
     required mongo.ObjectId? driverId,
     required mongo.ObjectId? busId,
-  }) {
-    // TODO: updateRoute(mongo.ObjectId routeId, Route route)
-    // if succes then change it form here as well
+  }) async {
+    // Get Route Object
+    late Route r;
+    if (routeState.value == RouteType.morning) {
+      r = morning[index];
+    } else if (routeState.value == RouteType.morning) {
+      r = evening[index];
+    } else {
+      r = speacial[index];
+    }
+
+    r.name = name;
+    r.trackId = trackId;
+    r.driverId = driverId;
+    r.busId = busId;
+
+    final res = await MongoDatabase.updateRoute(r);
+    if (res == false) return false;
 
     if (routeState.value == RouteType.morning) {
-      morning[index].name = name;
-      morning[index].trackId = trackId;
-      morning[index].driverId = driverId;
-      morning[index].busId = busId;
+      morning[index] = r;
     } else if (routeState.value == RouteType.evening) {
-      morning[index].name = name;
-      morning[index].trackId = trackId;
-      morning[index].driverId = driverId;
-      morning[index].busId = busId;
+      evening[index] = r;
     } else {
-      morning[index].name = name;
-      morning[index].trackId = trackId;
-      morning[index].driverId = driverId;
-      morning[index].busId = busId;
+      speacial[index] = r;
     }
-
-    // code to update in DATABASE
-
-    // update screen
     doUpdate();
+    return true;
   }
 
-  void addRoute(Route r) {
-    // TODO: addRoute(mongo.ObjectId routeId, Route route)
-    // if succes then change run bellow code
-
-    if (r.type == RouteType.morning) {
-      morning.add(r);
-    } else if (r.type == RouteType.evening) {
-      evening.add(r);
-    } else {
-      speacial.add(r);
+  Future<bool> addRoute(Route r) async {
+    final result = await MongoDatabase.addRoute(r);
+    if (result == true) {
+      if (r.type == RouteType.morning) {
+        morning.add(r);
+      } else if (r.type == RouteType.evening) {
+        evening.add(r);
+      } else {
+        speacial.add(r);
+      }
+      doUpdate();
     }
+    return result;
   }
 
   List<int> searchByName(String s) {

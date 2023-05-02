@@ -5,9 +5,15 @@
         },
         "name": "4",
         "type": "Morning",
-        "track_id": "644a8a29d494d5c1c2069338",
-        "driver_id": "644a8a29d494d5c1c20693e9",
-        "bus_id": "644a8a29d494d5c1c20693f0"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c2069338"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693e9"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f0"
+        }
     },
     {
         "_id": {
@@ -15,9 +21,15 @@
         },
         "name": "5",
         "type": "Morning",
-        "track_id": "644a8a29d494d5c1c206935b",
-        "driver_id": "644a8a29d494d5c1c20693eb",
-        "bus_id": "644a8a29d494d5c1c20693f2"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c206935b"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693eb"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f2"
+        }
     },
     {
         "_id": {
@@ -25,9 +37,15 @@
         },
         "name": "6",
         "type": "Morning",
-        "track_id": "644a8a29d494d5c1c206937f",
-        "driver_id": "644a8a29d494d5c1c20693ed",
-        "bus_id": "644a8a29d494d5c1c20693f4"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c206937f"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693ed"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f4"
+        }
     },
     {
         "_id": {
@@ -35,8 +53,14 @@
         },
         "name": "Rana Town",
         "type": "Morning",
-        "track_id": "644a8a29d494d5c1c20693a3",
-        "driver_id": "644a8a29d494d5c1c20693ef",
-        "bus_id": "644a8a29d494d5c1c20693f6"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c20693a3"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693ef"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f6"
+        }
     }
 ]

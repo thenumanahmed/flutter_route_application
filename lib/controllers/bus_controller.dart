@@ -1,70 +1,67 @@
-import 'dart:convert';
-
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:dashboard_route_app/functions/custom_scafold.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
+import '../dbHelper/mongo_db.dart';
 import '../models/bus.dart';
 
-//TODO mongo getBusses()
-//TODO: mongo addBus(Bus b)
-//TODO: mongo deleteBus(mongo.ObjectId id)
 //TODO: mogno updateBus(mongo.ObjectID id, Bus b)
 
 class BusController extends GetxController {
   final indexes = <int>[].obs;
-  final buses = <Bus>[
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK001', modelNo: 1),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK002', modelNo: 2),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK003', modelNo: 3),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK004', modelNo: 4),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK005', modelNo: 5),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK006', modelNo: 6),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK007', modelNo: 7),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK008', modelNo: 8),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK009', modelNo: 9),
-    Bus(id: mongo.ObjectId(), numberPlate: 'LEK010', modelNo: 10),
-  ].obs;
+  final buses = <Bus>[].obs;
+  final fetching = FetchingState.getting.obs;
   // final
+
+  @override
+  void onInit() {
+    initiliazeBuses();
+    super.onInit();
+  }
+
+  void initiliazeBuses() async {
+    fetching.value = FetchingState.getting;
+    final value = await MongoDatabase.getBuses();
+    List<Bus> dBuses = value.map((bus) => Bus.fromJson(bus)).toList();
+    buses.value = dBuses;
+    fetching.value = FetchingState.done;
+  }
+
+  Future<void> deleteBuses(BuildContext context, List<int> index) async {
+    if (index.isEmpty) {
+      customSnackbar(context, false, 'Empty Delete List');
+      return;
+    }
+
+    index.sort();
+    bool delete = true;
+    for (int i = index.length - 1; i >= 0; i--) {
+      MongoDatabase.deleteBus(buses[index[i]].id).then((value) {
+        if (value == true) {
+          buses.removeAt(index[i]);
+        } else {
+          delete = false;
+        }
+      });
+    }
+    customSnackbar(context, delete, 'Delete Bus');
+    indexes.clear();
+  }
+
   List<String> get numberPlates => buses.map((bus) => bus.numberPlate).toList();
 
   void copyBusToClipboard() {
     final jsonList = buses.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
-  }
-
-  @override
-  void onReady() {
-    // initAuth();
-
-    super.onReady();
-  }
-
-  void initilizedData() {
-    // TODO: getBuses()
-    // set fetching.value = FetchingState.loading
-    // get data from mongo db
-    // if success store values in buses list and set fetching.value = FetchingState.completed
-    // else set fetching.value = LoadingState.Error
-    //
-  }
-  Future<void> deleteBuses(List<int> index) async {
-    index.sort();
-    for (int i = index.length - 1; i >= 0; i--) {
-      // TODO: Mongo delteBus(mongo.ObjectId busId)
-      // if succes then delete local buses.removeAt(index[i]);
-      // bool res = true;
-      await MongoDatabase.deleteBus(buses[index[i]].id);
-      // if (res == true) {
-      buses.removeAt(index[i]);
-      // } else {
-      // TODO:  show error on scaffold messenger
-      // }
-    }
-    indexes.clear();
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   void setIndexes(List<int> index) {

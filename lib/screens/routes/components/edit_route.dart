@@ -1,5 +1,6 @@
 import 'package:dashboard_route_app/configs/themes/ui_parameters.dart';
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
+import 'package:dashboard_route_app/functions/custom_scafold.dart';
 import 'package:dashboard_route_app/widgets/custom_alert_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,20 @@ class _EditRouteState extends State<EditRoute> {
     track.text = route.trackName;
     driver.text = route.driverName;
     bus.text = route.busNumber;
+
+    // check if anyone is not_found
+    if (name.text == r.Route.notFound) {
+      name.text = RouteForm.none;
+    }
+    if (track.text == r.Route.notFound) {
+      track.text = RouteForm.none;
+    }
+    if (driver.text == r.Route.notFound) {
+      driver.text = RouteForm.none;
+    }
+    if (bus.text == r.Route.notFound) {
+      bus.text = RouteForm.none;
+    }
 
     super.initState();
   }
@@ -63,14 +78,22 @@ class _EditRouteState extends State<EditRoute> {
     final busId =
         bus.text != RouteForm.none ? rc.stringToBusId(bus.text) : null;
 
-    rc.updateRoute(
+    rc
+        .updateRoute(
       index: widget.rIndex,
       name: name.text,
       trackId: trackId,
       driverId: driverId,
       busId: busId,
-    );
+    )
+        .then((value) {
+      if (value == true) {
+        Navigator.pop(context);
 
-    Navigator.pop(context);
+        customSnackbar(context, value, 'Route Updated');
+      } else {
+        customSnackbar(context, value, 'Route Updated');
+      }
+    });
   }
 }

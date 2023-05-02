@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../configs/themes/ui_parameters.dart';
 import '../../../functions/custom_dialog.dart';
+import '../../../functions/custom_scafold.dart';
 import '../../../models/route.dart';
 import '../../../responsive.dart';
 import '../../../models/route.dart' as r;
@@ -36,7 +37,10 @@ class RouteTable extends StatelessWidget {
         import: const AddRoute(),
         export: const AddRoute(),
         selectionImport: (r) {},
-        selectionDelete: rc.selectionDelete,
+        selectionDelete: (list) {
+          rc.selectionDelete(list).then(
+              (value) => customSnackbar(context, value, 'Deleted Routes'));
+        },
         searchBy: rc.searchByName,
       );
     });

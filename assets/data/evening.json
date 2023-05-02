@@ -1,29 +1,50 @@
 [
     {
-        "_id":{
-    "$oid":  "644a8a2ad494d5c1c20693fb"},
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c20693fb"
+        },
         "name": "4",
         "type": "Evening",
-        "track_id": "644a8a29d494d5c1c2069349",
-        "driver_id": "644a8a29d494d5c1c20693ea",
-        "bus_id": "644a8a29d494d5c1c20693f1"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c2069349"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693ea"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f1"
+        }
     },
     {
-        "_id":{
-    "$oid":  "644a8a2ad494d5c1c20693fd"},
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c20693fd"
+        },
         "name": "5",
         "type": "Evening",
-        "track_id": "644a8a29d494d5c1c206936d",
-        "driver_id": "644a8a29d494d5c1c20693ec",
-        "bus_id": "644a8a29d494d5c1c20693f3"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c206936d"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693ec"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f3"
+        }
     },
     {
-        "_id":{
-    "$oid":  "644a8a2ad494d5c1c20693ff"},
+        "_id": {
+            "$oid": "644a8a2ad494d5c1c20693ff"
+        },
         "name": "6",
         "type": "Evening",
-        "track_id": "644a8a29d494d5c1c2069391",
-        "driver_id": "644a8a29d494d5c1c20693ee",
-        "bus_id": "644a8a29d494d5c1c20693f5"
+        "track_id": {
+            "$oid": "644a8a29d494d5c1c2069391"
+        },
+        "driver_id": {
+            "$oid": "644a8a29d494d5c1c20693ee"
+        },
+        "bus_id": {
+            "$oid": "644a8a29d494d5c1c20693f5"
+        }
     }
 ]

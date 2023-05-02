@@ -1,5 +1,6 @@
 import 'package:dashboard_route_app/configs/themes/ui_parameters.dart';
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
+import 'package:dashboard_route_app/functions/custom_scafold.dart';
 import 'package:dashboard_route_app/widgets/custom_alert_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,8 +64,15 @@ class _AddRouteState extends State<AddRoute> {
               busId: busId,
               type: rc.routeState.value,
             );
-            rc.addRoute(route);
-            Navigator.pop(context);
+            rc.addRoute(route).then((value) {
+              if (value) {
+                Navigator.pop(context);
+                customSnackbar(context, value, 'Add Route');
+              } else {
+                customSnackbar(context, value, 'Add Route');
+              }
+            });
+
             rc.routeState.value = rc.routeState.value;
           },
           title: 'Add Route',

@@ -30,7 +30,7 @@ class Body extends StatelessWidget {
         title: 'Buses',
         tableWidth: tableWidth,
         dataColumn: getBusDataColumn(context),
-        getDataCell: getBusDataCells,
+        getDataCell: (data, index) => getBusDataCells(context, data, index),
         searchBy: bc.searchByName,
         // ignore: invalid_use_of_protected_member
         list: bc.buses.value,
@@ -64,6 +64,7 @@ class Body extends StatelessWidget {
   }
 
   List<DataCell> getBusDataCells(
+    BuildContext context,
     dynamic data,
     int index,
   ) {
@@ -77,13 +78,13 @@ class Body extends StatelessWidget {
       DataCell(Row(
         children: [
           CustomIconButton(
-            onTap: () => editBus(index),
+            onTap: () => editBus(context, index),
             message: 'Edit Track',
             icon: Icons.edit,
             color: Colors.blue,
           ),
           CustomIconButton(
-            onTap: () => deleteBus(index),
+            onTap: () => deleteBus(context, index),
             message: 'Delete Track',
             icon: Icons.delete,
             color: Colors.redAccent,
@@ -123,11 +124,11 @@ class Body extends StatelessWidget {
     }
   }
 
-  void editBus(int index) {}
+  void editBus(BuildContext context, int index) {}
 
-  void deleteBus(int index) {
+  void deleteBus(BuildContext context, int index) {
     final bc = Get.find<BusController>();
-    bc.deleteBuses([index]);
+    bc.deleteBuses(context, [index]);
   }
 
   List<int> searchByName(String s) {

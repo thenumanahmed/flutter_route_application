@@ -18,6 +18,7 @@ class Route {
   mongo.ObjectId? busId;
   mongo.ObjectId? driverId;
 
+  static const String notFound = "not_found";
   Route({
     required this.id,
     required this.name,
@@ -28,7 +29,7 @@ class Route {
   });
 
   Route.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['_id'] as mongo.ObjectId,
         name = json['name'],
         type = stringToRouteType(json['type'] as String),
         trackId = json['track_id'],
@@ -57,9 +58,9 @@ class Route {
   Bus? get bus =>
       busId == null ? null : Get.find<BusController>().getBusById(busId!);
 
-  String get trackName => track != null ? track!.name : "not_found";
-  String get driverName => driver != null ? driver!.username : "not_found";
-  String get busNumber => bus != null ? bus!.numberPlate : "not_found";
+  String get trackName => track != null ? track!.name : notFound;
+  String get driverName => driver != null ? driver!.username : notFound;
+  String get busNumber => bus != null ? bus!.numberPlate : notFound;
 
   static RouteType stringToRouteType(String routeType) {
     if (routeType == 'Morning') {
