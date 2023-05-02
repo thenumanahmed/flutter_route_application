@@ -216,7 +216,6 @@ class MongoDatabase {
 
     if (kDebugMode) {
       print(trackingsList.length);
-      print(trackingsList[0]['name']);
     }
     return trackingsList;
   }

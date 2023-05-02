@@ -61,6 +61,11 @@ class Route {
   String get trackName => track != null ? track!.name : notFound;
   String get driverName => driver != null ? driver!.username : notFound;
   String get busNumber => bus != null ? bus!.numberPlate : notFound;
+  String get typeCharacter => type == RouteType.morning
+      ? 'M'
+      : type == RouteType.evening
+          ? 'E'
+          : 'S';
 
   static RouteType stringToRouteType(String routeType) {
     if (routeType == 'Morning') {

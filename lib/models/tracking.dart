@@ -40,8 +40,30 @@ class Tracking {
     return r;
   }
 
+  String get routeName {
+    final r = route;
+    return r != null ? r.name : 'Not Found';
+  }
+
+  String get typeCharacter {
+    final r = route;
+    return r != null ? r.typeCharacter : 'N';
+  }
+
   Track? get track {
     return route == null ? null : route!.track;
+  }
+
+  int get totalStops {
+    final r = route;
+    if (r != null) {
+      final t = r.track;
+      if (t != null) {
+        return t.stops.length;
+      }
+      return 0;
+    }
+    return 0;
   }
 
   Tracking.fromJson(Map<String, dynamic> json)
@@ -50,7 +72,7 @@ class Tracking {
         latitude = json['latitude'],
         longitude = json['longitude'],
         stopCovered = json['stop_covered'],
-        updateTime = stringToTimeOfDay(json['updateTime'] as String);
+        updateTime = stringToTimeOfDay(json['update_time'] as String);
 
   Map<String, dynamic> toJson() {
     return {

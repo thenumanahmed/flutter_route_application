@@ -30,8 +30,8 @@ class TrackingDetails extends StatelessWidget {
         // ignore: invalid_use_of_protected_member
         final tracking = tgc.trackings.value[tgc.indexes[0]];
         final track = tracking.track;
-        final String routeName = track!.name;
-        const String routeType = 'Morning';
+        final String routeName = tracking.routeName;
+        final String routeType = tracking.typeCharacter;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -56,14 +56,16 @@ class TrackingDetails extends StatelessWidget {
               ],
             ),
             kHeightSpace,
-            Text(tracking.driverName, style: TextStyle(color: Colors.black)),
+            Text(tracking.driverName,
+                style: const TextStyle(color: Colors.black)),
             kHeightSpace,
-            DotsProgressLine(
-              height: 10,
-              currentStop: tracking.stopCovered,
-              stops: List.generate(
-                  track.stops.length, (index) => track.stops[index].name),
-            ),
+            if (track != null)
+              DotsProgressLine(
+                height: 10,
+                currentStop: tracking.stopCovered,
+                stops: List.generate(
+                    track.stops.length, (index) => track.stops[index].name),
+              ),
           ],
         );
       }),

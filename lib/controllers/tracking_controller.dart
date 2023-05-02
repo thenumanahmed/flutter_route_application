@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class TrackingController extends GetxController {
   final trackingState = TrackingState.map.obs;
   final indexes = <int>[].obs;
   final trackings = <Tracking>[].obs;
+  final fetching = FetchingState.getting.obs;
   // final
 
   //TODO: mongo getTrackings()
@@ -21,9 +23,38 @@ class TrackingController extends GetxController {
 
   @override
   void onReady() {
-    // initAuth();
-    super.onReady();
     initializeValues();
+    super.onReady();
+  }
+
+  void initializeValues() async {
+    fetching.value = FetchingState.getting;
+    final value = await MongoDatabase.getTrackings();
+    List<Tracking> dTracking = value.map((tracking) {
+      print(tracking);
+      return Tracking.fromJson(tracking);
+    }).toList();
+    print(dTracking.length);
+    trackings.value = dTracking;
+    fetching.value = FetchingState.done;
+  }
+
+  Future<bool> stopTracking(List<int> index) async {
+    if (index.isEmpty) return false;
+
+    index.sort();
+    bool deleted = true;
+    for (int i = index.length - 1; i >= 0; i--) {
+      final res = await MongoDatabase.stopTracking(trackings[index[i]].id);
+      if (res == true) {
+        trackings.removeAt(index[i]);
+      } else {
+        deleted = false;
+      }
+    }
+    indexes.clear();
+    trackingState.value = TrackingState.map;
+    return deleted;
   }
 
   void copyTrackingToClipboard() {
@@ -31,21 +62,6 @@ class TrackingController extends GetxController {
     final jsonString = jsonEncode(jsonList);
     Clipboard.setData(ClipboardData(text: jsonString))
         .then((v) => print('data Copied'));
-  }
-
-  void stopTracking(List<int> index) {
-    index.sort();
-    for (int i = index.length - 1; i >= 0; i--) {
-      // TODO: mongo stopTracking(monog.ObjectId trackingId)
-      // if success delete then execute trackings.removeAt(index[i]);
-      trackings.removeAt(index[i]);
-    }
-    indexes.clear();
-    trackingState.value = TrackingState.map;
-  }
-
-  void initializeValues() {
-    // localInitialize();
   }
 
   void localInitialize() {

@@ -38,7 +38,7 @@ class Body extends StatelessWidget {
             onDelete: tgc.stopTracking,
             getTile: (tracking) => TrackingTile(
               listWidth: listWidth,
-              tracking: tracking,
+              dTracking: tracking,
             ),
             searchBy: tgc.searchByName,
             onSelectedIndexUpdate: tgc.setIndexes,
