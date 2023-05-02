@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../widgets/custom_hide_area.dart';
 import '../../../widgets/custom_list/custom_list.dart';
-import '../../../widgets/custom_map/custom_map.dart';
+// import '../../../widgets/custom_map/custom_map.dart';
 import '../../../controllers/tracking_controller.dart';
 import 'tracking_detail.dart';
 import 'tracking_tile.dart';
@@ -47,7 +47,7 @@ class Body extends StatelessWidget {
         },
       ),
       main: Obx(() {
-        int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : 0;
+        int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : -1;
         tgc.indexes.value;
         print('hi');
         print('index $index');
@@ -64,7 +64,7 @@ class Body extends StatelessWidget {
                 : TrackingDetails(height: messageHeight),
             main: ViewTrackingMap(
               key: UniqueKey(),
-              tracking: tgc.trackings[index],
+              tracking: index != -1 ? tgc.trackings[index] : null,
             ));
       }),
     );

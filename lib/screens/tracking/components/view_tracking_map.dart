@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../../models/track.dart';
 import '../../../../widgets/flutter_map_constants.dart';
+import '../../../configs/map/flutter_map.dart';
 import '../../../models/tracking.dart';
 
 class ViewTrackingMap extends StatelessWidget {
@@ -13,11 +14,14 @@ class ViewTrackingMap extends StatelessWidget {
     required this.tracking,
   });
 
-  final Tracking tracking;
+  final Tracking? tracking;
   @override
   Widget build(BuildContext context) {
+    Track? track;
     final mp = MapController();
-    final track = tracking.track;
+    if (tracking != null) {
+      track = tracking!.track;
+    }
     return FlutterMap(
       mapController: mp,
       options: MapOptions(
@@ -29,7 +33,9 @@ class ViewTrackingMap extends StatelessWidget {
         },
 
         maxBounds: kMaxBounds,
-        center: LatLng(tracking.latitude, tracking.longitude),
+        center: tracking != null
+            ? LatLng(tracking!.latitude, tracking!.longitude)
+            : kUetKskPoint,
         zoom: 15,
         maxZoom: kMaxZoom,
         minZoom: kMinZoom,
@@ -39,15 +45,15 @@ class ViewTrackingMap extends StatelessWidget {
       nonRotatedChildren: const [],
       children: [
         kTileLayer,
-        if (track != null)
+        if (tracking != null && track != null)
           PolylineLayer(
             polylines: getPolylines(track.path, color: Colors.blue),
           ),
-        if (track != null)
+        if (tracking != null && track != null)
           MarkerLayer(
             markers: getMarkers(track.stops),
           ),
-        DriverLocation(tracking: tracking),
+        if (tracking != null) DriverLocation(tracking: tracking!),
       ],
     );
   }

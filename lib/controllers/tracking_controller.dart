@@ -48,10 +48,7 @@ class TrackingController extends GetxController {
   }
 
   void initializeValues() {
-    //TODO: mongodatebase getTracking()
-    // kia ab har jagah batah diya ha idher nahi batah raha
-
-    localInitialize();
+    // localInitialize();
   }
 
   void localInitialize() {

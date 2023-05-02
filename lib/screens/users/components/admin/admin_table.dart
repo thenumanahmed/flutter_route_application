@@ -79,7 +79,7 @@ class AdminTable extends StatelessWidget {
         Text(admin.username, softWrap: true),
       ),
       DataCell(Text(admin.email)),
-      DataCell(Text(admin.password)),
+      DataCell(Text(admin.phoneNo)),
       DataCell(Text(admin.isBlocked ? "Yes" : "No")),
       DataCell(Row(
         children: [
