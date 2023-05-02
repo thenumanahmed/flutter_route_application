@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 
 import '../../../configs/themes/ui_parameters.dart';
 import '../../../functions/custom_dialog.dart';
-import '../../../functions/custom_scafold.dart';
+// import '../../../functions/custom_scafold.dart';
+import '../../../functions/custom_snackbar.dart';
 import '../../../models/route.dart';
 import '../../../responsive.dart';
 import '../../../models/route.dart' as r;
