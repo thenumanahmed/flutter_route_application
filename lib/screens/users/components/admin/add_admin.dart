@@ -74,7 +74,8 @@ class _AddAdminState extends State<AddAdmin> {
               if (key.currentState!.validate()) {
                 User newAdmin = User(
                   id: mongo.ObjectId(),
-                  password: password.text,
+                  password: password
+                      .text, // passwor.text ko yaha encrypt karna ha bas takey databse main excrypted value jaey
                   phoneNo: phoneNo.text,
                   username: username.text,
                   email: email.text,

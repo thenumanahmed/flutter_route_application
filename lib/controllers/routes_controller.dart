@@ -96,38 +96,40 @@ class RouteController extends GetxController {
     updateScreen.value = !updateScreen.value;
   }
 
-  Future<bool> selectionDelete(List<int> indexes) async {
-    indexes.sort();
+  Future<bool> selectionDelete(List<int> index) async {
+    index.sort();
     print('hi');
     bool deleted = true;
+    print(index.toString());
     if (routeState.value == RouteType.morning) {
-      for (int i = indexes.length - 1; i >= 0; i--) {
-        final res = await MongoDatabase.deleteRoute(morning[indexes[i]].id);
+      for (int i = index.length - 1; i >= 0; i--) {
+        final res = await MongoDatabase.deleteRoute(morning[index[i]].id);
         if (res == true) {
-          morning.removeAt(indexes[i]);
+          morning.removeAt(index[i]);
         } else {
           deleted = false;
         }
       }
     } else if (routeState.value == RouteType.evening) {
-      for (int i = indexes.length - 1; i >= 0; i--) {
-        final res = await MongoDatabase.deleteRoute(evening[indexes[i]].id);
+      for (int i = index.length - 1; i >= 0; i--) {
+        final res = await MongoDatabase.deleteRoute(evening[index[i]].id);
         if (res == true) {
-          evening.removeAt(indexes[i]);
+          evening.removeAt(index[i]);
         } else {
           deleted = false;
         }
       }
     } else {
-      for (int i = indexes.length - 1; i >= 0; i--) {
-        final res = await MongoDatabase.deleteRoute(speacial[indexes[i]].id);
+      for (int i = index.length - 1; i >= 0; i--) {
+        final res = await MongoDatabase.deleteRoute(speacial[index[i]].id);
         if (res == true) {
-          speacial.removeAt(indexes[i]);
+          speacial.removeAt(index[i]);
         } else {
           deleted = false;
         }
       }
     }
+    index.clear();
 
     // update table
     doUpdate();

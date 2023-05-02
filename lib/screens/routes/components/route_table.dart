@@ -27,6 +27,7 @@ class RouteTable extends StatelessWidget {
       rc.routeState.value;
       rc.updateScreen.value;
       return CustomDataTable(
+        key: UniqueKey(),
         tableWidth: tableWidth,
         title: getTitle(rc.routeState.value),
         getDataCell: (dynamic, index) =>
@@ -37,8 +38,8 @@ class RouteTable extends StatelessWidget {
         import: const AddRoute(),
         export: const AddRoute(),
         selectionImport: (r) {},
-        selectionDelete: (list) {
-          rc.selectionDelete(list).then(
+        selectionDelete: (index) {
+          rc.selectionDelete(index).then(
               (value) => customSnackbar(context, value, 'Deleted Routes'));
         },
         searchBy: rc.searchByName,
