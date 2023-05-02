@@ -5,7 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../../../../configs/themes/custom_text_styles.dart';
 import '../../../../configs/themes/ui_parameters.dart';
-import '../../../../functions/custom_scafold.dart';
+import '../../../../functions/custom_snackbar.dart';
 import '../../../../models/users.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../widgets/custom_icon_button.dart';
