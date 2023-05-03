@@ -20,6 +20,7 @@ class MongoDatabase {
   static DbCollection? routesCollection;
   static DbCollection? busesCollection;
   static DbCollection? stopsCollection;
+  static DbCollection? updateCollection;
 
   static connect() async {
     db = await Db.create(MONGO_CONN_URL);
@@ -33,6 +34,22 @@ class MongoDatabase {
     routesCollection = db!.collection(ROUTES_COLLECTION);
     trackingCollection = db!.collection(TRACKING_COLLECTION);
     stopsCollection = db!.collection(STOPS_COLLECTION);
+    updateCollection = db!.collection(UPDATE_COLLECTION);
+  }
+
+  static Future<int> getTrackingUpdate() async {
+    final filter = where.eq('type', 'tracking');
+    final result = await updateCollection!.findOne(filter);
+    print(result);
+    return result != null ? result['count'] as int : -1;
+  }
+
+  static Future<bool> updateTracking() async {
+    final filter = where.eq('type', 'tracking');
+    final update = modify.inc('count', 1); // Increment the 'count' field by 1
+    final result = await stopsCollection!.update(filter, update);
+    print(result);
+    return result != null ? true : false;
   }
 
   static bool mongoResult(WriteResult result, String message) {
@@ -310,6 +327,7 @@ class MongoDatabase {
 
   static Future<bool> stopTracking(ObjectId trackingId) async {
     final result = await trackingCollection?.remove(where.id(trackingId));
+    result != null ? updateTracking() : null;
     return mongoDeleteResult(result, 'Stop Tracking'); // return true;
   }
 

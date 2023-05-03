@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,9 @@ class TrackingScreen extends StatelessWidget {
             kHeightSpace,
             Obx(() {
               final rc = Get.find<RouteController>();
-              if (rc.fetching.value == true) {
+              final tgc = Get.find<RouteController>();
+              if (rc.fetching.value == FetchingState.getting &&
+                  tgc.fetching.value == FetchingState.getting) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

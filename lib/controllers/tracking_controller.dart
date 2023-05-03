@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
@@ -16,26 +17,41 @@ class TrackingController extends GetxController {
   final indexes = <int>[].obs;
   final trackings = <Tracking>[].obs;
   final fetching = FetchingState.getting.obs;
-  // final
-
-  //TODO: mongo getTrackings()
-  //TODO: mongo stopTracking(mongo.ObjectId trackingId)
+  final updateCount = (0).obs;
 
   @override
-  void onReady() {
-    initializeValues();
-    super.onReady();
+  void onReady() async {
+    await initializeValues();
+    checkDatabaseUpdate();
   }
 
-  void initializeValues() async {
+  Future<void> initializeValues() async {
+    await getTrackingsFromDatabase();
+  }
+
+  void checkDatabaseUpdate() {
+    Timer.periodic(Duration(seconds: 5), (timer) async {
+      int c = await MongoDatabase.getTrackingUpdate();
+      print('Update COunt ${updateCount.value} mong $c');
+      if (updateCount.value != c) {
+        print('Getting Tracks from database');
+        fetching.value = FetchingState.getting;
+        getTrackingsFromDatabase();
+        fetching.value = FetchingState.done;
+        updateCount.value = c;
+      }
+    });
+  }
+
+  Future<void> getTrackingsFromDatabase() async {
     fetching.value = FetchingState.getting;
     final value = await MongoDatabase.getTrackings();
     List<Tracking> dTracking = value.map((tracking) {
       print(tracking);
       return Tracking.fromJson(tracking);
     }).toList();
-    print(dTracking.length);
     trackings.value = dTracking;
+
     fetching.value = FetchingState.done;
   }
 

@@ -12,6 +12,7 @@ const MEMBERS_COLLECTION = "members";
 const ROUTES_COLLECTION = "routes";
 const TRACKING_COLLECTION = "tracking";
 const STOPS_COLLECTION = "stops";
+const UPDATE_COLLECTION = "update";
 
 const user = "salman";
 // q^7]<C(2hOJmbE|b
