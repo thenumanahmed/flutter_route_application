@@ -20,58 +20,55 @@ class Body extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final height = size.height - 100;
 
-    return Obx(() {
-      // tgc.trackings.value;
-      return CustomHideArea(
-        height: height,
-        hideSize: listWidth,
-        allwaysHide: false,
-        message: 'Show Driver',
-        hide: Obx(
-          () {
-            // ignore: invalid_use_of_protected_member
-            tgc.updateCount.value;
-            tgc.indexes.value;
-            return CustomList(
-              key: UniqueKey(),
-              deleteMessage: 'Stop Tracking',
-              searchMessage: 'Search Routes',
-              deleteIcon: Icons.stop_circle_outlined,
-              height: height,
-              onDelete: tgc.stopTracking,
-              getTile: (tracking) => TrackingTile(
-                listWidth: listWidth,
-                dTracking: tracking,
-              ),
-              searchBy: tgc.searchByName,
-              onSelectedIndexUpdate: tgc.setIndexes,
-              list: tgc.trackings,
-            );
-          },
-        ),
-        main: Obx(() {
-          int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : -1;
-          tgc.indexes.value;
+    return CustomHideArea(
+      height: height,
+      hideSize: listWidth,
+      allwaysHide: false,
+      message: 'Show Driver',
+      hide: Obx(
+        () {
+          // ignore: invalid_use_of_protected_member
           tgc.updateCount.value;
-          return CustomHideArea(
+          tgc.indexes.value;
+          return CustomList(
+            key: UniqueKey(),
+            deleteMessage: 'Stop Tracking',
+            searchMessage: 'Search Routes',
+            deleteIcon: Icons.stop_circle_outlined,
+            height: height,
+            onDelete: tgc.stopTracking,
+            getTile: (tracking) => TrackingTile(
+              listWidth: listWidth,
+              dTracking: tracking,
+            ),
+            searchBy: tgc.searchByName,
+            onSelectedIndexUpdate: tgc.setIndexes,
+            list: tgc.trackings,
+          );
+        },
+      ),
+      main: Obx(() {
+        int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : -1;
+        tgc.indexes.value;
+        tgc.updateCount.value;
+        return CustomHideArea(
+            key: UniqueKey(),
+            height: height,
+            // hideSize: messageHeight,
+            allwaysHide: true,
+            buttonBackground: Colors.black,
+            buttonForeground: Colors.white,
+            hidePos: HidePos.bottom,
+            message: 'Show Details',
+            hide: (tgc.trackingState.value == TrackingState.map)
+                ? const SizedBox.shrink()
+                : TrackingDetails(height: messageHeight),
+            main: ViewTrackingMap(
               key: UniqueKey(),
-              height: height,
-              // hideSize: messageHeight,
-              allwaysHide: true,
-              buttonBackground: Colors.black,
-              buttonForeground: Colors.white,
-              hidePos: HidePos.bottom,
-              message: 'Show Details',
-              hide: (tgc.trackingState.value == TrackingState.map)
-                  ? const SizedBox.shrink()
-                  : TrackingDetails(height: messageHeight),
-              main: ViewTrackingMap(
-                key: UniqueKey(),
-                tracking: index != -1 ? tgc.trackings[index] : null,
-              ));
-        }),
-      );
-    });
+              tracking: index != -1 ? tgc.trackings[index] : null,
+            ));
+      }),
+    );
   }
 
   onStop(List<int> indexes) {}
