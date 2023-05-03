@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/users_controller.dart';
+import '../../../../functions/custom_dialog.dart';
 import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
+import '../admin/edit_admin.dart';
 import 'add_driver.dart';
 
 class DriverTable extends StatelessWidget {
@@ -83,7 +85,12 @@ class DriverTable extends StatelessWidget {
       DataCell(Row(
         children: [
           CustomIconButton(
-            onTap: () => editDriver(context, index),
+            onTap: () => customDialog(
+              context: context,
+              title: 'EDIT DRIVER',
+              widget:
+                  EditUser(index: index, user: data, userType: UserType.driver),
+            ),
             message: 'Edit Driver',
             icon: Icons.edit,
             color: Colors.blue,

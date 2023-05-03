@@ -6,11 +6,13 @@ import 'package:get/get.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/users_controller.dart';
+import '../../../../functions/custom_dialog.dart';
 import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
 import 'add_admin.dart';
+import 'edit_admin.dart';
 
 class AdminTable extends StatelessWidget {
   const AdminTable({super.key});
@@ -84,7 +86,12 @@ class AdminTable extends StatelessWidget {
       DataCell(Row(
         children: [
           CustomIconButton(
-            onTap: () => editAdmin(index),
+            onTap: () => customDialog(
+              context: context,
+              title: 'EDIT ADMIN',
+              widget:
+                  EditUser(index: index, user: data, userType: UserType.admin),
+            ),
             message: 'Edit Admin',
             icon: Icons.edit,
             color: Colors.blue,
