@@ -18,14 +18,14 @@ class SlideMenu extends StatelessWidget {
           () => Column(
             children: [
               DrawerHeader(child: Image.asset("assets/images/logo.png")),
-              DrawerListTile(
-                onPress: () =>
-                    menuController.setSelectedItem(MenuItems.dashboard),
-                isSelected:
-                    menuController.selectedItem.value == MenuItems.dashboard,
-                svgSrc: "assets/icons/menu_dashbord.svg",
-                title: 'Dashboard',
-              ),
+              // DrawerListTile(
+              //   onPress: () =>
+              //       menuController.setSelectedItem(MenuItems.dashboard),
+              //   isSelected:
+              //       menuController.selectedItem.value == MenuItems.dashboard,
+              //   svgSrc: "assets/icons/menu_dashbord.svg",
+              //   title: 'Dashboard',
+              // ),
               DrawerListTile(
                 onPress: () =>
                     menuController.setSelectedItem(MenuItems.tracking),
@@ -62,29 +62,29 @@ class SlideMenu extends StatelessWidget {
                 svgSrc: "assets/icons/menu_store.svg",
                 title: 'Buses',
               ),
-              DrawerListTile(
-                onPress: () =>
-                    menuController.setSelectedItem(MenuItems.message),
-                isSelected:
-                    menuController.selectedItem.value == MenuItems.message,
-                imageSrc: "assets/icons/message.png",
-                title: 'Message',
-              ),
-              DrawerListTile(
-                onPress: () =>
-                    menuController.setSelectedItem(MenuItems.settings),
-                isSelected:
-                    menuController.selectedItem.value == MenuItems.settings,
-                svgSrc: "assets/icons/menu_setting.svg",
-                title: 'Settings',
-              ),
-              DrawerListTile(
-                onPress: () {},
-                isSelected:
-                    menuController.selectedItem.value == MenuItems.login,
-                svgSrc: "assets/icons/menu_profile.svg",
-                title: 'Logout',
-              ),
+              // DrawerListTile(
+              //   onPress: () =>
+              //       menuController.setSelectedItem(MenuItems.message),
+              //   isSelected:
+              //       menuController.selectedItem.value == MenuItems.message,
+              //   imageSrc: "assets/icons/message.png",
+              //   title: 'Message',
+              // ),
+              // DrawerListTile(
+              //   onPress: () =>
+              //       menuController.setSelectedItem(MenuItems.settings),
+              //   isSelected:
+              //       menuController.selectedItem.value == MenuItems.settings,
+              //   svgSrc: "assets/icons/menu_setting.svg",
+              //   title: 'Settings',
+              // ),
+              // DrawerListTile(
+              //   onPress: () {},
+              //   isSelected:
+              //       menuController.selectedItem.value == MenuItems.login,
+              //   svgSrc: "assets/icons/menu_profile.svg",
+              //   title: 'Logout',
+              // ),
             ],
           ),
         ),
