@@ -10,15 +10,15 @@ import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../controllers/users_controller.dart';
 import '../user_form.dart';
 
-class AddAdmin extends StatefulWidget {
-  const AddAdmin({super.key});
-  // final UserType userType;
+class AddUser extends StatefulWidget {
+  const AddUser({super.key, required this.userType});
+  final UserType userType;
 
   @override
-  State<AddAdmin> createState() => _AddAdminState();
+  State<AddUser> createState() => _AddUserState();
 }
 
-class _AddAdminState extends State<AddAdmin> {
+class _AddUserState extends State<AddUser> {
   late final TextEditingController username;
   late final TextEditingController email;
   late final TextEditingController phoneNo;
@@ -27,6 +27,9 @@ class _AddAdminState extends State<AddAdmin> {
   String defaultEmail = "0";
   String defaultPhoneNo = "0";
   String defaultPassword = "0";
+
+  int tUser = 0;
+  late String defaultC;
 
   @override
   void initState() {
@@ -40,13 +43,23 @@ class _AddAdminState extends State<AddAdmin> {
     phoneNo = TextEditingController();
     password = TextEditingController();
 
-    final UsersController uc = Get.find();
-    final admins = uc.admins;
-    final tAdmins = admins.length;
+    final uc = Get.find<UsersController>();
 
-    defaultUsername = 'a0${tAdmins + 1}';
-    defaultEmail = 'a0${tAdmins + 1}@google.com';
-    defaultPhoneNo = '+92 1234567890';
+    if (widget.userType == UserType.admin) {
+      tUser = uc.admins.length;
+      defaultC = 'a0';
+    } else if (widget.userType == UserType.driver) {
+      tUser = uc.drivers.length;
+      defaultC = 'd0';
+    } else {
+      tUser = uc.members.length;
+      defaultC = '2021se';
+    }
+
+    final String defaultString = '$defaultC${tUser + 1}';
+    defaultUsername = defaultString;
+    defaultEmail = '$defaultString@uet.edu.pk';
+    defaultPhoneNo = '+92-1234567890';
     defaultPassword = '12345678';
   }
 
@@ -75,7 +88,7 @@ class _AddAdminState extends State<AddAdmin> {
             title: 'Add',
             onTap: () async {
               if (key.currentState!.validate()) {
-                User newAdmin = User(
+                User newUser = User(
                   id: mongo.ObjectId(),
                   password: password
                       .text, // passwor.text ko yaha encrypt karna ha bas takey databse main excrypted value jaey
@@ -83,15 +96,38 @@ class _AddAdminState extends State<AddAdmin> {
                   username: username.text,
                   email: email.text,
                 );
-                MongoDatabase.addAdmin(newAdmin).then((value) {
-                  if (value == true) {
-                    uc.admins.add(newAdmin);
-                    Navigator.pop(context);
-                    customSnackbar(context, value, 'Add Admin');
-                  } else {
-                    customSnackbar(context, value, 'Add Admin');
-                  }
-                });
+
+                if (widget.userType == UserType.admin) {
+                  MongoDatabase.addAdmin(newUser).then((value) {
+                    if (value == true) {
+                      uc.admins.add(newUser);
+                      Navigator.pop(context);
+                      customSnackbar(context, value, 'Add Admin');
+                    } else {
+                      customSnackbar(context, value, 'Add Admin');
+                    }
+                  });
+                } else if (widget.userType == UserType.driver) {
+                  MongoDatabase.addDriver(newUser).then((value) {
+                    if (value == true) {
+                      uc.drivers.add(newUser);
+                      Navigator.pop(context);
+                      customSnackbar(context, value, 'Add Driver');
+                    } else {
+                      customSnackbar(context, value, 'Add Driver');
+                    }
+                  });
+                } else if (widget.userType == UserType.member) {
+                  MongoDatabase.addMember(newUser).then((value) {
+                    if (value == true) {
+                      uc.members.add(newUser);
+                      Navigator.pop(context);
+                      customSnackbar(context, value, 'Add member');
+                    } else {
+                      customSnackbar(context, value, 'Add member');
+                    }
+                  });
+                }
               }
             },
           ),

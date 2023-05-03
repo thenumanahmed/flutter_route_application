@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/screens/users/components/admin/add_admin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,7 @@ class DriverTable extends StatelessWidget {
         avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
     return Obx(
       () => CustomDataTable(
-        add: const AddDriver(),
+        add: const AddUser(userType: UserType.driver),
         import: const Text('Import'),
         export: const Text('Export'),
         selectionImport: selectionImport,

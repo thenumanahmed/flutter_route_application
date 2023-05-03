@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/users_controller.dart';
+import '../../../../functions/custom_dialog.dart';
 import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
+import '../admin/add_admin.dart';
+import '../admin/edit_admin.dart';
 import 'add_member.dart';
 
 class MemberTable extends StatelessWidget {
@@ -21,7 +24,7 @@ class MemberTable extends StatelessWidget {
         avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
     return Obx(
       () => CustomDataTable(
-        add: const AddMember(),
+        add: const AddUser(userType: UserType.member),
         import: const Text('Import'),
         export: const Text('Export'),
         selectionImport: selectionImport,
@@ -83,7 +86,12 @@ class MemberTable extends StatelessWidget {
       DataCell(Row(
         children: [
           CustomIconButton(
-            onTap: () => editMember(index),
+            onTap: () => customDialog(
+              context: context,
+              title: 'EDIT DRIVER',
+              widget:
+                  EditUser(index: index, user: data, userType: UserType.member),
+            ),
             message: 'Edit Member',
             icon: Icons.edit,
             color: Colors.blue,

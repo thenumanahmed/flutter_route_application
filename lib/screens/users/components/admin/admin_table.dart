@@ -25,7 +25,7 @@ class AdminTable extends StatelessWidget {
         avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
     return Obx(
       () => CustomDataTable(
-        add: const AddAdmin(),
+        add: const AddUser(userType: UserType.admin),
         import: const Text('Import'),
         export: const Text('Export'),
         selectionImport: selectionImport,
