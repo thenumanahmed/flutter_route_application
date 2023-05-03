@@ -88,14 +88,12 @@ class TracksController extends GetxController {
     tStopIndex.sort();
     final tc = Get.find<TracksController>();
     for (int i = tStopIndex.length - 1; i >= 0; i--) {
-      // TODO Mongo delteStop(mongo.ObjectId trackID,mongo.ObjectId stopID)
       final stopId = tc.tracks[tIndex].stops[tStopIndex[i]].id;
 
       MongoDatabase.deleteStop(stopId).then((value) {
         if (value == true) {
         } else {}
       });
-      // if succes then delete local tc.tracks[tIndex].deleteStop(tStopIndex[i]);
       tc.tracks[tIndex].deleteStop(tStopIndex[i]);
     }
   }
@@ -136,7 +134,8 @@ class TracksController extends GetxController {
   void copyTracksToClipboard() {
     final jsonList = tracks.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) print('data Copied');
+    });
   }
 }

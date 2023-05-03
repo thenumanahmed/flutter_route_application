@@ -1,5 +1,6 @@
 import 'package:dashboard_route_app/controllers/bus_controller.dart';
 import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:dashboard_route_app/functions/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -63,13 +64,15 @@ class _AddBusState extends State<AddBus> {
                   modelNo: int.parse(modelNo.text),
                 );
                 //    returns true / false
-                var res = await MongoDatabase.addBus(b);
-                if (res == true) {
-                  bc.buses.add(b);
-                  Navigator.pop(context);
-                } else {
-                  // TODO: show scaffold message on error
-                }
+                MongoDatabase.addBus(b).then((value) {
+                  if (value == true) {
+                    bc.buses.add(b);
+                    Navigator.pop(context);
+                    customSnackbar(context, value, 'Add Bus');
+                  } else {
+                    customSnackbar(context, value, 'Add Bus');
+                  }
+                });
               }
             },
           ),

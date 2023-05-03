@@ -54,13 +54,14 @@ class _AddTrackState extends State<AddTrack> {
               path: [],
               stops: [],
             );
-            bool res = await MongoDatabase.addTrack(newTrack);
-            if (res == true) {
-              tc.tracks.add(newTrack);
-              Navigator.pop(context);
-            } else {
-              //  TODO: show error on scaffold messenger
-            }
+            MongoDatabase.addTrack(newTrack).then((value) {
+              if (value == true) {
+                tc.tracks.add(newTrack);
+                Navigator.pop(context);
+              } else {
+                //  TODO: show error on scaffold messenger
+              }
+            });
           },
         ),
       ],

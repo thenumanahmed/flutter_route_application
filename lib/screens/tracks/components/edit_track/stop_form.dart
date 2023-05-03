@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 
 import '../../../../configs/themes/custom_text_styles.dart';
 import '../../../../configs/themes/ui_parameters.dart';

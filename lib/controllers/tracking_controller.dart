@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
 import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -32,9 +33,7 @@ class TrackingController extends GetxController {
   void checkDatabaseUpdate() {
     Timer.periodic(Duration(seconds: 5), (timer) async {
       int c = await MongoDatabase.getTrackingUpdate();
-      print('Update COunt ${updateCount.value} mong $c');
       if (updateCount.value != c) {
-        print('Getting Tracks from database');
         fetching.value = FetchingState.getting;
         getTrackingsFromDatabase();
         fetching.value = FetchingState.done;
@@ -47,7 +46,6 @@ class TrackingController extends GetxController {
     fetching.value = FetchingState.getting;
     final value = await MongoDatabase.getTrackings();
     List<Tracking> dTracking = value.map((tracking) {
-      print(tracking);
       return Tracking.fromJson(tracking);
     }).toList();
     trackings.value = dTracking;
@@ -76,8 +74,11 @@ class TrackingController extends GetxController {
   void copyTrackingToClipboard() {
     final jsonList = trackings.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   void localInitialize() {

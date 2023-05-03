@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -51,22 +52,31 @@ class RouteController extends GetxController {
   void copyMorningToClipboard() {
     final jsonList = morning.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   void copyEveningToClipboard() {
     final jsonList = evening.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   void copySpeacialToClipboard() {
     final jsonList = speacial.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   Route currentRoute(int index) {
@@ -98,9 +108,8 @@ class RouteController extends GetxController {
 
   Future<bool> selectionDelete(List<int> index) async {
     index.sort();
-    print('hi');
+
     bool deleted = true;
-    print(index.toString());
     if (routeState.value == RouteType.morning) {
       for (int i = index.length - 1; i >= 0; i--) {
         final res = await MongoDatabase.deleteRoute(morning[index[i]].id);

@@ -45,7 +45,6 @@ class EditController extends GetxController {
     if (kDebugMode) {
       print('Delete : ${indexes.toString()}');
     }
-    // TODO: dont add delteStop here cause it is already added in deltestop
     Get.find<TracksController>().deleteStops(tIndex.value, indexes);
 
     setSelectedIndexed([]);

@@ -40,7 +40,6 @@ class MongoDatabase {
   static Future<int> getTrackingUpdate() async {
     final filter = where.eq('type', 'tracking');
     final result = await updateCollection!.findOne(filter);
-    print(result);
     return result != null ? result['count'] as int : -1;
   }
 
@@ -48,7 +47,6 @@ class MongoDatabase {
     final filter = where.eq('type', 'tracking');
     final update = modify.inc('count', 1); // Increment the 'count' field by 1
     final result = await stopsCollection!.update(filter, update);
-    print(result);
     return result != null ? true : false;
   }
 

@@ -1,12 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
-
-import '../../controllers/map_box_controller.dart';
-
 import 'custom_flutter_map.dart';
 
 class CustomMap extends StatelessWidget {

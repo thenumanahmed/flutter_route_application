@@ -78,13 +78,14 @@ class _AddMemberState extends State<AddMember> {
                   username: username.text,
                   email: email.text,
                 );
-                bool res = await MongoDatabase.addMember(newMember);
-                if (res == true) {
-                  uc.members.add(newMember);
-                  Navigator.pop(context);
-                } else {
-                  //TODO: show error on scafold messenger
-                }
+                MongoDatabase.addMember(newMember).then((value) {
+                  if (value == true) {
+                    uc.members.add(newMember);
+                    Navigator.pop(context);
+                  } else {
+                    //TODO: show error on scafold messenger
+                  }
+                });
               }
             },
           ),

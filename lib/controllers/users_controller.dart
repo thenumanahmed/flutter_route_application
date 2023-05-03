@@ -38,7 +38,6 @@ class UsersController extends GetxController {
     fetchingDrivers.value = FetchingState.getting;
 
     getAdminsFromDatabase();
-    print('GET ADMINS');
     getDriversFromDatabase();
     getMembersFromDatabase();
   }
@@ -46,7 +45,6 @@ class UsersController extends GetxController {
   void getAdminsFromDatabase() async {
     final value = await MongoDatabase.getAdmins();
     List<User> dAdmins = value.map((admin) => User.fromJson(admin)).toList();
-    print('Emails  ${dAdmins[0].email}');
     admins.value = dAdmins;
     fetchingAdmins.value = FetchingState.done;
   }
@@ -68,8 +66,11 @@ class UsersController extends GetxController {
   void copyMembersToClipboard() {
     final jsonList = members.map((track) => track.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
-    Clipboard.setData(ClipboardData(text: jsonString))
-        .then((v) => print('data Copied'));
+    Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
+      if (kDebugMode) {
+        print('data Copied');
+      }
+    });
   }
 
   void copyDriversToClipboard() {

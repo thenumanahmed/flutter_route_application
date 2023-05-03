@@ -80,7 +80,6 @@ class _AddAdminState extends State<AddAdmin> {
                   username: username.text,
                   email: email.text,
                 );
-                print(newAdmin.toString());
                 MongoDatabase.addAdmin(newAdmin).then((value) {
                   if (value == true) {
                     uc.admins.add(newAdmin);

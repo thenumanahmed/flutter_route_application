@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../configs/themes/ui_parameters.dart';
-import '../../../controllers/track/tracks_controller.dart';
 import '../../../controllers/tracking_controller.dart';
 import '../../../widgets/dots_progress_line.dart';
 import '../../../widgets/custom_icon_button.dart';

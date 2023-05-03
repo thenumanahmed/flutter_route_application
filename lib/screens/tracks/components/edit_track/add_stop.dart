@@ -1,27 +1,21 @@
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
-import 'package:dashboard_route_app/functions/custom_snackbar.dart';
-import 'package:dashboard_route_app/screens/tracks/components/edit_track/stop_form.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_map/flutter_map.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../../../../configs/map/flutter_map.dart';
-import '../../../../configs/themes/custom_text_styles.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/track/edit_controller.dart';
 import '../../../../functions/latlng_string.dart';
 import '../../../../models/track.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
-import '../../../../widgets/custom_icon_button.dart';
 import '../../../../controllers/track/tracks_controller.dart';
-import '../../../../functions/custom_dialog.dart';
 import '../../../../functions/time.dart';
-import 'set_location.dart';
-import 'center_map.dart';
+import '../../../../dbHelper/mongo_db.dart';
+import '../../../../functions/custom_snackbar.dart';
+import '../../../tracks/components/edit_track/stop_form.dart';
 
 class AddStop extends StatefulWidget {
   const AddStop({super.key});

@@ -83,7 +83,7 @@ Marker getDriver(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(size)),
       padding: const EdgeInsets.all(defaultPadding / 4),
-      child: Tooltip(
+      child: const Tooltip(
         message: 'Driver Location',
         child: Icon(
           Icons.directions_bus_rounded,

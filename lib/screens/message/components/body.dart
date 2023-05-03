@@ -1,7 +1,4 @@
-import 'package:dashboard_route_app/responsive.dart';
 import 'package:flutter/material.dart';
-
-import '../../../widgets/custom_list/custom_list.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
