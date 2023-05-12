@@ -12,9 +12,11 @@ class TrackingsSocketApi {
   final WebSocketChannel _api;
 
   Stream<List<Tracking>> get stream => _api.stream.map<List<Tracking>>((data) {
+        print('HI From Track');
         final decoded = json.decode(data);
         return (decoded as List).map<Tracking>(
           (json) {
+            print(json);
             return Tracking.fromJson(json);
           },
         ).toList();

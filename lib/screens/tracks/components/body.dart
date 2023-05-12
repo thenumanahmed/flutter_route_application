@@ -76,11 +76,11 @@ class Body extends StatelessWidget {
           onPressed: () => controller.setTrackState(TrackState.map),
           child: const Text('Map'),
         ),
-        ElevatedButton(
-          // onPressed: () => controller.setTrackState(TrackState.view),
-          onPressed: () => controller.getTracks(),
-          child: const Text('Get Tracks'),
-        ),
+        // ElevatedButton(
+        //   // onPressed: () => controller.setTrackState(TrackState.view),
+        //   // onPressed: () => controller.getTracks(),
+        //   child: const Text('Get Tracks'),
+        // ),
       ],
     );
   }

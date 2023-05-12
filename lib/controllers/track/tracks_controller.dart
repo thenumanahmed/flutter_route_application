@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,8 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../../dbHelper/mongo_db.dart';
 import '../../models/track.dart';
+import '../../sockets/buses_api.dart';
+import '../../sockets/tracks_api.dart';
 import '../tracks_data/track1.dart';
 import '../tracks_data/track2.dart';
 import '../tracks_data/track3.dart';
@@ -36,27 +39,28 @@ class TracksController extends GetxController {
   List<String> get names => tracks.map((track) => track.name).toList();
   final loading = true.obs;
 
-  final tracks = [
-    track1,
-    track2,
-    track3,
-    track4,
-    track5,
-    track6,
-    track7,
-  ].obs;
-  @override
-  void onReady() {
-    getTracks();
+  final tracks = <Track>[].obs;
 
-    super.onReady();
+  final _socketStream = StreamController<List<Track>>.broadcast();
+  final api = TracksSocketApi();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadBuses();
   }
 
-  void getTracks() async {
-    final value = await MongoDatabase.getTracks();
-    List<Track> tTracks = value.map((track) => Track.fromJson(track)).toList();
-    tracks.value = tTracks;
-    loading.value = false;
+  void _loadBuses() {
+    api.stream.listen((data) {
+      print('Listing Tracks');
+      loading.value = true;
+      tracks.clear();
+      tracks.addAll(data);
+      loading.value = false;
+
+      // add the data to the _socketStream for other listeners
+      _socketStream.add(data);
+    });
   }
 
   void deleteTrack(int tIndex) {

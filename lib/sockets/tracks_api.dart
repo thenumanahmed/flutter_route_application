@@ -11,9 +11,11 @@ class TracksSocketApi {
   final WebSocketChannel _api;
 
   Stream<List<Track>> get stream => _api.stream.map<List<Track>>((data) {
+        print('Hi From Tracs');
         final decoded = json.decode(data);
         return (decoded as List).map<Track>(
           (json) {
+            print('Hi Tracks json $json');
             return Track.fromJson(json);
           },
         ).toList();
