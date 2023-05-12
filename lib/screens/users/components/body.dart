@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 
 import '../../../configs/themes/ui_parameters.dart';
 import '../../../controllers/users_controller.dart';
-import 'driver/driver.table.dart';
 import './user_type_row.dart';
-import 'member/member_table.dart';
-import 'admin/admin_table.dart';
+import 'table/admin_table.dart';
+import 'table/driver.table.dart';
+import 'table/member_table.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});

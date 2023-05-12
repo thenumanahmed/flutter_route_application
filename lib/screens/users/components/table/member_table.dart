@@ -1,4 +1,3 @@
-import 'package:dashboard_route_app/screens/users/components/add_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,14 +5,16 @@ import 'package:get/get.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/users_controller.dart';
 import '../../../../functions/custom_dialog.dart';
+import '../../../../functions/custom_snackbar.dart';
 import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
-import '../admin/edit_user.dart';
+import '../operations/add_user.dart';
+import '../operations/edit_user.dart';
 
-class DriverTable extends StatelessWidget {
-  const DriverTable({super.key});
+class MemberTable extends StatelessWidget {
+  const MemberTable({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +24,24 @@ class DriverTable extends StatelessWidget {
         avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
     return Obx(
       () => CustomDataTable(
-        add: const AddUser(userType: UserType.driver),
+        add: const AddUser(userType: UserType.member),
         import: const Text('Import'),
         export: const Text('Export'),
         selectionImport: selectionImport,
-        selectionDelete: selectionDelete,
-        title: 'Drivers',
+        selectionDelete: (indexes) => selectionDelete(context, indexes),
+
+        title: 'Members',
         tableWidth: tableWidth,
-        dataColumn: getDriverDataColumn(context),
-        getDataCell: (data, index) => getDriverDataCells(context, data, index),
+        dataColumn: getMemberDataColumn(context),
+        getDataCell: (data, index) => getMemberDataCells(context, data, index),
         searchBy: searchByName,
         // ignore: invalid_use_of_protected_member
-        list: uc.drivers.value,
+        list: uc.members.value,
       ),
     );
   }
 
-  List<DataColumn> getDriverDataColumn(BuildContext context) {
+  List<DataColumn> getMemberDataColumn(BuildContext context) {
     return [
       const DataColumn(
         label: Text(
@@ -69,7 +71,7 @@ class DriverTable extends StatelessWidget {
     ];
   }
 
-  List<DataCell> getDriverDataCells(
+  List<DataCell> getMemberDataCells(
     BuildContext context,
     dynamic data,
     int index,
@@ -89,15 +91,15 @@ class DriverTable extends StatelessWidget {
               context: context,
               title: 'EDIT DRIVER',
               widget:
-                  EditUser(index: index, user: data, userType: UserType.driver),
+                  EditUser(index: index, user: data, userType: UserType.member),
             ),
-            message: 'Edit Driver',
+            message: 'Edit Member',
             icon: Icons.edit,
             color: Colors.blue,
           ),
           CustomIconButton(
-            onTap: () => deleteDriver(context, index),
-            message: 'Delete Driver',
+            onTap: () => deleteMember(context, index),
+            message: 'Delete Member',
             icon: Icons.delete,
             color: Colors.redAccent,
           ),
@@ -106,32 +108,52 @@ class DriverTable extends StatelessWidget {
     ];
   }
 
+  void add() {
+    if (kDebugMode) {
+      print('Add');
+    }
+  }
+
+  void import() {
+    if (kDebugMode) {
+      print('Import');
+    }
+  }
+
+  void export() {
+    if (kDebugMode) {
+      print('Export');
+    }
+  }
+
   void selectionImport(List<int> indexes) {
     if (kDebugMode) {
       print('Selection Import : ${indexes.toString()}');
     }
   }
 
-  void selectionDelete(List<int> indexes) {
-    if (kDebugMode) {
-      print('Selection Delete : ${indexes.toString()}');
-    }
+  void selectionDelete(BuildContext ctx, List<int> indexes) {
+    Get.find<UsersController>()
+        .deleteUsers(ctx, indexes, UserType.admin)
+        .then((value) {
+      customSnackbar(ctx, value, 'Deleted Users');
+    });
   }
 
-  void editDriver(BuildContext context, int index) {}
+  void editMember(int index) {}
 
-  void deleteDriver(BuildContext context, int index) {
+  void deleteMember(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
-    uc.deleteUser(context, index, UserType.driver);
+    uc.deleteUser(context, index, UserType.member);
   }
 
   List<int> searchByName(String s) {
     List<int> list = [];
     final bc = Get.find<UsersController>();
-    for (int i = 0; i < bc.drivers.length; i++) {
-      if (bc.drivers[i].username.capitalize!.contains(s.capitalize!) ||
-          bc.drivers[i].email.capitalize!.contains(s.capitalize!) ||
-          bc.drivers[i].phoneNo.capitalize!.contains(s.capitalize!)) {
+    for (int i = 0; i < bc.members.length; i++) {
+      if (bc.members[i].username.capitalize!.contains(s.capitalize!) ||
+          bc.members[i].email.capitalize!.contains(s.capitalize!) ||
+          bc.members[i].phoneNo.capitalize!.contains(s.capitalize!)) {
         list.add(i);
       }
     }

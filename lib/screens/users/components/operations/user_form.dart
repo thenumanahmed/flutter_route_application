@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../configs/themes/custom_text_styles.dart';
-import '../../../configs/themes/ui_parameters.dart';
-import '../../../widgets/custom_icon_button.dart';
+import '../../../../configs/themes/custom_text_styles.dart';
+import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../widgets/custom_icon_button.dart';
 
 class UserForm extends StatelessWidget {
   const UserForm({

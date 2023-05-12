@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/users_controller.dart';
 import '../../../../functions/custom_dialog.dart';
+import '../../../../functions/custom_snackbar.dart';
 import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
-import '../add_user.dart';
-import 'edit_user.dart';
+import '../operations/add_user.dart';
+import '../operations/edit_user.dart';
 
 class AdminTable extends StatelessWidget {
   const AdminTable({super.key});
@@ -29,7 +30,7 @@ class AdminTable extends StatelessWidget {
         import: const Text('Import'),
         export: const Text('Export'),
         selectionImport: selectionImport,
-        selectionDelete: selectionDelete,
+        selectionDelete: (indexes) => selectionDelete(context, indexes),
         title: 'Admins',
         tableWidth: tableWidth,
         dataColumn: getAdminDataColumn(context),
@@ -131,10 +132,12 @@ class AdminTable extends StatelessWidget {
     }
   }
 
-  void selectionDelete(List<int> indexes) {
-    if (kDebugMode) {
-      print('Selection Delete : ${indexes.toString()}');
-    }
+  void selectionDelete(BuildContext ctx, List<int> indexes) {
+    Get.find<UsersController>()
+        .deleteUsers(ctx, indexes, UserType.admin)
+        .then((value) {
+      customSnackbar(ctx, value, 'Deleted Admins');
+    });
   }
 
   void editAdmin(int index) {}

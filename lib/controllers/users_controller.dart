@@ -218,6 +218,40 @@ class UsersController extends GetxController {
     }
   }
 
+  Future<bool> deleteUsers(
+      BuildContext context, List<int> indexes, UserType userType) async {
+    print('hoo');
+    final List<mongo.ObjectId> toDelete = [];
+    if (userType == UserType.driver) {
+      for (int i = 0; i < indexes.length; i++) {
+        toDelete.add(drivers[indexes[i]].id);
+      }
+      driversApi.send(json.encode({
+        'action': 'DELETE_MULTIPLE',
+        'payload': toDelete,
+      }));
+      return true;
+    } else if (userType == UserType.member) {
+      for (int i = 0; i < indexes.length; i++) {
+        toDelete.add(members[indexes[i]].id);
+      }
+      membersApi.send(json.encode({
+        'action': 'DELETE_MULTIPLE',
+        'payload': toDelete,
+      }));
+      return true;
+    } else {
+      for (int i = 0; i < indexes.length; i++) {
+        toDelete.add(admins[indexes[i]].id);
+      }
+      adminsApi.send(json.encode({
+        'action': 'DELETE_MULTIPLE',
+        'payload': toDelete,
+      }));
+      return true;
+    }
+  }
+
   Future<bool> addUser(User user, UserType userType) async {
     print(user.toJson());
     if (userType == UserType.driver) {
