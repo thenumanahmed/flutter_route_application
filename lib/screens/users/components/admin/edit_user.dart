@@ -89,9 +89,8 @@ class _EditUserState extends State<EditUser> {
                 user.email = email.text;
 
                 if (widget.userType == UserType.admin) {
-                  MongoDatabase.updateAdmin(user).then((value) {
+                  await uc.updateUser(user, UserType.admin).then((value) {
                     if (value == true) {
-                      uc.admins[widget.index] = user;
                       Navigator.pop(context);
                       customSnackbar(context, value, 'Update user');
                     } else {
@@ -99,9 +98,8 @@ class _EditUserState extends State<EditUser> {
                     }
                   });
                 } else if (widget.userType == UserType.driver) {
-                  MongoDatabase.updateDriver(user).then((value) {
+                  await uc.updateUser(user, UserType.driver).then((value) {
                     if (value == true) {
-                      uc.drivers[widget.index] = user;
                       Navigator.pop(context);
                       customSnackbar(context, value, 'Update Driver');
                     } else {
@@ -109,9 +107,8 @@ class _EditUserState extends State<EditUser> {
                     }
                   });
                 } else if (widget.userType == UserType.member) {
-                  MongoDatabase.updateMembers(user).then((value) {
+                  await uc.updateUser(user, UserType.member).then((value) {
                     if (value == true) {
-                      uc.members[widget.index] = user;
                       Navigator.pop(context);
                       customSnackbar(context, value, 'Update Member');
                     } else {

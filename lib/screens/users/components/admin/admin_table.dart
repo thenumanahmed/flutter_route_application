@@ -11,8 +11,8 @@ import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
-import 'add_admin.dart';
-import 'edit_admin.dart';
+import '../add_user.dart';
+import 'edit_user.dart';
 
 class AdminTable extends StatelessWidget {
   const AdminTable({super.key});
@@ -141,6 +141,7 @@ class AdminTable extends StatelessWidget {
 
   void deleteAdmin(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
+    print('call');
     uc.deleteUser(context, index, UserType.admin);
   }
 

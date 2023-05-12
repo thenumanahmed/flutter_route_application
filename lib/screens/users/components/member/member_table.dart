@@ -9,9 +9,8 @@ import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
-import '../admin/add_admin.dart';
-import '../admin/edit_admin.dart';
-import 'add_member.dart';
+import '../add_user.dart';
+import '../admin/edit_user.dart';
 
 class MemberTable extends StatelessWidget {
   const MemberTable({super.key});

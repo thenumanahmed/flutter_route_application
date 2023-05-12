@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,9 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../dbHelper/mongo_db.dart';
 import '../models/users.dart';
+import '../sockets/admins_api.dart';
+import '../sockets/drivers_api.dart';
+import '../sockets/members_api.dart';
 
 //TODO: mogno updateAdmin(mongo.ObjectID id, User a)
 
@@ -25,42 +30,59 @@ class UsersController extends GetxController {
   final admins = <User>[].obs;
   final drivers = <User>[].obs;
 
+  final fetching = FetchingState.getting.obs;
+  final _membersSocketStream = StreamController<List<User>>.broadcast();
+  final _driversSocketStream = StreamController<List<User>>.broadcast();
+  final _adminsSocketStream = StreamController<List<User>>.broadcast();
+  final membersApi = MembersSocketApi();
+  final driversApi = DriversSocketApi();
+  final adminsApi = AdminsSocketApi();
+
   @override
   void onInit() {
-    // TODO: implement onInit
-    initiliazeUsers();
     super.onInit();
+    _loadAdmins();
+    _loadDrivers();
+    _loadMembers();
   }
 
-  void initiliazeUsers() {
-    fetchingMembers.value = FetchingState.getting;
-    fetchingAdmins.value = FetchingState.getting;
-    fetchingDrivers.value = FetchingState.getting;
+  void _loadMembers() {
+    membersApi.stream.listen((data) {
+      fetchingMembers.value = FetchingState.getting;
+      members.clear();
+      members.addAll(data);
+      fetchingMembers.value = FetchingState.done;
 
-    getAdminsFromDatabase();
-    getDriversFromDatabase();
-    getMembersFromDatabase();
+      // add the data to the _socketStream for other listeners
+      _membersSocketStream.add(data);
+    });
+    membersApi.send(json.encode({'action': 'LOAD'}));
   }
 
-  void getAdminsFromDatabase() async {
-    final value = await MongoDatabase.getAdmins();
-    List<User> dAdmins = value.map((admin) => User.fromJson(admin)).toList();
-    admins.value = dAdmins;
-    fetchingAdmins.value = FetchingState.done;
+  void _loadDrivers() {
+    driversApi.stream.listen((data) {
+      fetchingDrivers.value = FetchingState.getting;
+      drivers.clear();
+      drivers.addAll(data);
+      fetchingDrivers.value = FetchingState.done;
+
+      // add the data to the _socketStream for other listeners
+      _driversSocketStream.add(data);
+    });
+    driversApi.send(json.encode({'action': 'LOAD'}));
   }
 
-  void getDriversFromDatabase() async {
-    final value = await MongoDatabase.getDrivers();
-    List<User> dDrivers = value.map((driver) => User.fromJson(driver)).toList();
-    drivers.value = dDrivers;
-    fetchingDrivers.value = FetchingState.done;
-  }
+  void _loadAdmins() {
+    adminsApi.stream.listen((data) {
+      fetchingAdmins.value = FetchingState.getting;
+      admins.clear();
+      admins.addAll(data);
+      fetchingAdmins.value = FetchingState.done;
 
-  void getMembersFromDatabase() async {
-    final value = await MongoDatabase.getMembers();
-    List<User> dMembers = value.map((member) => User.fromJson(member)).toList();
-    members.value = dMembers;
-    fetchingMembers.value = FetchingState.done;
+      // add the data to the _socketStream for other listeners
+      _adminsSocketStream.add(data);
+    });
+    adminsApi.send(json.encode({'action': 'LOAD'}));
   }
 
   void copyMembersToClipboard() {
@@ -176,23 +198,69 @@ class UsersController extends GetxController {
   Future<bool> deleteUser(
       BuildContext context, int index, UserType userType) async {
     if (userType == UserType.driver) {
-      final result = await MongoDatabase.deleteDriver(drivers[index].id);
-      if (result) {
-        drivers.removeAt(index);
-      }
-      return result;
+      driversApi.send(json.encode({
+        'action': 'DELETE',
+        'payload': drivers[index].id,
+      }));
+      return true;
     } else if (userType == UserType.member) {
-      final result = await MongoDatabase.deleteMember(members[index].id);
-      if (result) {
-        members.removeAt(index);
-      }
-      return result;
+      membersApi.send(json.encode({
+        'action': 'DELETE',
+        'payload': members[index].id,
+      }));
+      return true;
     } else {
-      final result = await MongoDatabase.deleteAdmin(admins[index].id);
-      if (result) {
-        admins.removeAt(index);
-      }
-      return result;
+      adminsApi.send(json.encode({
+        'action': 'DELETE',
+        'payload': admins[index].id,
+      }));
+      return true;
+    }
+  }
+
+  Future<bool> addUser(User user, UserType userType) async {
+    print(user.toJson());
+    if (userType == UserType.driver) {
+      driversApi.send(json.encode({
+        'action': 'ADD',
+        'payload': user.toJson(),
+      }));
+      return true;
+    } else if (userType == UserType.member) {
+      membersApi.send(json.encode({
+        'action': 'ADD',
+        'payload': user.toJson(),
+      }));
+      return true;
+    } else {
+      adminsApi.send(json.encode({
+        'action': 'ADD',
+        'payload': user.toJson(),
+      }));
+      return true;
+    }
+  }
+
+  Future<bool> updateUser(User user, UserType userType) async {
+    print(user.toJson());
+    if (userType == UserType.driver) {
+      driversApi.send(json.encode({
+        'action': 'UPDATE',
+        'payload': user.toJson(),
+      }));
+      return true;
+    } else if (userType == UserType.member) {
+      membersApi.send(json.encode({
+        'action': 'UPDATE',
+        'payload': user.toJson(),
+      }));
+      return true;
+    } else {
+      adminsApi.send(json.encode({
+        'action': 'UPDATE',
+        'payload': user.toJson(),
+      }));
+      return true;
     }
   }
 }

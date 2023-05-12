@@ -1,14 +1,13 @@
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:dashboard_route_app/functions/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
-import '../../../../configs/themes/ui_parameters.dart';
-import '../../../../models/users.dart';
-import '../../../../widgets/custom_alert_buttons.dart';
-import '../../../../controllers/users_controller.dart';
-import '../user_form.dart';
+import '../../../configs/themes/ui_parameters.dart';
+import '../../../models/users.dart';
+import '../../../widgets/custom_alert_buttons.dart';
+import '../../../controllers/users_controller.dart';
+import 'user_form.dart';
 
 class AddUser extends StatefulWidget {
   const AddUser({super.key, required this.userType});
@@ -97,36 +96,15 @@ class _AddUserState extends State<AddUser> {
                   email: email.text,
                 );
 
-                if (widget.userType == UserType.admin) {
-                  MongoDatabase.addAdmin(newUser).then((value) {
-                    if (value == true) {
-                      uc.admins.add(newUser);
-                      Navigator.pop(context);
-                      customSnackbar(context, value, 'Add Admin');
-                    } else {
-                      customSnackbar(context, value, 'Add Admin');
-                    }
-                  });
-                } else if (widget.userType == UserType.driver) {
-                  MongoDatabase.addDriver(newUser).then((value) {
-                    if (value == true) {
-                      uc.drivers.add(newUser);
-                      Navigator.pop(context);
-                      customSnackbar(context, value, 'Add Driver');
-                    } else {
-                      customSnackbar(context, value, 'Add Driver');
-                    }
-                  });
-                } else if (widget.userType == UserType.member) {
-                  MongoDatabase.addMember(newUser).then((value) {
-                    if (value == true) {
-                      uc.members.add(newUser);
-                      Navigator.pop(context);
-                      customSnackbar(context, value, 'Add member');
-                    } else {
-                      customSnackbar(context, value, 'Add member');
-                    }
-                  });
+                print('goign to add admin');
+                uc.addUser(newUser, widget.userType);
+
+                bool value = true;
+                if (value == true) {
+                  Navigator.pop(context);
+                  customSnackbar(context, value, 'Added ');
+                } else {
+                  customSnackbar(context, value, 'Added');
                 }
               }
             },

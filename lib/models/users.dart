@@ -18,8 +18,8 @@ class User {
   });
 
   User.fromJson(Map<String, dynamic> json)
-      : id = json['id'].runtimeType == mongo.ObjectId
-            ? json['id'] as mongo.ObjectId
+      : id = json['_id'].runtimeType == mongo.ObjectId
+            ? json['_id'] as mongo.ObjectId
             : mongo.ObjectId.fromHexString(json['_id']),
         email = json['email'] as String,
         username = json['username'] as String,

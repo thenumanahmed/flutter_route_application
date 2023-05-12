@@ -1,4 +1,4 @@
-import 'package:dashboard_route_app/screens/users/components/admin/add_admin.dart';
+import 'package:dashboard_route_app/screens/users/components/add_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,8 +10,7 @@ import '../../../../models/users.dart';
 import '../../../../responsive.dart';
 import '../../../../widgets/custom_data_table/custom_data_table.dart';
 import '../../../../widgets/custom_icon_button.dart';
-import '../admin/edit_admin.dart';
-import 'add_driver.dart';
+import '../admin/edit_user.dart';
 
 class DriverTable extends StatelessWidget {
   const DriverTable({super.key});
@@ -123,7 +122,7 @@ class DriverTable extends StatelessWidget {
 
   void deleteDriver(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
-    uc.deleteUser(context, index, UserType.driver).then((value) => null);
+    uc.deleteUser(context, index, UserType.driver);
   }
 
   List<int> searchByName(String s) {
