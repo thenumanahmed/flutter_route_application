@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,27 +10,39 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import '../dbHelper/mongo_db.dart';
 import '../functions/custom_snackbar.dart';
 import '../models/bus.dart';
-
-//TODO: mogno updateBus(mongo.ObjectID id, Bus b)
+import '../sockets/buses_api.dart';
 
 class BusController extends GetxController {
   final indexes = <int>[].obs;
   final buses = <Bus>[].obs;
   final fetching = FetchingState.getting.obs;
-  // final
+  final _socketStream = StreamController<List<Bus>>.broadcast();
+  final api = BusesSocketApi();
 
   @override
   void onInit() {
-    initiliazeBuses();
     super.onInit();
+    _loadBuses();
   }
 
-  void initiliazeBuses() async {
-    fetching.value = FetchingState.getting;
-    final value = await MongoDatabase.getBuses();
-    List<Bus> dBuses = value.map((bus) => Bus.fromJson(bus)).toList();
-    buses.value = dBuses;
-    fetching.value = FetchingState.done;
+  void _loadBuses() {
+    api.stream.listen((data) {
+      fetching.value = FetchingState.getting;
+      buses.clear();
+      buses.addAll(data);
+      fetching.value = FetchingState.done;
+
+      // add the data to the _socketStream for other listeners
+      _socketStream.add(data);
+    });
+    api.send(json.encode({'action': 'LOAD'}));
+  }
+
+  void addBus(Bus b) {
+    api.send(json.encode({
+      'action': 'ADD',
+      'payload': b.toJson(),
+    }));
   }
 
   Future<void> deleteBuses(BuildContext context, List<int> index) async {
@@ -39,15 +53,23 @@ class BusController extends GetxController {
 
     index.sort();
     bool delete = true;
-    for (int i = index.length - 1; i >= 0; i--) {
-      MongoDatabase.deleteBus(buses[index[i]].id).then((value) {
-        if (value == true) {
-          buses.removeAt(index[i]);
-        } else {
-          delete = false;
-        }
-      });
+
+    index.sort();
+    List<Bus> toDelete = [];
+    for (int i = 0; i < index.length; i++) {
+      toDelete.add(buses[index[i]]);
     }
+    print(json.encode({
+      'action': 'DELETE_MULTIPLE',
+      'payload': toDelete.map((e) => e.id).toList(),
+    }));
+
+    api.send(json.encode({
+      'action': 'DELETE_MULTIPLE',
+      'payload': toDelete.map((e) => e.id).toList(),
+    }));
+    indexes.clear();
+
     customSnackbar(context, delete, 'Delete Bus');
     indexes.clear();
   }

@@ -67,8 +67,12 @@ class Tracking {
   }
 
   Tracking.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
-        routeId = json['route_id'],
+      : id = json['_id'].runtimeType == mongo.ObjectId
+            ? json['_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['_id']),
+        routeId = json['route_id'].runtimeType == mongo.ObjectId
+            ? json['route_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['route_id']),
         latitude = json['latitude'],
         longitude = json['longitude'],
         stopCovered = json['stop_covered'],

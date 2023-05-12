@@ -63,16 +63,17 @@ class _AddBusState extends State<AddBus> {
                   numberPlate: numberPlate.text,
                   modelNo: int.parse(modelNo.text),
                 );
+
+                bc.addBus(b);
                 //    returns true / false
-                MongoDatabase.addBus(b).then((value) {
-                  if (value == true) {
-                    bc.buses.add(b);
-                    Navigator.pop(context);
-                    customSnackbar(context, value, 'Add Bus');
-                  } else {
-                    customSnackbar(context, value, 'Add Bus');
-                  }
-                });
+                bool value = true;
+                if (value == true) {
+                  bc.buses.add(b);
+                  Navigator.pop(context);
+                  customSnackbar(context, value, 'Add Bus');
+                } else {
+                  customSnackbar(context, value, 'Add Bus');
+                }
               }
             },
           ),

@@ -29,12 +29,20 @@ class Route {
   });
 
   Route.fromJson(Map<String, dynamic> json)
-      : id = json['_id'] as mongo.ObjectId,
+      : id = json['_id'].runtimeType == mongo.ObjectId
+            ? json['_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['_id']),
         name = json['name'],
         type = stringToRouteType(json['type'] as String),
-        trackId = json['track_id'],
-        driverId = json['driver_id'],
-        busId = json['bus_id'];
+        trackId = json['track_id'].runtimeType == mongo.ObjectId
+            ? json['track_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['track_id']),
+        driverId = json['driver_id'].runtimeType == mongo.ObjectId
+            ? json['driver_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['driver_id']),
+        busId = json['bus_id'].runtimeType == mongo.ObjectId
+            ? json['bus_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['bus_id']);
 
   Map<String, dynamic> toJson() {
     return {

@@ -15,7 +15,7 @@ void main() async {
 
   InitialBindings().dependencies();
   await dotenv.load(fileName: "assets/config/.env");
-  await MongoDatabase.connect();
+  // await MongoDatabase.connect();
 
   runApp(const MainApp());
 }

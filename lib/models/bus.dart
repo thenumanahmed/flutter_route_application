@@ -13,7 +13,9 @@ class Bus {
   });
 
   Bus.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['_id'].runtimeType == mongo.ObjectId
+            ? json['_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['_id']),
         numberPlate = json['number_plate'],
         modelNo = json['model_no'],
         isWorking = json['is_working'];
@@ -24,6 +26,22 @@ class Bus {
       "number_plate": numberPlate,
       "model_no": modelNo,
       "is_working": isWorking,
+    };
+  }
+
+  static Map<String, dynamic> newBusJson(String numberPlate, int modelNo) {
+    return {
+      "number_plate": numberPlate,
+      "model_no": modelNo,
+      "is_working": true,
+    };
+  }
+
+  static Map<String, dynamic> updateBusJson(String numberPlate, int modelNo) {
+    return {
+      "number_plate": numberPlate,
+      "model_no": modelNo,
+      "is_working": true,
     };
   }
 }

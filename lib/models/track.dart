@@ -29,7 +29,9 @@ class Track {
   }
 
   Track.fromJson(Map<String, dynamic> json)
-      : id = json['_id'] as mongo.ObjectId,
+      : id = json['_id'].runtimeType == mongo.ObjectId
+            ? json['_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['_id']),
         name = json['name'],
         isAssigned = json['is_assigned'],
         stops = <Stop>[],
@@ -107,8 +109,12 @@ class Stop {
   });
 
   Stop.fromJson(Map<String, dynamic> json)
-      : id = json['_id'] as mongo.ObjectId,
-        trackId = json['track_id'] as mongo.ObjectId,
+      : id = json['_id'].runtimeType == mongo.ObjectId
+            ? json['_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['_id']),
+        trackId = json['track_id'].runtimeType == mongo.ObjectId
+            ? json['track_id'] as mongo.ObjectId
+            : mongo.ObjectId.fromHexString(json['track_id']),
         name = json['name'],
         time = stringToTimeOfDay(json['time'] as String),
         isStop = json['is_stop'],

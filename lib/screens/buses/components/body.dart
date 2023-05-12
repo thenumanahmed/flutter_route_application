@@ -26,7 +26,7 @@ class Body extends StatelessWidget {
         import: const Text('Add'),
         export: const Text('Add'),
         selectionImport: selectionImport,
-        selectionDelete: selectionDelete,
+        selectionDelete: (indexes) => selectionDelete(context, indexes),
         title: 'Buses',
         tableWidth: tableWidth,
         dataColumn: getBusDataColumn(context),
@@ -118,10 +118,8 @@ class Body extends StatelessWidget {
     }
   }
 
-  void selectionDelete(List<int> indexes) {
-    if (kDebugMode) {
-      print('Selection Delete : ${indexes.toString()}');
-    }
+  void selectionDelete(BuildContext ctx, List<int> indexes) {
+    Get.find<BusController>().deleteBuses(ctx, indexes);
   }
 
   void editBus(BuildContext context, int index) {}
