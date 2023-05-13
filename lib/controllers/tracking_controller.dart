@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +10,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../models/tracking.dart';
 import '../sockets/trackings_api.dart';
+import 'fetching.dart';
 
 enum TrackingState { map, single, multiple }
 
@@ -47,12 +47,13 @@ class TrackingController extends GetxController {
     index.sort();
     bool deleted = true;
     for (int i = index.length - 1; i >= 0; i--) {
-      final res = await MongoDatabase.stopTracking(trackings[index[i]].id);
-      if (res == true) {
-        trackings.removeAt(index[i]);
-      } else {
-        deleted = false;
-      }
+      // TODO: Tracking Deletes
+      // final res = await MongoDatabase.stopTracking(trackings[index[i]].id);
+      // if (res == true) {
+      //   trackings.removeAt(index[i]);
+      // } else {
+      //   deleted = false;
+      // }
     }
     indexes.clear();
     trackingState.value = TrackingState.map;

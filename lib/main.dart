@@ -6,7 +6,6 @@ import './bindings/initial_bindings.dart';
 import './routes/routes.dart';
 import './configs/themes/app_dark_theme.dart';
 import './configs/themes/app_light_theme.dart';
-import 'dbHelper/mongo_db.dart';
 // import './dbHelper/mongo_db.dart';
 
 void main() async {
@@ -15,7 +14,6 @@ void main() async {
 
   InitialBindings().dependencies();
   await dotenv.load(fileName: "assets/config/.env");
-  // await MongoDatabase.connect();
 
   runApp(const MainApp());
 }

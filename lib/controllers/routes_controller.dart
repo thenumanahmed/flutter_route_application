@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -13,6 +12,7 @@ import '../sockets/routes_api.dart';
 import './users_controller.dart';
 import './track/tracks_controller.dart';
 import './bus_controller.dart';
+import 'fetching.dart';
 
 class RouteController extends GetxController {
   final routeState = RouteType.morning.obs;
@@ -34,7 +34,6 @@ class RouteController extends GetxController {
 
   void _loadBuses() {
     api.stream.listen((data) {
-      print('hi routes ${data.length}');
       fetching.value = FetchingState.getting;
       List<r.Route> m = [];
       List<r.Route> e = [];
@@ -134,30 +133,34 @@ class RouteController extends GetxController {
     bool deleted = true;
     if (routeState.value == RouteType.morning) {
       for (int i = index.length - 1; i >= 0; i--) {
-        final res = await MongoDatabase.deleteRoute(morning[index[i]].id);
-        if (res == true) {
-          morning.removeAt(index[i]);
-        } else {
-          deleted = false;
-        }
+        // TODO: DELETE ROUTE MORNING
+        // final res = await MongoDatabase.deleteRoute(morning[index[i]].id);
+        // if (res == true) {
+        //   morning.removeAt(index[i]);
+        // } else {
+        //   deleted = false;
+        // }
       }
     } else if (routeState.value == RouteType.evening) {
       for (int i = index.length - 1; i >= 0; i--) {
-        final res = await MongoDatabase.deleteRoute(evening[index[i]].id);
-        if (res == true) {
-          evening.removeAt(index[i]);
-        } else {
-          deleted = false;
-        }
+        // TODO: DELTE ROUTE Evening
+
+        // final res = await MongoDatabase.deleteRoute(evening[index[i]].id);
+        // if (res == true) {
+        //   evening.removeAt(index[i]);
+        // } else {
+        //   deleted = false;
+        // }
       }
     } else {
       for (int i = index.length - 1; i >= 0; i--) {
-        final res = await MongoDatabase.deleteRoute(speacial[index[i]].id);
-        if (res == true) {
-          speacial.removeAt(index[i]);
-        } else {
-          deleted = false;
-        }
+        // TODO: DELTE ROUTE Speacial
+        // final res = await MongoDatabase.deleteRoute(speacial[index[i]].id);
+        // if (res == true) {
+        //   speacial.removeAt(index[i]);
+        // } else {
+        //   deleted = false;
+        // }
       }
     }
     index.clear();
@@ -190,7 +193,9 @@ class RouteController extends GetxController {
     r.driverId = driverId;
     r.busId = busId;
 
-    final res = await MongoDatabase.updateRoute(r);
+    //TODO: UPDATE ROUTE
+    // final res = await MongoDatabase.updateRoute(r);
+    final res = true;
     if (res == false) return false;
 
     if (routeState.value == RouteType.morning) {
@@ -205,7 +210,9 @@ class RouteController extends GetxController {
   }
 
   Future<bool> addRoute(Route r) async {
-    final result = await MongoDatabase.addRoute(r);
+    // TODO: add Route
+    // final result = await MongoDatabase.addRoute(r);
+    final result = true;
     if (result == true) {
       if (r.type == RouteType.morning) {
         morning.add(r);

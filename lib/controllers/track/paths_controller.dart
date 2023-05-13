@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dashboard_route_app/controllers/track/tracks_controller.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
-import '../../dbHelper/mongo_db.dart';
 import '../../models/path.dart';
 import '../../sockets/paths_api.dart';
+import '../fetching.dart';
+import './tracks_controller.dart';
 
 class PathsController extends GetxController {
   final fetching = FetchingState.getting.obs;

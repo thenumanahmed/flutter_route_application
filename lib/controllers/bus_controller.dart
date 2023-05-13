@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
-import '../dbHelper/mongo_db.dart';
 import '../functions/custom_snackbar.dart';
 import '../models/bus.dart';
 import '../sockets/buses_api.dart';
+import 'fetching.dart';
 
 class BusController extends GetxController {
   final indexes = <int>[].obs;

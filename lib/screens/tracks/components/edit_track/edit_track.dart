@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../controllers/track/paths_controller.dart';
 import '../../../../controllers/track/stops_controller.dart';
 import '../../../../controllers/track/tracks_controller.dart';
 import '../../../../controllers/track/edit_controller.dart';
@@ -25,6 +26,7 @@ class EditTrack extends StatelessWidget {
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>(); // tracksController
     final sc = Get.find<StopsController>(); //stopsController
+    final pc = Get.find<PathsController>(); //stopsController
     final ec = Get.find<EditController>(); // editController
 
     final size = MediaQuery.of(context).size;
@@ -43,7 +45,9 @@ class EditTrack extends StatelessWidget {
         Obx(() {
           ec.toUpdate.value;
           tc.stopsUpdate.value;
+          pc.paths.value;
           final stops = sc.getStopByTrackID(tc.tracks[ec.tIndex.value].id);
+          final path = pc.getPathByID(tc.tracks[ec.tIndex.value].id);
           return HeaderListArea(
             height: height,
             hideSize: hideWidth,
@@ -65,17 +69,17 @@ class EditTrack extends StatelessWidget {
               if (ec.editBodyState.value == EditBodyState.map) {
                 return ViewTrackMap(
                   stops: stops,
-                  path: const [],
+                  path: path.path,
                 );
               } else if (ec.editBodyState.value == EditBodyState.single) {
                 return EditStop(
-                  sIndex: ec.selectedIndexes[0],
+                  stop: stops[ec.selectedIndexes[0]],
                   tIndex: trackIndex,
                   key: UniqueKey(),
                 );
               } else {
                 return EditStop(
-                  sIndex: ec.selectedIndexes[0],
+                  stop: stops[ec.selectedIndexes[0]],
                   tIndex: trackIndex,
                   key: UniqueKey(),
                 );

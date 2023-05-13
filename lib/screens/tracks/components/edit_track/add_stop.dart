@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:flutter/material.dart';
@@ -13,13 +14,11 @@ import '../../../../models/track.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../controllers/track/tracks_controller.dart';
 import '../../../../functions/time.dart';
-import '../../../../dbHelper/mongo_db.dart';
 import '../../../../functions/custom_snackbar.dart';
 import '../../../tracks/components/edit_track/stop_form.dart';
 
 class AddStop extends StatefulWidget {
   const AddStop({super.key});
-
   @override
   State<AddStop> createState() => _AddStopState();
 }
@@ -44,6 +43,7 @@ class _AddStopState extends State<AddStop> {
   @override
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>();
+    final sc = Get.find<StopsController>();
     final ec = Get.find<EditController>();
 
     return Column(
@@ -58,7 +58,7 @@ class _AddStopState extends State<AddStop> {
         kHeightSpace,
         CustomAlertButton(
           title: 'Add',
-          onTap: () => addStop(tc, ec),
+          onTap: () => addStop(tc, sc, ec),
         ),
       ],
     );
@@ -66,16 +66,17 @@ class _AddStopState extends State<AddStop> {
 
   void initializeValues() {
     final tc = Get.find<TracksController>();
+    final sc = Get.find<StopsController>();
     final ec = Get.find<EditController>();
 
     Track track = tc.tracks[ec.tIndex.value];
-    final tStops = track.stops.length;
+    final stops = sc.getStopByTrackID(track.id);
 
-    defaultName = 'stop ${tStops + 1}';
+    defaultName = 'stop ${stops.length + 1}';
     name.text = defaultName;
 
-    if (tStops != 0) {
-      final lastStop = track.stops[tStops - 1];
+    if (stops.isNotEmpty) {
+      final lastStop = stops[stops.length - 1];
       center = LatLng(lastStop.latitude, lastStop.longitude);
       time.text = timeOfDayToString(lastStop.time);
     } else {
@@ -85,7 +86,7 @@ class _AddStopState extends State<AddStop> {
     location.text = latLngToString(center);
   }
 
-  void addStop(TracksController tc, EditController ec) {
+  void addStop(TracksController tc, StopsController sc, EditController ec) {
     Stop toAddStop = Stop(
         id: mongo.ObjectId(),
         trackId: tc.tracks[ec.tIndex.value].id,
@@ -95,16 +96,16 @@ class _AddStopState extends State<AddStop> {
         stopNo: tc.tracks[ec.tIndex.value].stops.length,
         latitude: center.latitude,
         longitude: center.longitude);
-
-    MongoDatabase.addStop(toAddStop).then((value) {
-      if (value == true) {
-        tc.tracks[ec.tIndex.value].stops.add(toAddStop);
-        ec.doUpdate();
-        Navigator.pop(context);
-        customSnackbar(context, true, 'Stop Added');
-      } else {
-        customSnackbar(context, false, 'Stop not Added');
-      }
-    });
+    //TODO: ADD STOP
+    // MongoDatabase.addStop(toAddStop).then((value) {
+    //   if (value == true) {
+    //     tc.tracks[ec.tIndex.value].stops.add(toAddStop);
+    //     ec.doUpdate();
+    //     Navigator.pop(context);
+    //     customSnackbar(context, true, 'Stop Added');
+    //   } else {
+    //     customSnackbar(context, false, 'Stop not Added');
+    //   }
+    // });
   }
 }

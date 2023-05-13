@@ -1,9 +1,7 @@
-import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/track/tracks_controller.dart';
-import '../../../dbHelper/mongo_db.dart';
 import './edit_track/edit_track.dart';
 import './view_track/view_track.dart';
 import 'track_table/tracks_table.dart';
@@ -21,20 +19,12 @@ class Body extends StatelessWidget {
     });
   }
 
-  // Future<void> _insertNewTrack(BuildContext context, String name) async {
-  //   var id = mongo.ObjectId();
-  //   final data = MongoDbModel(id: id, name: name, isAssigned: false);
-
-  //   await MongoDatabase.insert(data).then((value) =>
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(SnackBar(content: Text("Inserted ID + ${id.$oid}"))));
-  // }
-
   Future<void> _insertTracks(
       BuildContext context, TracksController controller) async {
-    await MongoDatabase.insertTrack(controller.tracks[0]).then((value) =>
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Inserted ID + ${controller.tracks[0].id.$oid}"))));
+    // TODO INSERT TRACK
+    // await MongoDatabase.insertTrack(controller.tracks[0]).then((value) =>
+    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //         content: Text("Inserted ID + ${controller.tracks[0].id.$oid}"))));
   }
 
   Widget showTrackState(TracksController controller) {

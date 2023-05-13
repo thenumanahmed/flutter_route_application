@@ -7,27 +7,9 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
-import '../../dbHelper/mongo_db.dart';
+// import '../../dbHelper/mongo_db.dart';
 import '../../models/track.dart';
-import '../../sockets/buses_api.dart';
 import '../../sockets/tracks_api.dart';
-import '../tracks_data/track1.dart';
-import '../tracks_data/track2.dart';
-import '../tracks_data/track3.dart';
-import '../tracks_data/track4.dart';
-import '../tracks_data/track5.dart';
-import '../tracks_data/track6.dart';
-import '../tracks_data/track7.dart';
-
-// TODO: getTracks() - done
-// TODO: mongo addTrack(Track t);
-// TODO: mongo delteTrack(mongoObjectId trackID)
-// TODO: mongo updateTrack(mongoObjectId trackID,Track t);
-
-// TODO: getStops() - done
-// TODO: mongo addStop(Stop t);
-// TODO: mongo delteStop(mongoObjectId StopID)
-// TODO: mongo updateStop(mongoObjectId StopID);
 
 enum TrackState { tracks, view, add, edit, delete, map }
 
@@ -94,12 +76,12 @@ class TracksController extends GetxController {
     final tc = Get.find<TracksController>();
     for (int i = tStopIndex.length - 1; i >= 0; i--) {
       final stopId = tc.tracks[tIndex].stops[tStopIndex[i]].id;
-
-      MongoDatabase.deleteStop(stopId).then((value) {
-        if (value == true) {
-        } else {}
-      });
-      tc.tracks[tIndex].deleteStop(tStopIndex[i]);
+      // TODO: DELTE STOPs
+      // MongoDatabase.deleteStop(stopId).then((value) {
+      //   if (value == true) {
+      //   } else {}
+      // });
+      // tc.tracks[tIndex].deleteStop(tStopIndex[i]);
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -54,14 +53,15 @@ class _AddTrackState extends State<AddTrack> {
               path: [],
               stops: [],
             );
-            MongoDatabase.addTrack(newTrack).then((value) {
-              if (value == true) {
-                tc.tracks.add(newTrack);
-                Navigator.pop(context);
-              } else {
-                //  TODO: show error on scaffold messenger
-              }
-            });
+            // TODO ADD TRACK
+            // MongoDatabase.addTrack(newTrack).then((value) {
+            //   if (value == true) {
+            //     tc.tracks.add(newTrack);
+            //     Navigator.pop(context);
+            //   } else {
+            //     //  TODO: show error on scaffold messenger
+            //   }
+            // });
           },
         ),
       ],

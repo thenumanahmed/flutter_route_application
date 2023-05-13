@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../../../dbHelper/mongo_db.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../functions/custom_snackbar.dart';
 import '../../../../functions/latlng_string.dart';
@@ -15,10 +14,10 @@ import './stop_form.dart';
 class EditStop extends StatefulWidget {
   const EditStop({
     Key? key,
-    required this.sIndex,
+    required this.stop,
     required this.tIndex,
   }) : super(key: key);
-  final int sIndex;
+  final Stop stop;
   final int tIndex;
 
   @override
@@ -68,33 +67,34 @@ class _EditStopState extends State<EditStop> {
 
   void initializeData() {
     final tc = Get.find<TracksController>();
-    final Stop stop = tc.tracks[widget.tIndex].stops[widget.sIndex];
-    location.text = "${stop.latitude},${stop.longitude}";
-    name.text = stop.name;
-    time.text = timeOfDayToString(stop.time);
+
+    location.text = "${widget.stop.latitude},${widget.stop.longitude}";
+    name.text = widget.stop.name;
+    time.text = timeOfDayToString(widget.stop.time);
   }
 
   void editStop(TracksController tc, EditController ec) async {
     // updated Stop locally
-    Stop toUpdateStop = tc.tracks[widget.tIndex].stops[widget.sIndex];
+    Stop toUpdateStop = widget.stop;
     LatLng p1 = stringToLatLng(location.text);
     toUpdateStop.latitude = p1.latitude;
     toUpdateStop.longitude = p1.longitude;
     toUpdateStop.time = stringToTimeOfDay(time.text);
     toUpdateStop.name = name.text;
 
-    // try to update on MongoDb
-    MongoDatabase.updateStop(toUpdateStop).then((value) {
-      if (value == true) {
-        // Update Localy
-        tc.tracks[widget.tIndex].stops[widget.sIndex] = toUpdateStop;
-        customSnackbar(context, true, 'Stop Updated!');
-        ec.doUpdate();
-      } else {
-        // Error
-        customSnackbar(context, true, 'Stop not Updated!');
-      }
-    });
+    // TODO: Update Stop
+    // // try to update on MongoDb
+    // MongoDatabase.updateStop(toUpdateStop).then((value) {
+    //   if (value == true) {
+    //     // Update Localy
+    //     tc.tracks[widget.tIndex].stops[widget.sIndex] = toUpdateStop;
+    //     customSnackbar(context, true, 'Stop Updated!');
+    //     ec.doUpdate();
+    //   } else {
+    //     // Error
+    //     customSnackbar(context, true, 'Stop not Updated!');
+    //   }
+    // });
     // update Stop in mongodb
   }
 }
