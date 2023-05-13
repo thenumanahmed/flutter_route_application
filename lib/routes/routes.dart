@@ -24,8 +24,8 @@ class AppRoutes {
               Get.put(TracksController());
               Get.put(UsersController());
               Get.put(BusController());
-              Get.put(RouteController());
-              Get.put(TrackingController());
+              // Get.put(RouteController());
+              // Get.put(TrackingController());
 
               Get.put(EditController());
               Get.put(CustomMenuController());

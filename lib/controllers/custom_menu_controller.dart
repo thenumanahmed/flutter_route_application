@@ -14,7 +14,7 @@ enum MenuItems {
 }
 
 class CustomMenuController extends GetxController {
-  final selectedItem = MenuItems.tracking.obs;
+  final selectedItem = MenuItems.tracks.obs;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 

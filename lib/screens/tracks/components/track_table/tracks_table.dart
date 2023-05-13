@@ -123,6 +123,7 @@ class TracksTable extends StatelessWidget {
     if (kDebugMode) {
       print('Selection Import : ${indexes.toString()}');
     }
+    print(Get.find<TracksController>().tracks.length);
   }
 
   void selectionDelete(List<int> indexes) {

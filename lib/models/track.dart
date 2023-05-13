@@ -36,21 +36,22 @@ class Track {
         isAssigned = json['is_assigned'],
         stops = <Stop>[],
         path = <List<double>>[] {
+    print('Tracks Json Called');
     // code to assign stops as well
 
-    if (json['stops'] != null) {
-      stops = <Stop>[];
-      // add code here to get json of Stops
-      json['stops'].forEach((v) {
-        stops.add(Stop.fromJson(v));
-      });
-    }
-    if (json['path'] != null) {
-      path = <List<double>>[];
-      json['path'].forEach((v) {
-        path.add([v[0], v[1]]);
-      });
-    }
+    // if (json['stops'] != null) {
+    //   stops = <Stop>[];
+    //   // add code here to get json of Stops
+    //   json['stops'].forEach((v) {
+    //     stops.add(Stop.fromJson(v));
+    //   });
+    // }
+    // if (json['path'] != null) {
+    //   path = <List<double>>[];
+    //   json['path'].forEach((v) {
+    //     path.add([v[0], v[1]]);
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -62,8 +63,8 @@ class Track {
       "_id": id,
       "name": name,
       "is_assigned": isAssigned,
-      "stops": stops.map((stop) => stop.toJson()).toList(),
-      "path": path.map((point) => [point[0], point[1]]).toList(),
+      // "stops": stops.map((stop) => stop.toJson()).toList(),
+      // "path": path.map((point) => [point[0], point[1]]).toList(),
     };
   }
 

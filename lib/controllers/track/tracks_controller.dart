@@ -52,15 +52,13 @@ class TracksController extends GetxController {
 
   void _loadBuses() {
     api.stream.listen((data) {
-      print('Listing Tracks');
-      loading.value = true;
       tracks.clear();
       tracks.addAll(data);
       loading.value = false;
-
       // add the data to the _socketStream for other listeners
       _socketStream.add(data);
     });
+    api.send(json.encode({'action': 'LOAD'}));
   }
 
   void deleteTrack(int tIndex) {
