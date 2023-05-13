@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 const kServer = 'localhost';
-const kPort = 9003;
+const kPort = 9004;
 
 const BUSES_WEBSOCKET = "buses-ws/";
 const ADMINS_WEBSOCKET = "admins-ws/";

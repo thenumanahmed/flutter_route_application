@@ -36,7 +36,6 @@ class Track {
         isAssigned = json['is_assigned'],
         stops = <Stop>[],
         path = <List<double>>[] {
-    print('Tracks Json Called');
     // code to assign stops as well
 
     // if (json['stops'] != null) {

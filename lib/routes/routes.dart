@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:get/get.dart';
 
 import '../controllers/bus_controller.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
             page: () => const MainScreen(),
             binding: BindingsBuilder(() {
               // Tracks
+              Get.put(StopsController());
               Get.put(TracksController());
               Get.put(UsersController());
               Get.put(BusController());

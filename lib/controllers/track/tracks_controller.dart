@@ -35,6 +35,7 @@ enum SelectionState { active, inActive }
 
 class TracksController extends GetxController {
   final trackState = TrackState.tracks.obs;
+  final stopsUpdate = false.obs;
   final id = mongo.ObjectId().obs;
   List<String> get names => tracks.map((track) => track.name).toList();
   final loading = true.obs;
@@ -47,11 +48,12 @@ class TracksController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadBuses();
+    _loadTracks();
   }
 
-  void _loadBuses() {
+  void _loadTracks() {
     api.stream.listen((data) {
+      loading.value = true;
       tracks.clear();
       tracks.addAll(data);
       loading.value = false;
@@ -139,5 +141,9 @@ class TracksController extends GetxController {
     Clipboard.setData(ClipboardData(text: jsonString)).then((v) {
       if (kDebugMode) print('data Copied');
     });
+  }
+
+  void signalStopsUpdate() {
+    stopsUpdate.value = !stopsUpdate.value;
   }
 }

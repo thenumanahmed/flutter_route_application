@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,8 +23,9 @@ class TracksTable extends StatelessWidget {
     final tableWidth =
         avaliableWidth >= 650.0 ? (avaliableWidth - defaultPadding * 4) : 650.0;
 
-    return Obx(
-      () => CustomDataTable(
+    return Obx(() {
+      tc.stopsUpdate.value;
+      return CustomDataTable(
         add: const AddTrack(),
         import: const Text('Add'),
         export: const Text('Add'),
@@ -36,8 +38,8 @@ class TracksTable extends StatelessWidget {
         searchBy: tc.searchByName,
         // ignore: invalid_use_of_protected_member
         list: tc.tracks.value,
-      ),
-    );
+      );
+    });
   }
 
   List<DataColumn> getTrackDataColumn(BuildContext context) {
@@ -74,7 +76,9 @@ class TracksTable extends StatelessWidget {
       DataCell(
         Text(track.name, softWrap: true),
       ),
-      DataCell(Text(track.stops.length.toString())),
+      DataCell(Text(
+        Get.find<StopsController>().getStopByTrackID(data.id).length.toString(),
+      )),
       DataCell(Text(track.isAssigned ? "Yes" : "No")),
       DataCell(Row(
         children: [
