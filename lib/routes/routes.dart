@@ -6,6 +6,7 @@ import '../controllers/custom_menu_controller.dart';
 import '../controllers/map_box_controller.dart';
 import '../controllers/routes_controller.dart';
 import '../controllers/track/edit_controller.dart';
+import '../controllers/track/paths_controller.dart';
 import '../controllers/track/tracks_controller.dart';
 import '../controllers/track/view_controller.dart';
 
@@ -22,12 +23,13 @@ class AppRoutes {
             page: () => const MainScreen(),
             binding: BindingsBuilder(() {
               // Tracks
+              Get.put(PathsController());
               Get.put(StopsController());
               Get.put(TracksController());
               Get.put(UsersController());
               Get.put(BusController());
-              // Get.put(RouteController());
-              // Get.put(TrackingController());
+              Get.put(RouteController());
+              Get.put(TrackingController());
 
               Get.put(EditController());
               Get.put(CustomMenuController());

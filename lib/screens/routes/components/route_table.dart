@@ -27,6 +27,9 @@ class RouteTable extends StatelessWidget {
     return Obx(() {
       rc.routeState.value;
       rc.updateScreen.value;
+      rc.morning.value;
+      rc.evening.value;
+      rc.speacial.value;
       return CustomDataTable(
         key: UniqueKey(),
         tableWidth: tableWidth,

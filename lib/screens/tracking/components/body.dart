@@ -28,7 +28,6 @@ class Body extends StatelessWidget {
       hide: Obx(
         () {
           // ignore: invalid_use_of_protected_member
-          tgc.updateCount.value;
           tgc.indexes.value;
           return CustomList(
             key: UniqueKey(),
@@ -50,7 +49,6 @@ class Body extends StatelessWidget {
       main: Obx(() {
         int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : -1;
         tgc.indexes.value;
-        tgc.updateCount.value;
         return CustomHideArea(
             key: UniqueKey(),
             height: height,

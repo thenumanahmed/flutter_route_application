@@ -36,6 +36,7 @@ enum SelectionState { active, inActive }
 class TracksController extends GetxController {
   final trackState = TrackState.tracks.obs;
   final stopsUpdate = false.obs;
+  final pathUpdate = false.obs;
   final id = mongo.ObjectId().obs;
   List<String> get names => tracks.map((track) => track.name).toList();
   final loading = true.obs;
@@ -145,5 +146,9 @@ class TracksController extends GetxController {
 
   void signalStopsUpdate() {
     stopsUpdate.value = !stopsUpdate.value;
+  }
+
+  void signalPathsUpdate() {
+    pathUpdate.value = !pathUpdate.value;
   }
 }

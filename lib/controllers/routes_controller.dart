@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dashboard_route_app/dbHelper/mongo_db.dart';
@@ -8,13 +9,12 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../models/route.dart' as r;
 import '../models/route.dart';
+import '../sockets/routes_api.dart';
 import './users_controller.dart';
 import './track/tracks_controller.dart';
 import './bus_controller.dart';
 
 class RouteController extends GetxController {
-  final fetching = FetchingState.getting.obs;
-
   final routeState = RouteType.morning.obs;
   final indexes = <int>[].obs;
   final morning = <r.Route>[].obs;
@@ -22,29 +22,51 @@ class RouteController extends GetxController {
   final speacial = <r.Route>[].obs;
   final updateScreen = false.obs;
 
+  final fetching = FetchingState.getting.obs;
+  final _socketStream = StreamController<List<r.Route>>.broadcast();
+  final api = RoutesSocketApi();
+
   @override
-  void onReady() {
-    // initAuth();
-    initializeData();
-    super.onReady();
+  void onInit() {
+    super.onInit();
+    _loadBuses();
   }
 
-  void initializeData() async {
-    fetching.value = FetchingState.getting;
-    final value = await MongoDatabase.getRoutes();
-    List<Route> dRoutes = value.map((route) => Route.fromJson(route)).toList();
-    for (int i = 0; i < dRoutes.length; i++) {
-      if (dRoutes[i].type == RouteType.morning) {
-        morning.add(dRoutes[i]);
-      } else if (dRoutes[i].type == RouteType.evening) {
-        evening.add(dRoutes[i]);
-      } else {
-        speacial.add(dRoutes[i]);
+  void _loadBuses() {
+    api.stream.listen((data) {
+      print('hi routes ${data.length}');
+      fetching.value = FetchingState.getting;
+      List<r.Route> m = [];
+      List<r.Route> e = [];
+      List<r.Route> s = [];
+
+      for (int i = 0; i < data.length; i++) {
+        if (data[i].type == r.RouteType.morning) {
+          m.add(data[i]);
+        } else if (data[i].type == r.RouteType.evening) {
+          e.add(data[i]);
+        } else if (data[i].type == r.RouteType.speacial) {
+          s.add(data[i]);
+        }
       }
-    }
-    fetching.value = FetchingState.done;
-  }
 
+      morning.clear();
+      morning.addAll(m);
+      evening.clear();
+      evening.addAll(e);
+      speacial.clear();
+      speacial.addAll(s);
+
+      fetching.value = FetchingState.done;
+      print('hi routes  m${morning.length}');
+      print('hi routes  e${evening.length}');
+      print('hi routes  s${speacial.length}');
+
+      // add the data to the _socketStream for other listeners
+      _socketStream.add(data);
+    });
+    api.send(json.encode({'action': 'LOAD'}));
+  }
   // TDOD: mongo addRoute(Route r)
   // TDOD: mongo deleteRoute(mongo.Objectid routeId)
 

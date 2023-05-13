@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../../controllers/track/paths_controller.dart';
 import '../../../../controllers/track/view_controller.dart';
 import '../../../../controllers/track/tracks_controller.dart';
 import '../../../../functions/time.dart';
@@ -20,6 +21,7 @@ class ViewTrack extends StatelessWidget {
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>(); // tracksController
     final sc = Get.find<StopsController>(); // tracksController
+    final pc = Get.find<PathsController>(); // tracksController
     final vc = Get.find<ViewController>(); // tracksController
 
     final size = MediaQuery.of(context).size;
@@ -29,14 +31,16 @@ class ViewTrack extends StatelessWidget {
 
     return Obx(() {
       tc.stopsUpdate.value;
+      pc.paths.value;
       final stops = sc.getStopByTrackID(
-        tc.tracks[vc.tIndex.value].id,
+        tc.tracks[trackIndex].id,
       );
+      final path = pc.getPathByID(tc.tracks[trackIndex].id);
       return HeaderListArea(
         height: height,
         hideSize: hideWidth,
         tableHeader: TableHeader(
-          titleText: 'Track: ${tc.tracks[vc.tIndex.value].name}',
+          titleText: 'Track: ${tc.tracks[trackIndex].name}',
           leadingIconData: Icons.arrow_back_ios_new,
           leadingOnTap: vc.setExit,
         ),
@@ -50,7 +54,7 @@ class ViewTrack extends StatelessWidget {
         ),
         body: ViewTrackMap(
           stops: stops,
-          path: const [],
+          path: path.path,
         ),
       );
     });

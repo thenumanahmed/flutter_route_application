@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../models/tracking.dart';
+import '../sockets/trackings_api.dart';
 
 enum TrackingState { map, single, multiple }
 
@@ -18,39 +19,26 @@ class TrackingController extends GetxController {
   final indexes = <int>[].obs;
   final trackings = <Tracking>[].obs;
   final fetching = FetchingState.getting.obs;
-  final updateCount = (0).obs;
+  final _socketStream = StreamController<List<Tracking>>.broadcast();
+  final api = TrackingsSocketApi();
 
   @override
-  void onReady() async {
-    await initializeValues();
-    checkDatabaseUpdate();
+  void onInit() {
+    super.onInit();
+    _loadTrackings();
   }
 
-  Future<void> initializeValues() async {
-    await getTrackingsFromDatabase();
-  }
-
-  void checkDatabaseUpdate() {
-    Timer.periodic(Duration(seconds: 5), (timer) async {
-      int c = await MongoDatabase.getTrackingUpdate();
-      if (updateCount.value != c) {
-        fetching.value = FetchingState.getting;
-        getTrackingsFromDatabase();
-        fetching.value = FetchingState.done;
-        updateCount.value = c;
-      }
+  void _loadTrackings() {
+    api.stream.listen((data) {
+      print('hi routes ${data.length}');
+      fetching.value = FetchingState.getting;
+      trackings.clear();
+      trackings.addAll(data);
+      fetching.value = FetchingState.done;
+      // add the data to the _socketStream for other listeners
+      _socketStream.add(data);
     });
-  }
-
-  Future<void> getTrackingsFromDatabase() async {
-    fetching.value = FetchingState.getting;
-    final value = await MongoDatabase.getTrackings();
-    List<Tracking> dTracking = value.map((tracking) {
-      return Tracking.fromJson(tracking);
-    }).toList();
-    trackings.value = dTracking;
-
-    fetching.value = FetchingState.done;
+    api.send(json.encode({'action': 'LOAD'}));
   }
 
   Future<bool> stopTracking(List<int> index) async {
