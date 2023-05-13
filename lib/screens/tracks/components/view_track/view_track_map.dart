@@ -9,10 +9,12 @@ import '../../../../widgets/flutter_map_constants.dart';
 class ViewTrackMap extends StatelessWidget {
   const ViewTrackMap({
     super.key,
-    required this.track,
+    required this.path,
+    required this.stops,
   });
 
-  final Track track;
+  final List<List<double>> path;
+  final List<Stop> stops;
   @override
   Widget build(BuildContext context) {
     final mp = MapController();
@@ -28,8 +30,8 @@ class ViewTrackMap extends StatelessWidget {
         },
 
         maxBounds: kMaxBounds,
-        center: track.stops.isNotEmpty
-            ? LatLng(track.stops[0].latitude, track.stops[0].longitude)
+        center: stops.isNotEmpty
+            ? LatLng(stops[0].latitude, stops[0].longitude)
             : kCenter,
         zoom: 15,
         maxZoom: kMaxZoom,
@@ -41,10 +43,10 @@ class ViewTrackMap extends StatelessWidget {
       children: [
         kTileLayer,
         PolylineLayer(
-          polylines: getPolylines(track.path, color: Colors.blue),
+          polylines: getPolylines(path, color: Colors.blue),
         ),
         MarkerLayer(
-          markers: getMarkers(track.stops),
+          markers: getMarkers(stops),
         ),
       ],
     );

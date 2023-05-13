@@ -45,6 +45,16 @@ class StopsController extends GetxController {
     return dStop;
   }
 
+  List<int> searchByStops(List<Stop> sStops, String s) {
+    List<int> list = [];
+    for (int i = 0; i < sStops.length; i++) {
+      if (sStops[i].name.capitalize!.contains(s.capitalize!)) {
+        list.add(i);
+      }
+    }
+    return list;
+  }
+
   void addStop(Stop s) {}
 
   void deleteStop(mongo.ObjectId id) {}

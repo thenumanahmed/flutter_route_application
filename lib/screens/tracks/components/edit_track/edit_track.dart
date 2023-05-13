@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
+import '../../../../controllers/track/stops_controller.dart';
 import '../../../../controllers/track/tracks_controller.dart';
 import '../../../../controllers/track/edit_controller.dart';
 import '../../../../functions/time.dart';
@@ -23,7 +24,8 @@ class EditTrack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>(); // tracksController
-    final ec = Get.find<EditController>(); // tracksController
+    final sc = Get.find<StopsController>(); //stopsController
+    final ec = Get.find<EditController>(); // editController
 
     final size = MediaQuery.of(context).size;
     final height = size.height * 0.75;
@@ -40,6 +42,8 @@ class EditTrack extends StatelessWidget {
         kHalfHeightpace,
         Obx(() {
           ec.toUpdate.value;
+          tc.stopsUpdate.value;
+          final stops = sc.getStopByTrackID(tc.tracks[ec.tIndex.value].id);
           return HeaderListArea(
             height: height,
             hideSize: hideWidth,
@@ -51,16 +55,17 @@ class EditTrack extends StatelessWidget {
             customList: CustomList(
               height: height,
               width: hideWidth,
-              list: tc.tracks[trackIndex].stops,
+              list: stops,
               getTile: getTile,
-              searchBy: tc.tracks[trackIndex].getStopsBy,
+              searchBy: (value) => sc.searchByStops(stops, value),
               onSelectedIndexUpdate: ec.setSelectedIndexed,
               onDelete: ec.onDeleteSelected,
             ),
             body: Obx(() {
               if (ec.editBodyState.value == EditBodyState.map) {
                 return ViewTrackMap(
-                  track: tc.tracks[trackIndex],
+                  stops: stops,
+                  path: const [],
                 );
               } else if (ec.editBodyState.value == EditBodyState.single) {
                 return EditStop(

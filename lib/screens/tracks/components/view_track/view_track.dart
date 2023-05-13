@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class ViewTrack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>(); // tracksController
+    final sc = Get.find<StopsController>(); // tracksController
     final vc = Get.find<ViewController>(); // tracksController
 
     final size = MediaQuery.of(context).size;
@@ -25,26 +27,33 @@ class ViewTrack extends StatelessWidget {
     const hideWidth = 250.0;
     final int trackIndex = vc.tIndex.value;
 
-    return HeaderListArea(
-      height: height,
-      hideSize: hideWidth,
-      tableHeader: TableHeader(
-        titleText: 'Track: ${tc.tracks[vc.tIndex.value].name}',
-        leadingIconData: Icons.arrow_back_ios_new,
-        leadingOnTap: vc.setExit,
-      ),
-      customList: CustomList(
+    return Obx(() {
+      tc.stopsUpdate.value;
+      final stops = sc.getStopByTrackID(
+        tc.tracks[vc.tIndex.value].id,
+      );
+      return HeaderListArea(
         height: height,
-        width: hideWidth,
-        list: tc.tracks[trackIndex].stops,
-        getTile: getTile,
-        searchBy: tc.tracks[trackIndex].getStopsBy,
-        onSelectedIndexUpdate: vc.setSelectedIndexed,
-      ),
-      body: ViewTrackMap(
-        track: tc.tracks[trackIndex],
-      ),
-    );
+        hideSize: hideWidth,
+        tableHeader: TableHeader(
+          titleText: 'Track: ${tc.tracks[vc.tIndex.value].name}',
+          leadingIconData: Icons.arrow_back_ios_new,
+          leadingOnTap: vc.setExit,
+        ),
+        customList: CustomList(
+          height: height,
+          width: hideWidth,
+          list: stops,
+          getTile: getTile,
+          searchBy: (value) => sc.searchByStops(stops, value),
+          onSelectedIndexUpdate: vc.setSelectedIndexed,
+        ),
+        body: ViewTrackMap(
+          stops: stops,
+          path: const [],
+        ),
+      );
+    });
   }
 
   Widget getTile(dynamic s) {

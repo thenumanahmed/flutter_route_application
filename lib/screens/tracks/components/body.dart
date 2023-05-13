@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,9 +14,11 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TracksController>();
-    return Obx(() => controller.loading.value == true
-        ? const CircularProgressIndicator()
-        : showTrackState(controller));
+    return Obx(() {
+      return controller.loading.value == true
+          ? const CircularProgressIndicator()
+          : showTrackState(controller);
+    });
   }
 
   // Future<void> _insertNewTrack(BuildContext context, String name) async {
