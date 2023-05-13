@@ -1,8 +1,11 @@
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../configs/themes/ui_parameters.dart';
+import '../../../controllers/track/paths_controller.dart';
 import '../../../controllers/tracking_controller.dart';
+import '../../../models/track.dart';
 import '../../../widgets/dots_progress_line.dart';
 import '../../../widgets/custom_icon_button.dart';
 
@@ -12,6 +15,8 @@ class TrackingDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tgc = Get.find<TrackingController>();
+    final sc = Get.find<StopsController>();
+    final pc = Get.find<PathsController>();
 
     // return Obx(() {
     tgc.trackingState.value;
@@ -28,8 +33,11 @@ class TrackingDetails extends StatelessWidget {
         // ignore: invalid_use_of_protected_member
         final tracking = tgc.trackings.value[tgc.indexes[0]];
         final track = tracking.track;
+        final List<Stop> stops =
+            track == null ? [] : sc.getStopByTrackID(track.id);
         final String routeName = tracking.routeName;
         final String routeType = tracking.typeCharacter;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -61,8 +69,8 @@ class TrackingDetails extends StatelessWidget {
               DotsProgressLine(
                 height: 10,
                 currentStop: tracking.stopCovered,
-                stops: List.generate(
-                    track.stops.length, (index) => track.stops[index].name),
+                stops:
+                    List.generate(stops.length, (index) => stops[index].name),
               ),
           ],
         );

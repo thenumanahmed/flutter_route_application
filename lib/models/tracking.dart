@@ -1,4 +1,5 @@
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
+import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:dashboard_route_app/models/track.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,7 @@ class Tracking {
     if (r != null) {
       final t = r.track;
       if (t != null) {
-        return t.stops.length;
+        return Get.find<StopsController>().getStopByTrackID(t.id).length;
       }
       return 0;
     }
