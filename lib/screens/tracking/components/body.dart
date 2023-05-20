@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +31,6 @@ class Body extends StatelessWidget {
       message: 'Show Driver',
       hide: Obx(
         () {
-          // ignore: invalid_use_of_protected_member
           tgc.indexes.value;
           rc.fetching.value;
 

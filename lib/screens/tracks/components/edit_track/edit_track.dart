@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -46,7 +48,6 @@ class EditTrack extends StatelessWidget {
         final path = pc.getPathByID(tc.tracks[ec.tIndex.value].id);
         final key = stops.map((s) => s.toJson()).toString();
 
-        print('Edit Track Screen ');
         return Column(
           children: [
             ActionButtons(

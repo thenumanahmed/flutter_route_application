@@ -1,11 +1,9 @@
-import 'package:dashboard_route_app/controllers/track/stops_controller.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
-
+import '../../../../controllers/track/stops_controller.dart';
 import '../../../../configs/map/flutter_map.dart';
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/track/edit_controller.dart';

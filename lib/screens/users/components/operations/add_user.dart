@@ -96,7 +96,6 @@ class _AddUserState extends State<AddUser> {
                   email: email.text,
                 );
 
-                print('goign to add admin');
                 uc.addUser(newUser, widget.userType);
 
                 bool value = true;

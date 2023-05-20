@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../configs/themes/ui_parameters.dart';
-import '../../../controllers/track/paths_controller.dart';
 import '../../../controllers/tracking_controller.dart';
 import '../../../models/track.dart';
 import '../../../widgets/dots_progress_line.dart';
@@ -16,9 +15,7 @@ class TrackingDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final tgc = Get.find<TrackingController>();
     final sc = Get.find<StopsController>();
-    final pc = Get.find<PathsController>();
 
-    // return Obx(() {
     tgc.trackingState.value;
 
     return Container(

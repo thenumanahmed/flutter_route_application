@@ -144,7 +144,6 @@ class AdminTable extends StatelessWidget {
 
   void deleteAdmin(BuildContext context, int index) {
     final uc = Get.find<UsersController>();
-    print('call');
     uc.deleteUser(context, index, UserType.admin);
   }
 

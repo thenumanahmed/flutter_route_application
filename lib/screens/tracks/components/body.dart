@@ -20,12 +20,7 @@ class Body extends StatelessWidget {
   }
 
   Future<void> _insertTracks(
-      BuildContext context, TracksController controller) async {
-    // TODO INSERT TRACK
-    // await MongoDatabase.insertTrack(controller.tracks[0]).then((value) =>
-    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //         content: Text("Inserted ID + ${controller.tracks[0].id.$oid}"))));
-  }
+      BuildContext context, TracksController controller) async {}
 
   Widget showTrackState(TracksController controller) {
     Widget widget = const SizedBox.shrink();

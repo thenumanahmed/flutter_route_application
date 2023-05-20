@@ -37,8 +37,6 @@ class TracksController extends GetxController {
 
   void _loadTracks() {
     api.stream.listen((data) {
-      print('Stream Updated');
-      print('Tracks');
       loading.value = true;
       tracks.clear();
       tracks.addAll(data);
@@ -81,11 +79,6 @@ class TracksController extends GetxController {
 
   void deleteTrackById(mongo.ObjectId id) {
     final index = tracks.indexWhere((element) => element.id == id);
-
-    // TODO Mongo delteTrack(mongoObjectId trackID)
-    // if index -1 return
-    // perform delete from mongo
-    // if succes then remove local tracks.removeAt(index)
 
     tracks.removeAt(index);
   }

@@ -9,11 +9,11 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
+    return const Padding(
+      padding: EdgeInsets.only(
           left: defaultPadding, right: defaultPadding, bottom: defaultPadding),
       child: Column(
-        children: const [
+        children: [
           RouteTypes(),
           kHeightSpace,
           RouteTable(),

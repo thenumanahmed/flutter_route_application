@@ -64,7 +64,6 @@ class _AddRouteState extends State<AddRoute> {
               busId: busId,
               type: rc.routeState.value,
             );
-            print('hi');
             rc.addRoute(route).then((value) {
               if (value) {
                 Navigator.pop(context);

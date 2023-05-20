@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import './tracks_controller.dart';
@@ -26,7 +25,6 @@ class EditController extends GetxController {
   }
 
   void setSelectedIndexed(List<int> indexes) {
-    print('Indexes Updated');
     selectedIndexes.value = indexes;
     if (selectedIndexes.isEmpty) {
       editBodyState.value = EditBodyState.map;

@@ -45,7 +45,6 @@ class _CustomListState extends State<CustomList> {
   @override
   void initState() {
     list = widget.list;
-    print('HI');
     super.initState();
   }
 
@@ -148,7 +147,6 @@ class _CustomListState extends State<CustomList> {
   }
 
   SizedBox getSearchArea() {
-    print(selectedIndexes.toString());
     return SizedBox(
       height: 50,
       child: Row(

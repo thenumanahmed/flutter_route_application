@@ -34,7 +34,6 @@ class RouteController extends GetxController {
 
   void _loadBuses() {
     api.stream.listen((data) {
-      print('Stream Come');
       fetching.value = FetchingState.getting;
       List<r.Route> m = [];
       List<r.Route> e = [];
@@ -57,10 +56,6 @@ class RouteController extends GetxController {
       speacial.clear();
       speacial.addAll(s);
       fetching.value = FetchingState.done;
-      print('hi routes  m${morning.length}');
-      print('hi routes  e${evening.length}');
-      print('hi routes  s${speacial.length}');
-
       // add the data to the _socketStream for other listeners
       _socketStream.add(data);
     });
@@ -144,8 +139,6 @@ class RouteController extends GetxController {
         ids.add(speacial[index[i]].id);
       }
     }
-    print('Delete Caleed');
-    print(ids.length);
     deleteRoutesApi(ids);
     index.clear();
 
@@ -193,9 +186,6 @@ class RouteController extends GetxController {
 
     updateRouteApi(r);
 
-    final res = true;
-    if (res == false) return false;
-
     if (routeState.value == RouteType.morning) {
       morning[index] = r;
     } else if (routeState.value == RouteType.evening) {
@@ -209,7 +199,7 @@ class RouteController extends GetxController {
 
   Future<bool> addRoute(Route r) async {
     addRouteApi(r);
-    final result = true;
+    const result = true;
     return result;
   }
 

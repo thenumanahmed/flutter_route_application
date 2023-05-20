@@ -13,12 +13,6 @@ import '../sockets/drivers_api.dart';
 import '../sockets/members_api.dart';
 import 'fetching.dart';
 
-//TODO: mogno updateAdmin(mongo.ObjectID id, User a)
-
-//TODO: mogno updateDriver(mongo.ObjectID id, User d)
-
-//TODO: mogno updateMember(mongo.ObjectID id, User u)
-
 enum UserType { admin, driver, member }
 
 class UsersController extends GetxController {
@@ -220,7 +214,6 @@ class UsersController extends GetxController {
 
   Future<bool> deleteUsers(
       BuildContext context, List<int> indexes, UserType userType) async {
-    print('hoo');
     final List<mongo.ObjectId> toDelete = [];
     if (userType == UserType.driver) {
       for (int i = 0; i < indexes.length; i++) {
@@ -253,7 +246,6 @@ class UsersController extends GetxController {
   }
 
   Future<bool> addUser(User user, UserType userType) async {
-    print(user.toJson());
     if (userType == UserType.driver) {
       driversApi.send(json.encode({
         'action': 'ADD',
@@ -276,7 +268,6 @@ class UsersController extends GetxController {
   }
 
   Future<bool> updateUser(User user, UserType userType) async {
-    print(user.toJson());
     if (userType == UserType.driver) {
       driversApi.send(json.encode({
         'action': 'UPDATE',

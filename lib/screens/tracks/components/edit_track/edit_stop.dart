@@ -76,12 +76,7 @@ class _EditStopState extends State<EditStop> {
 
   void editStop(
       TracksController tc, EditController ec, StopsController sc) async {
-    if (form.currentContext == null) {
-      print("null");
-      return;
-    }
     if (form.currentState!.validate()) {
-      print('called');
       // updated Stop locally
       Stop toUpdateStop = widget.stop;
       LatLng p1 = stringToLatLng(location.text);

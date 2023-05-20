@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:dashboard_route_app/controllers/routes_controller.dart';
 import 'package:dashboard_route_app/widgets/custom_data_table/custom_data_table.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,6 @@ class RouteTable extends StatelessWidget {
         export: const AddRoute(),
         selectionImport: (r) {},
         selectionDelete: (index) {
-          print('HI');
           rc.selectionDelete(index).then(
               (value) => customSnackbar(context, value, 'Deleted Routes'));
         },

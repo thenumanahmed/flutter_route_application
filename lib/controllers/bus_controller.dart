@@ -59,11 +59,6 @@ class BusController extends GetxController {
     for (int i = 0; i < index.length; i++) {
       toDelete.add(buses[index[i]]);
     }
-    print(json.encode({
-      'action': 'DELETE_MULTIPLE',
-      'payload': toDelete.map((e) => e.id).toList(),
-    }));
-
     api.send(json.encode({
       'action': 'DELETE_MULTIPLE',
       'payload': toDelete.map((e) => e.id).toList(),

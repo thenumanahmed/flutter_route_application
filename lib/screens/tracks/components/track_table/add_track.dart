@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../../../../configs/themes/custom_text_styles.dart';
 import '../../../../configs/themes/ui_parameters.dart';
-import '../../../../models/track.dart';
-import 'package:dashboard_route_app/controllers/track/tracks_controller.dart';
+import '../../../../controllers/track/tracks_controller.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../widgets/custom_icon_button.dart';
 

@@ -9,11 +9,11 @@ class UsersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: SingleChildScrollView(
         padding: defaultEdgePadding,
         child: Column(
-          children: const [
+          children: [
             Header(title: 'Users'),
             kHeightSpace,
             Body(),

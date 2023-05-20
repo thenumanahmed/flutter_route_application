@@ -28,9 +28,7 @@ class PathsController extends GetxController {
   }
 
   void _loadPaths() {
-    print('Paths');
     api.stream.listen((data) {
-      print('path $data');
       fetching.value = FetchingState.getting;
       TracksController.loading.value = true;
       paths.clear();
