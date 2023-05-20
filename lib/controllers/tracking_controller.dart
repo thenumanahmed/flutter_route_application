@@ -32,6 +32,7 @@ class TrackingController extends GetxController {
     api.stream.listen((data) {
       print('hi routes ${data.length}');
       fetching.value = FetchingState.getting;
+      setIndexes([]);
       trackings.clear();
       trackings.addAll(data);
       fetching.value = FetchingState.done;
@@ -45,19 +46,22 @@ class TrackingController extends GetxController {
     if (index.isEmpty) return false;
 
     index.sort();
+    List<mongo.ObjectId> ids = [];
     bool deleted = true;
     for (int i = index.length - 1; i >= 0; i--) {
-      // TODO: Tracking Deletes
-      // final res = await MongoDatabase.stopTracking(trackings[index[i]].id);
-      // if (res == true) {
-      //   trackings.removeAt(index[i]);
-      // } else {
-      //   deleted = false;
-      // }
+      ids.add(trackings[index[i]].id);
     }
+    stopTrackingApi(ids);
     indexes.clear();
     trackingState.value = TrackingState.map;
     return deleted;
+  }
+
+  stopTrackingApi(List<mongo.ObjectId> ids) {
+    api.send(json.encode({
+      'action': 'DELETE_MULTIPLE',
+      'payload': ids,
+    }));
   }
 
   void copyTrackingToClipboard() {
