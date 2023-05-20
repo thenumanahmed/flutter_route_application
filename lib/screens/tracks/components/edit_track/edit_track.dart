@@ -44,19 +44,18 @@ class EditTrack extends StatelessWidget {
         ),
         kHalfHeightpace,
         Obx(() {
+          ec.setSelectedIndexed([]);
           ec.toUpdate.value;
           tc.stopsUpdate.value;
           pc.paths.value;
           sc.stops.value;
           final stops = sc.getStopByTrackID(tc.tracks[ec.tIndex.value].id).obs;
           final path = pc.getPathByID(tc.tracks[ec.tIndex.value].id);
-          final String key =
-              '${pc.valueUpadte.value},${sc.valueUpadte.value},${tc.stopsUpdate.value}';
-          print(key);
+          final key = stops.map((s) => s.toJson()).toString();
 
           print('Edit Track Screen ');
           return HeaderListArea(
-            key: Key(stops.length.toString()),
+            key: Key(key),
             height: height,
             hideSize: hideWidth,
             tableHeader: TableHeader(
@@ -83,7 +82,6 @@ class EditTrack extends StatelessWidget {
             ),
             body: Obx(() {
               ec.selectedIndexes.value;
-              print(ec.selectedIndexes.value);
               if (ec.editBodyState.value == EditBodyState.map) {
                 return ViewTrackMap(
                   stops: stops,

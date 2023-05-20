@@ -28,6 +28,7 @@ class _EditStopState extends State<EditStop> {
   final TextEditingController location = TextEditingController();
   final TextEditingController name = TextEditingController();
   final TextEditingController time = TextEditingController();
+  GlobalKey<FormState> form = GlobalKey();
 
   @override
   void initState() {
@@ -40,14 +41,14 @@ class _EditStopState extends State<EditStop> {
     final tc = Get.find<TracksController>();
     final ec = Get.find<EditController>();
     final sc = Get.find<StopsController>();
-
+    form = GlobalKey<FormState>();
     return Container(
       color: Colors.white,
       padding: defaultEdgePadding,
       child: Column(
         children: [
           StopForm(
-            formKey: GlobalKey(),
+            formKey: form,
             location: location,
             name: name,
             time: time,
@@ -67,6 +68,7 @@ class _EditStopState extends State<EditStop> {
   }
 
   void initializeData() {
+    form = GlobalKey<FormState>();
     location.text = "${widget.stop.latitude},${widget.stop.longitude}";
     name.text = widget.stop.name;
     time.text = timeOfDayToString(widget.stop.time);
@@ -74,16 +76,23 @@ class _EditStopState extends State<EditStop> {
 
   void editStop(
       TracksController tc, EditController ec, StopsController sc) async {
-    // updated Stop locally
-    Stop toUpdateStop = widget.stop;
-    LatLng p1 = stringToLatLng(location.text);
-    toUpdateStop.latitude = p1.latitude;
-    toUpdateStop.longitude = p1.longitude;
-    toUpdateStop.time = stringToTimeOfDay(time.text);
-    toUpdateStop.name = name.text;
+    if (form.currentContext == null) {
+      print("null");
+      return;
+    }
+    if (form.currentState!.validate()) {
+      print('called');
+      // updated Stop locally
+      Stop toUpdateStop = widget.stop;
+      LatLng p1 = stringToLatLng(location.text);
+      toUpdateStop.latitude = p1.latitude;
+      toUpdateStop.longitude = p1.longitude;
+      toUpdateStop.time = stringToTimeOfDay(time.text);
+      toUpdateStop.name = name.text;
 
-    sc.updateStop(toUpdateStop);
-    await Future.delayed(const Duration(seconds: 1));
-    ec.doUpdate();
+      sc.updateStop(toUpdateStop);
+      await Future.delayed(const Duration(seconds: 1));
+      ec.doUpdate();
+    }
   }
 }

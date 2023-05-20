@@ -31,6 +31,7 @@ class _SetLocationState extends State<SetLocation> {
     return TextFormField(
       controller: widget.location,
       style: kTextStyle,
+      validator: validateLatLngString,
       decoration: InputDecoration(
         labelText: 'Location',
         hintText: '31.77,45.666',
@@ -49,6 +50,21 @@ class _SetLocationState extends State<SetLocation> {
         ),
       ),
     );
+  }
+
+  String? validateLatLngString(String? value) {
+    const regex =
+        r'^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),[-+]?((1[0-7]|[1-9])?\d(\.\d+)?|180(\.0+)?)$';
+
+    if (value == null || value.isEmpty) {
+      return 'Postion cannot be empty.';
+    }
+
+    if (!RegExp(regex).hasMatch(value)) {
+      return 'Invalid format. Please use the format "double,double".';
+    }
+
+    return null; // Return null if there are no validation errors
   }
 
   SizedBox setMarker(BuildContext context, TextEditingController location) {

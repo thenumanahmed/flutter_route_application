@@ -29,7 +29,7 @@ class _StopFormState extends State<StopForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: widget.key,
+      key: widget.formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -53,6 +53,7 @@ class _StopFormState extends State<StopForm> {
       child: TextFormField(
         controller: time,
         style: kTextStyle,
+        validator: validateTimeField,
         decoration: InputDecoration(
           labelText: 'Time of Arrival',
           hintText: 'Format: 8:40 AM',
@@ -82,6 +83,7 @@ class _StopFormState extends State<StopForm> {
         child: TextFormField(
       controller: name,
       style: kTextStyle,
+      validator: validateNameField,
       decoration: InputDecoration(
         labelText: 'Name',
         hintText: 'Enter Stop name',
@@ -96,5 +98,30 @@ class _StopFormState extends State<StopForm> {
         ),
       ),
     ));
+  }
+
+  String? validateTimeField(String? value) {
+    const timeRegex = r'^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$';
+
+    if (value == null || value.isEmpty) {
+      return 'Time field cannot be empty.';
+    }
+
+    if (!RegExp(timeRegex).hasMatch(value)) {
+      return 'Invalid time format. Please use the format "H:MM AM/PM".';
+    }
+
+    return null; // Return null if there are no validation errors
+  }
+
+  String? validateNameField(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name cannot be empty.';
+    }
+    if (value.length < 3) {
+      return 'Name must be at least 3 characters long.';
+    }
+
+    return null;
   }
 }
