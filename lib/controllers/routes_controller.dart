@@ -56,7 +56,6 @@ class RouteController extends GetxController {
       evening.addAll(e);
       speacial.clear();
       speacial.addAll(s);
-
       fetching.value = FetchingState.done;
       print('hi routes  m${morning.length}');
       print('hi routes  e${evening.length}');
@@ -130,46 +129,37 @@ class RouteController extends GetxController {
 
   Future<bool> selectionDelete(List<int> index) async {
     index.sort();
-
+    List<mongo.ObjectId> ids = [];
     bool deleted = true;
     if (routeState.value == RouteType.morning) {
       for (int i = index.length - 1; i >= 0; i--) {
-        // TODO: DELETE ROUTE MORNING
-        // final res = await MongoDatabase.deleteRoute(morning[index[i]].id);
-        // if (res == true) {
-        //   morning.removeAt(index[i]);
-        // } else {
-        //   deleted = false;
-        // }
+        ids.add(morning[index[i]].id);
       }
     } else if (routeState.value == RouteType.evening) {
       for (int i = index.length - 1; i >= 0; i--) {
-        // TODO: DELTE ROUTE Evening
-
-        // final res = await MongoDatabase.deleteRoute(evening[index[i]].id);
-        // if (res == true) {
-        //   evening.removeAt(index[i]);
-        // } else {
-        //   deleted = false;
-        // }
+        ids.add(evening[index[i]].id);
       }
     } else {
       for (int i = index.length - 1; i >= 0; i--) {
-        // TODO: DELTE ROUTE Speacial
-        // final res = await MongoDatabase.deleteRoute(speacial[index[i]].id);
-        // if (res == true) {
-        //   speacial.removeAt(index[i]);
-        // } else {
-        //   deleted = false;
-        // }
+        ids.add(speacial[index[i]].id);
       }
     }
+    print('Delete Caleed');
+    print(ids.length);
+    deleteRoutesApi(ids);
     index.clear();
 
     // update table
     doUpdate();
 
     return deleted;
+  }
+
+  void deleteRoutesApi(List<mongo.ObjectId> ids) {
+    api.send(json.encode({
+      'action': 'DELETE_MULTIPLE',
+      'payload': ids,
+    }));
   }
 
   void updateRouteApi(Route r) {
@@ -218,20 +208,16 @@ class RouteController extends GetxController {
   }
 
   Future<bool> addRoute(Route r) async {
-    // TODO: add Route
-    // final result = await MongoDatabase.addRoute(r);
+    addRouteApi(r);
     final result = true;
-    if (result == true) {
-      if (r.type == RouteType.morning) {
-        morning.add(r);
-      } else if (r.type == RouteType.evening) {
-        evening.add(r);
-      } else {
-        speacial.add(r);
-      }
-      doUpdate();
-    }
     return result;
+  }
+
+  void addRouteApi(Route r) {
+    api.send(json.encode({
+      'action': 'ADD',
+      'payload': r.toJson(),
+    }));
   }
 
   List<int> searchByName(String s) {

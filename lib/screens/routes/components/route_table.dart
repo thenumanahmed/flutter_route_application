@@ -43,6 +43,7 @@ class RouteTable extends StatelessWidget {
         export: const AddRoute(),
         selectionImport: (r) {},
         selectionDelete: (index) {
+          print('HI');
           rc.selectionDelete(index).then(
               (value) => customSnackbar(context, value, 'Deleted Routes'));
         },
