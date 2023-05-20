@@ -1,3 +1,4 @@
+import 'package:dashboard_route_app/controllers/routes_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tgc = Get.find<TrackingController>();
+    final rc = Get.find<RouteController>();
     final size = MediaQuery.of(context).size;
     final height = size.height - 100;
 
@@ -29,6 +31,8 @@ class Body extends StatelessWidget {
         () {
           // ignore: invalid_use_of_protected_member
           tgc.indexes.value;
+          rc.fetching.value;
+
           return CustomList(
             key: UniqueKey(),
             deleteMessage: 'Stop Tracking',
@@ -49,6 +53,8 @@ class Body extends StatelessWidget {
       main: Obx(() {
         int index = tgc.indexes.isNotEmpty ? tgc.indexes[0] : -1;
         tgc.indexes.value;
+        rc.fetching.value;
+
         return CustomHideArea(
             key: UniqueKey(),
             height: height,

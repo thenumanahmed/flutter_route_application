@@ -34,6 +34,7 @@ class RouteController extends GetxController {
 
   void _loadBuses() {
     api.stream.listen((data) {
+      print('Stream Come');
       fetching.value = FetchingState.getting;
       List<r.Route> m = [];
       List<r.Route> e = [];
@@ -171,6 +172,13 @@ class RouteController extends GetxController {
     return deleted;
   }
 
+  void updateRouteApi(Route r) {
+    api.send(json.encode({
+      'action': 'UPDATE',
+      'payload': r.toJson(),
+    }));
+  }
+
   Future<bool> updateRoute({
     required int index,
     required String name,
@@ -193,8 +201,8 @@ class RouteController extends GetxController {
     r.driverId = driverId;
     r.busId = busId;
 
-    //TODO: UPDATE ROUTE
-    // final res = await MongoDatabase.updateRoute(r);
+    updateRouteApi(r);
+
     final res = true;
     if (res == false) return false;
 
