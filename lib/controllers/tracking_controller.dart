@@ -84,7 +84,7 @@ class TrackingController extends GetxController {
   List<int> searchByName(String s) {
     List<int> list = [];
     for (int i = 0; i < trackings.length; i++) {
-      if (trackings[i].name.capitalize!.contains(s.capitalize!)) {
+      if (trackings[i].name.capitalize!.contains(s.trim().capitalize!)) {
         list.add(i);
       }
     }

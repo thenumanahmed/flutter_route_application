@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import '../models/route.dart' as r;
 
-import '../controllers/track/tracks_controller.dart';
 import '../functions/time.dart';
 
 class Tracking {
@@ -26,9 +25,9 @@ class Tracking {
   });
 
   String get name {
-    final tc = Get.find<TracksController>();
-    final track = tc.getTrackByID(routeId);
-    return track != null ? track.name : 'not_found';
+    final rc = Get.find<RouteController>();
+    final route = rc.getRoute(routeId);
+    return route != null ? route.trackName : 'not_found';
   }
 
   String get driverName {

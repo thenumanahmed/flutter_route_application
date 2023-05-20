@@ -64,7 +64,6 @@ class _EditRouteState extends State<EditRoute> {
         CustomAlertButton(
           onTap: () {
             if (formKey.currentState!.validate()) {
-              print('form validated');
               saveRoute();
             }
           },
