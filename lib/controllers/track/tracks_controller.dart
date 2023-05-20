@@ -10,7 +10,6 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 // import '../../dbHelper/mongo_db.dart';
 import '../../models/track.dart';
 import '../../sockets/tracks_api.dart';
-import '../../../controllers/track/stops_controller.dart';
 
 enum TrackState { tracks, view, add, edit, delete, map }
 
@@ -38,6 +37,7 @@ class TracksController extends GetxController {
   void _loadTracks() {
     api.stream.listen((data) {
       print('Stream Updated');
+
       loading.value = true;
       tracks.clear();
       tracks.addAll(data);
@@ -69,6 +69,13 @@ class TracksController extends GetxController {
     }));
   }
 
+  void updateTrack(Track t) {
+    api.send(json.encode({
+      'action': 'UPDATE',
+      'payload': t.toJson(),
+    }));
+  }
+
   void deleteTrackById(mongo.ObjectId id) {
     final index = tracks.indexWhere((element) => element.id == id);
 
@@ -81,17 +88,17 @@ class TracksController extends GetxController {
   }
 
   void deleteStops(int tIndex, List<int> tStopIndex) {
-    print('hi Tracks Stop Delete Stops called');
-    print(' $tIndex  ${tStopIndex.toString()}');
-    tStopIndex.sort();
-    List<mongo.ObjectId> stopsId = [];
-    for (int i = tStopIndex.length - 1; i >= 0; i--) {
-      print('$tIndex , $tStopIndex[i]');
-      stopsId.add(tracks[tIndex].stops[tStopIndex[i]].id);
-    }
-    print('Tracks COntroller indexes ID ${stopsId.length}');
-    final sc = Get.find<StopsController>();
-    sc.deleteStops(stopsId);
+    // print('hi Tracks Stop Delete Stops called');
+    // print(' $tIndex  ${tStopIndex.toString()}');
+    // tStopIndex.sort();
+    // List<mongo.ObjectId> stopsId = [];
+    // for (int i = tStopIndex.length - 1; i >= 0; i--) {
+    //   print('$tIndex , $tStopIndex[i]');
+    //   stopsId.add(tracks[tIndex].stops[tStopIndex[i]].id);
+    // }
+    // print('Tracks COntroller indexes ID ${stopsId.length}');
+    // final sc = Get.find<StopsController>();
+    // sc.deleteStops(stopsId);
   }
 
   void setTrackState(TrackState value) {
@@ -106,14 +113,6 @@ class TracksController extends GetxController {
 
   int getIndexByTrackID(mongo.ObjectId id) {
     return tracks.indexWhere((element) => element.id == id);
-  }
-
-  void setStopIsSelected(int tIndex, int sIndex, bool value) {
-    tracks[tIndex].stops[sIndex].isSelected.value = value;
-  }
-
-  bool getStopIsSelected(int tIndex, int sIndex) {
-    return tracks[tIndex].stops[sIndex].isSelected.value;
   }
 
   List<int> searchByName(String s) {

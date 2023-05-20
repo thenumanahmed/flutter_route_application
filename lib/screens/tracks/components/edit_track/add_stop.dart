@@ -14,11 +14,11 @@ import '../../../../models/track.dart';
 import '../../../../widgets/custom_alert_buttons.dart';
 import '../../../../controllers/track/tracks_controller.dart';
 import '../../../../functions/time.dart';
-import '../../../../functions/custom_snackbar.dart';
 import '../../../tracks/components/edit_track/stop_form.dart';
 
 class AddStop extends StatefulWidget {
-  const AddStop({super.key});
+  const AddStop({super.key, required this.stops});
+  final List<Stop> stops;
   @override
   State<AddStop> createState() => _AddStopState();
 }
@@ -92,7 +92,7 @@ class _AddStopState extends State<AddStop> {
       tc.tracks[ec.tIndex.value].id,
       name.text,
       stringToTimeOfDay(time.text),
-      tc.tracks[ec.tIndex.value].stops.length,
+      widget.stops.length,
       center.latitude,
       center.longitude,
     );

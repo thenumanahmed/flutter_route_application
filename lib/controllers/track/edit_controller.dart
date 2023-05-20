@@ -42,13 +42,15 @@ class EditController extends GetxController {
     toUpdate.value = !toUpdate.value;
   }
 
-  void onDeleteSelected(List<int> indexes) {
-    if (kDebugMode) {
-      print('Delete : ${indexes.toString()}');
-    }
-    print(tIndex.value);
-    Get.find<TracksController>().deleteStops(tIndex.value, indexes);
-    print('hi From on Delete Selected Edit Controllers');
-    setSelectedIndexed([]);
+  void onDeleteSelected(
+    List<int> indexes,
+  ) {
+    // if (kDebugMode) {
+    //   print('Delete : ${indexes.toString()}');
+    // }
+    // print(tIndex.value);
+    // Get.find<TracksController>().deleteStops(tIndex.value, indexes);
+    // print('hi From on Delete Selected Edit Controllers');
+    // setSelectedIndexed([]);
   }
 }

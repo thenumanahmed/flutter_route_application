@@ -73,42 +73,42 @@ class TrackingController extends GetxController {
   void localInitialize() {
     final rc = Get.find<RouteController>();
 
-    final tTracking = [
-      Tracking(
-        id: mongo.ObjectId(),
-        routeId: rc.morning[0].id,
-        latitude: rc.morning[0].track!.stops[3].latitude,
-        longitude: rc.morning[0].track!.stops[3].longitude,
-        stopCovered: 3,
-        updateTime: const TimeOfDay(hour: 7, minute: 35),
-      ),
-      Tracking(
-        id: mongo.ObjectId(),
-        routeId: rc.morning[1].id,
-        latitude: rc.morning[1].track!.stops[4].latitude,
-        longitude: rc.morning[1].track!.stops[4].longitude,
-        stopCovered: 4,
-        updateTime: const TimeOfDay(hour: 7, minute: 35),
-      ),
-      Tracking(
-        id: mongo.ObjectId(),
-        routeId: rc.morning[2].id,
-        latitude: rc.morning[2].track!.stops[4].latitude,
-        longitude: rc.morning[2].track!.stops[4].longitude,
-        stopCovered: 4,
-        updateTime: const TimeOfDay(hour: 7, minute: 35),
-      ),
-      Tracking(
-        id: mongo.ObjectId(),
-        routeId: rc.morning[3].id,
-        latitude: rc.morning[3].track!.stops[5].latitude,
-        longitude: rc.morning[3].track!.stops[5].longitude,
-        stopCovered: 5,
-        updateTime: const TimeOfDay(hour: 7, minute: 35),
-      )
-    ];
+    // final tTracking = [
+    //   Tracking(
+    //     id: mongo.ObjectId(),
+    //     routeId: rc.morning[0].id,
+    //     latitude: rc.morning[0].track!.stops[3].latitude,
+    //     longitude: rc.morning[0].track!.stops[3].longitude,
+    //     stopCovered: 3,
+    //     updateTime: const TimeOfDay(hour: 7, minute: 35),
+    //   ),
+    //   Tracking(
+    //     id: mongo.ObjectId(),
+    //     routeId: rc.morning[1].id,
+    //     latitude: rc.morning[1].track!.stops[4].latitude,
+    //     longitude: rc.morning[1].track!.stops[4].longitude,
+    //     stopCovered: 4,
+    //     updateTime: const TimeOfDay(hour: 7, minute: 35),
+    //   ),
+    //   Tracking(
+    //     id: mongo.ObjectId(),
+    //     routeId: rc.morning[2].id,
+    //     latitude: rc.morning[2].track!.stops[4].latitude,
+    //     longitude: rc.morning[2].track!.stops[4].longitude,
+    //     stopCovered: 4,
+    //     updateTime: const TimeOfDay(hour: 7, minute: 35),
+    //   ),
+    //   Tracking(
+    //     id: mongo.ObjectId(),
+    //     routeId: rc.morning[3].id,
+    //     latitude: rc.morning[3].track!.stops[5].latitude,
+    //     longitude: rc.morning[3].track!.stops[5].longitude,
+    //     stopCovered: 5,
+    //     updateTime: const TimeOfDay(hour: 7, minute: 35),
+    //   )
+    // ];
 
-    trackings.value = tTracking;
+    // trackings.value = tTracking;
   }
 
   void setIndexes(List<int> index) {

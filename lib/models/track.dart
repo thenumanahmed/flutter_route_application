@@ -8,56 +8,21 @@ import '../functions/time.dart';
 class Track {
   mongo.ObjectId id;
   String name;
-  List<Stop> stops;
-  List<List<double>> path;
   bool isAssigned;
   Track({
     required this.id,
     required this.name,
     this.isAssigned = false,
-    this.stops = const <Stop>[],
-    this.path = const [],
   });
-  List<int> getStopsBy(String s) {
-    List<int> list = [];
-    for (int i = 0; i < stops.length; i++) {
-      if (stops[i].name.capitalize!.contains(s.capitalize!)) {
-        list.add(i);
-      }
-    }
-    return list;
-  }
 
   Track.fromJson(Map<String, dynamic> json)
       : id = json['_id'].runtimeType == mongo.ObjectId
             ? json['_id'] as mongo.ObjectId
             : mongo.ObjectId.fromHexString(json['_id']),
         name = json['name'],
-        isAssigned = json['is_assigned'],
-        stops = <Stop>[],
-        path = <List<double>>[] {
-    // code to assign stops as well
-
-    // if (json['stops'] != null) {
-    //   stops = <Stop>[];
-    //   // add code here to get json of Stops
-    //   json['stops'].forEach((v) {
-    //     stops.add(Stop.fromJson(v));
-    //   });
-    // }
-    // if (json['path'] != null) {
-    //   path = <List<double>>[];
-    //   json['path'].forEach((v) {
-    //     path.add([v[0], v[1]]);
-    //   });
-    // }
-  }
+        isAssigned = json['is_assigned'];
 
   Map<String, dynamic> toJson() {
-    if (kDebugMode) {
-      print(path);
-      print(path.map((point) => [point[0], point[1]]).toList());
-    }
     return {
       "_id": id,
       "name": name,
@@ -65,24 +30,6 @@ class Track {
       // "stops": stops.map((stop) => stop.toJson()).toList(),
       // "path": path.map((point) => [point[0], point[1]]).toList(),
     };
-  }
-
-  setStopSelected(int index) {
-    stops[index].isSelected.value = true;
-  }
-
-  setStopUnSelected(int index) {
-    stops[index].isSelected.value = false;
-  }
-
-  setStopsUnSelected() {
-    for (int i = 0; i < stops.length; i++) {
-      stops[i].isSelected.value = false;
-    }
-  }
-
-  void deleteStop(int index) {
-    stops.removeAt(index);
   }
 }
 
