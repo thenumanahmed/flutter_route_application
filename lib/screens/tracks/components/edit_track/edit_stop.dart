@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
-import '../../../../functions/custom_snackbar.dart';
+import '../../../../controllers/track/stops_controller.dart';
 import '../../../../functions/latlng_string.dart';
 import '../../../../functions/time.dart';
 import '../../../../models/track.dart';
@@ -39,6 +39,7 @@ class _EditStopState extends State<EditStop> {
   Widget build(BuildContext context) {
     final tc = Get.find<TracksController>();
     final ec = Get.find<EditController>();
+    final sc = Get.find<StopsController>();
 
     return Container(
       color: Colors.white,
@@ -55,7 +56,7 @@ class _EditStopState extends State<EditStop> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                onPressed: () => editStop(tc, ec),
+                onPressed: () => editStop(tc, ec, sc),
                 child: const Text('Save'),
               ),
             ],
@@ -66,14 +67,13 @@ class _EditStopState extends State<EditStop> {
   }
 
   void initializeData() {
-    final tc = Get.find<TracksController>();
-
     location.text = "${widget.stop.latitude},${widget.stop.longitude}";
     name.text = widget.stop.name;
     time.text = timeOfDayToString(widget.stop.time);
   }
 
-  void editStop(TracksController tc, EditController ec) async {
+  void editStop(
+      TracksController tc, EditController ec, StopsController sc) async {
     // updated Stop locally
     Stop toUpdateStop = widget.stop;
     LatLng p1 = stringToLatLng(location.text);
@@ -82,19 +82,8 @@ class _EditStopState extends State<EditStop> {
     toUpdateStop.time = stringToTimeOfDay(time.text);
     toUpdateStop.name = name.text;
 
-    // TODO: Update Stop
-    // // try to update on MongoDb
-    // MongoDatabase.updateStop(toUpdateStop).then((value) {
-    //   if (value == true) {
-    //     // Update Localy
-    //     tc.tracks[widget.tIndex].stops[widget.sIndex] = toUpdateStop;
-    //     customSnackbar(context, true, 'Stop Updated!');
-    //     ec.doUpdate();
-    //   } else {
-    //     // Error
-    //     customSnackbar(context, true, 'Stop not Updated!');
-    //   }
-    // });
-    // update Stop in mongodb
+    sc.updateStop(toUpdateStop);
+    await Future.delayed(const Duration(seconds: 1));
+    ec.doUpdate();
   }
 }

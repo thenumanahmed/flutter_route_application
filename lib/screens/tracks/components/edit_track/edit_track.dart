@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 import '../../../../configs/themes/ui_parameters.dart';
 import '../../../../controllers/track/paths_controller.dart';
@@ -46,9 +47,16 @@ class EditTrack extends StatelessWidget {
           ec.toUpdate.value;
           tc.stopsUpdate.value;
           pc.paths.value;
-          final stops = sc.getStopByTrackID(tc.tracks[ec.tIndex.value].id);
+          sc.stops.value;
+          final stops = sc.getStopByTrackID(tc.tracks[ec.tIndex.value].id).obs;
           final path = pc.getPathByID(tc.tracks[ec.tIndex.value].id);
+          final String key =
+              '${pc.valueUpadte.value},${sc.valueUpadte.value},${tc.stopsUpdate.value}';
+          print(key);
+
+          print('Edit Track Screen ');
           return HeaderListArea(
+            key: Key(stops.length.toString()),
             height: height,
             hideSize: hideWidth,
             tableHeader: TableHeader(
@@ -63,9 +71,19 @@ class EditTrack extends StatelessWidget {
               getTile: getTile,
               searchBy: (value) => sc.searchByStops(stops, value),
               onSelectedIndexUpdate: ec.setSelectedIndexed,
-              onDelete: ec.onDeleteSelected,
+              onDelete: (List<int> indexes) async {
+                List<ObjectId> ids = [];
+                for (int i = 0; i < indexes.length; i++) {
+                  ids.add(stops[indexes[i]].id);
+                }
+                sc.deleteStops(ids);
+                await Future.delayed(const Duration(seconds: 1));
+                ec.doUpdate();
+              },
             ),
             body: Obx(() {
+              ec.selectedIndexes.value;
+              print(ec.selectedIndexes.value);
               if (ec.editBodyState.value == EditBodyState.map) {
                 return ViewTrackMap(
                   stops: stops,
@@ -73,9 +91,9 @@ class EditTrack extends StatelessWidget {
                 );
               } else if (ec.editBodyState.value == EditBodyState.single) {
                 return EditStop(
+                  key: UniqueKey(),
                   stop: stops[ec.selectedIndexes[0]],
                   tIndex: trackIndex,
-                  key: UniqueKey(),
                 );
               } else {
                 return EditStop(

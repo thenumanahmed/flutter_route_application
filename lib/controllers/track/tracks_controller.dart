@@ -10,6 +10,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 // import '../../dbHelper/mongo_db.dart';
 import '../../models/track.dart';
 import '../../sockets/tracks_api.dart';
+import '../../../controllers/track/stops_controller.dart';
 
 enum TrackState { tracks, view, add, edit, delete, map }
 
@@ -36,6 +37,7 @@ class TracksController extends GetxController {
 
   void _loadTracks() {
     api.stream.listen((data) {
+      print('Stream Updated');
       loading.value = true;
       tracks.clear();
       tracks.addAll(data);
@@ -46,18 +48,25 @@ class TracksController extends GetxController {
     api.send(json.encode({'action': 'LOAD'}));
   }
 
-  void deleteTrack(int tIndex) {
-    // TODO: Mongo deleteTrack(mongoObjectId trackID)
-    // you can get track id to delte by tracks[tIndex].id
-    // if fail return 0;
-    // else remove track local by track.removeAt(tIndex)
+  void doUpdateStops() {
+    stopsUpdate.value = !stopsUpdate.value;
+  }
 
+  void deleteTrack(int tIndex) {
     if (kDebugMode) {
       print('Removed ${tracks[tIndex].name}');
     }
+    api.send(json.encode({
+      'action': 'DELETE',
+      'payload': tracks[tIndex].id,
+    }));
+  }
 
-    // Delete Success in mongo delete from here
-    tracks.removeAt(tIndex);
+  void addTrack(String trackName) {
+    api.send(json.encode({
+      'action': 'ADD',
+      'payload': Track(id: mongo.ObjectId(), name: trackName).toJson(),
+    }));
   }
 
   void deleteTrackById(mongo.ObjectId id) {
@@ -72,17 +81,17 @@ class TracksController extends GetxController {
   }
 
   void deleteStops(int tIndex, List<int> tStopIndex) {
+    print('hi Tracks Stop Delete Stops called');
+    print(' $tIndex  ${tStopIndex.toString()}');
     tStopIndex.sort();
-    final tc = Get.find<TracksController>();
+    List<mongo.ObjectId> stopsId = [];
     for (int i = tStopIndex.length - 1; i >= 0; i--) {
-      final stopId = tc.tracks[tIndex].stops[tStopIndex[i]].id;
-      // TODO: DELTE STOPs
-      // MongoDatabase.deleteStop(stopId).then((value) {
-      //   if (value == true) {
-      //   } else {}
-      // });
-      // tc.tracks[tIndex].deleteStop(tStopIndex[i]);
+      print('$tIndex , $tStopIndex[i]');
+      stopsId.add(tracks[tIndex].stops[tStopIndex[i]].id);
     }
+    print('Tracks COntroller indexes ID ${stopsId.length}');
+    final sc = Get.find<StopsController>();
+    sc.deleteStops(stopsId);
   }
 
   void setTrackState(TrackState value) {

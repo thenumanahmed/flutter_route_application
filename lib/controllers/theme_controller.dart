@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../configs/themes/app_color.dart';
 import '../configs/themes/app_dark_theme.dart';
 import '../configs/themes/app_light_theme.dart';
+import '../sockets/api.dart';
 
 class ThemeController extends GetxController {
   late ThemeData _lightTheme;
@@ -15,6 +16,8 @@ class ThemeController extends GetxController {
   void onInit() {
     initializeThemeData();
     super.onInit();
+
+    print(kBusesWsUrl);
   }
 
   initializeThemeData() {

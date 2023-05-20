@@ -86,26 +86,20 @@ class _AddStopState extends State<AddStop> {
     location.text = latLngToString(center);
   }
 
-  void addStop(TracksController tc, StopsController sc, EditController ec) {
-    Stop toAddStop = Stop(
-        id: mongo.ObjectId(),
-        trackId: tc.tracks[ec.tIndex.value].id,
-        name: name.text,
-        time: stringToTimeOfDay(time.text),
-        isStop: true,
-        stopNo: tc.tracks[ec.tIndex.value].stops.length,
-        latitude: center.latitude,
-        longitude: center.longitude);
-    //TODO: ADD STOP
-    // MongoDatabase.addStop(toAddStop).then((value) {
-    //   if (value == true) {
-    //     tc.tracks[ec.tIndex.value].stops.add(toAddStop);
-    //     ec.doUpdate();
-    //     Navigator.pop(context);
-    //     customSnackbar(context, true, 'Stop Added');
-    //   } else {
-    //     customSnackbar(context, false, 'Stop not Added');
-    //   }
-    // });
+  void addStop(
+      TracksController tc, StopsController sc, EditController ec) async {
+    sc.addStop(
+      tc.tracks[ec.tIndex.value].id,
+      name.text,
+      stringToTimeOfDay(time.text),
+      tc.tracks[ec.tIndex.value].stops.length,
+      center.latitude,
+      center.longitude,
+    );
+
+    await Future.delayed(const Duration(seconds: 1)).then((value) {
+      Navigator.pop(context);
+      ec.doUpdate();
+    });
   }
 }

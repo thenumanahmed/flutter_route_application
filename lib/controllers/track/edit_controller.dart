@@ -26,6 +26,7 @@ class EditController extends GetxController {
   }
 
   void setSelectedIndexed(List<int> indexes) {
+    print('Indexes Updated');
     selectedIndexes.value = indexes;
     if (selectedIndexes.isEmpty) {
       editBodyState.value = EditBodyState.map;
@@ -45,8 +46,9 @@ class EditController extends GetxController {
     if (kDebugMode) {
       print('Delete : ${indexes.toString()}');
     }
+    print(tIndex.value);
     Get.find<TracksController>().deleteStops(tIndex.value, indexes);
-
+    print('hi From on Delete Selected Edit Controllers');
     setSelectedIndexed([]);
   }
 }

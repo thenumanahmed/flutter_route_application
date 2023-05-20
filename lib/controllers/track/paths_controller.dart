@@ -12,6 +12,7 @@ import './tracks_controller.dart';
 class PathsController extends GetxController {
   final fetching = FetchingState.getting.obs;
   final paths = <Path>[].obs;
+  final valueUpadte = false.obs;
 
   final _socketStream = StreamController<List<Path>>.broadcast();
   final api = PathsSocketApi();
@@ -20,6 +21,10 @@ class PathsController extends GetxController {
   void onInit() {
     super.onInit();
     _loadPaths();
+  }
+
+  doUpdate() {
+    valueUpadte.value = !valueUpadte.value;
   }
 
   void _loadPaths() {

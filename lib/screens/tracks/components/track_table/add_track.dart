@@ -46,22 +46,8 @@ class _AddTrackState extends State<AddTrack> {
         CustomAlertButton(
           title: 'Add',
           onTap: () async {
-            Track newTrack = Track(
-              id: mongo.ObjectId(),
-              name: name.text,
-              isAssigned: false,
-              path: [],
-              stops: [],
-            );
-            // TODO ADD TRACK
-            // MongoDatabase.addTrack(newTrack).then((value) {
-            //   if (value == true) {
-            //     tc.tracks.add(newTrack);
-            //     Navigator.pop(context);
-            //   } else {
-            //     //  TODO: show error on scaffold messenger
-            //   }
-            // });
+            tc.addTrack(name.text);
+            Navigator.pop(context);
           },
         ),
       ],

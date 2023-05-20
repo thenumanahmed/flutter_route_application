@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
@@ -12,9 +13,14 @@ import './tracks_controller.dart';
 class StopsController extends GetxController {
   final fetching = FetchingState.getting.obs;
   final stops = <Stop>[].obs;
+  final valueUpadte = false.obs;
 
   final _socketStream = StreamController<List<Stop>>.broadcast();
   final api = StopsSocketApi();
+
+  doUpdate() {
+    valueUpadte.value = !valueUpadte.value;
+  }
 
   @override
   void onInit() {
@@ -28,11 +34,47 @@ class StopsController extends GetxController {
       stops.clear();
       stops.addAll(data);
       fetching.value = FetchingState.done;
+      doUpdate();
       Get.find<TracksController>().signalStopsUpdate();
       // add the data to the _socketStream for other listeners
+
       _socketStream.add(data);
     });
     api.send(json.encode({'action': 'LOAD'}));
+  }
+
+  void addStop(mongo.ObjectId trackId, String name, TimeOfDay time, int stopNo,
+      double latitude, double longitude,
+      {bool isStop = true}) {
+    final s = Stop(
+      id: mongo.ObjectId(),
+      trackId: trackId,
+      name: name,
+      time: time,
+      isStop: true,
+      stopNo: stopNo,
+      latitude: latitude,
+      longitude: longitude,
+    );
+
+    api.send(json.encode({
+      'action': 'ADD',
+      'payload': s.toJson(),
+    }));
+  }
+
+  void updateStop(Stop s) {
+    api.send(json.encode({
+      'action': 'UPDATE',
+      'payload': s.toJson(),
+    }));
+  }
+
+  void deleteStops(List<mongo.ObjectId> stopsId) {
+    api.send(json.encode({
+      'action': 'DELETE_MULTIPLE',
+      'payload': stopsId.toList(),
+    }));
   }
 
   List<Stop> getStopByTrackID(mongo.ObjectId id) {
@@ -54,10 +96,4 @@ class StopsController extends GetxController {
     }
     return list;
   }
-
-  void addStop(Stop s) {}
-
-  void deleteStop(mongo.ObjectId id) {}
-
-  void updateStop(Stop s) {}
 }
