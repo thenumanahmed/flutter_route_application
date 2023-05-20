@@ -49,11 +49,12 @@ class _EditRouteState extends State<EditRoute> {
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         RouteForm(
-          formKey: GlobalKey(),
+          formKey: formKey,
           name: name,
           track: track,
           driver: driver,
@@ -61,7 +62,12 @@ class _EditRouteState extends State<EditRoute> {
         ),
         kHeightSpace,
         CustomAlertButton(
-          onTap: saveRoute,
+          onTap: () {
+            if (formKey.currentState!.validate()) {
+              print('form validated');
+              saveRoute();
+            }
+          },
           title: 'Save Route',
         ),
       ],

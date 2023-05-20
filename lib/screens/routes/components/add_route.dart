@@ -33,11 +33,12 @@ class _AddRouteState extends State<AddRoute> {
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         RouteForm(
-          formKey: GlobalKey(),
+          formKey: formKey,
           name: name,
           track: track,
           driver: driver,
@@ -46,6 +47,9 @@ class _AddRouteState extends State<AddRoute> {
         kHeightSpace,
         CustomAlertButton(
           onTap: () {
+            if (formKey.currentState!.validate() == false) {
+              return;
+            }
             final rc = Get.find<RouteController>();
             final trackId = track.text != RouteForm.none
                 ? rc.stringToTrackId(track.text)

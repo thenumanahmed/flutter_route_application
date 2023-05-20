@@ -32,6 +32,19 @@ class UsersController extends GetxController {
   final driversApi = DriversSocketApi();
   final adminsApi = AdminsSocketApi();
 
+  List<String> get existingAdminUsernames =>
+      admins.map((user) => user.username).toList();
+  List<String> get existingAdminEmails =>
+      admins.map((user) => user.email).toList();
+  List<String> get existingDriverUsernames =>
+      drivers.map((user) => user.username).toList();
+  List<String> get existingDriverEmails =>
+      drivers.map((user) => user.email).toList();
+  List<String> get existingMemberUsernames =>
+      members.map((user) => user.username).toList();
+  List<String> get existingMemberEmails =>
+      members.map((user) => user.email).toList();
+
   @override
   void onInit() {
     super.onInit();

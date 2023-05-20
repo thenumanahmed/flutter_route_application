@@ -46,7 +46,7 @@ class _RouteFormState extends State<RouteForm> {
     numberPlate.insert(0, RouteForm.none);
 
     return Form(
-      key: widget.key,
+      key: widget.formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -79,6 +79,8 @@ class _RouteFormState extends State<RouteForm> {
         child: TextFormField(
       controller: name,
       style: kTextStyle,
+      validator: (value) =>
+          (value == null || value.isEmpty) ? 'Please Enter Name' : null,
       decoration: InputDecoration(
         labelText: 'Name',
         hintText: 'Enter Route name',

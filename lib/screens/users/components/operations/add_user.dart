@@ -22,6 +22,8 @@ class _AddUserState extends State<AddUser> {
   late final TextEditingController email;
   late final TextEditingController phoneNo;
   late final TextEditingController password;
+  late List<String> usernames;
+  late List<String> emails;
   String defaultUsername = "";
   String defaultEmail = "0";
   String defaultPhoneNo = "0";
@@ -60,12 +62,22 @@ class _AddUserState extends State<AddUser> {
     defaultEmail = '$defaultString@uet.edu.pk';
     defaultPhoneNo = '+92-1234567890';
     defaultPassword = '12345678';
+
+    if (uc.usersState.value == UserType.admin) {
+      usernames = uc.existingAdminUsernames;
+      emails = uc.existingAdminEmails;
+    } else if (uc.usersState.value == UserType.driver) {
+      usernames = uc.existingDriverUsernames;
+      emails = uc.existingDriverEmails;
+    } else {
+      usernames = uc.existingMemberUsernames;
+      emails = uc.existingMemberEmails;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final UsersController uc = Get.find();
-
     final key = GlobalKey<FormState>();
     return Form(
       key: key,
@@ -81,6 +93,8 @@ class _AddUserState extends State<AddUser> {
             defaultEmail: defaultEmail,
             defaultPhoneNo: defaultPhoneNo,
             defaultPassword: defaultPassword,
+            existingUsernames: usernames,
+            existingEmails: emails,
           ),
           kHeightSpace,
           CustomAlertButton(
@@ -89,18 +103,18 @@ class _AddUserState extends State<AddUser> {
               if (key.currentState!.validate()) {
                 User newUser = User(
                   id: mongo.ObjectId(),
-                  password: password
-                      .text, // passwor.text ko yaha encrypt karna ha bas takey databse main excrypted value jaey
-                  phoneNo: phoneNo.text,
-                  username: username.text,
-                  email: email.text,
+                  password: password.text
+                      .trim(), // passwor.text ko yaha encrypt karna ha bas takey databse main excrypted value jaey
+                  phoneNo: phoneNo.text.trim(),
+                  username: username.text.trim(),
+                  email: email.text.trim(),
                 );
 
                 uc.addUser(newUser, widget.userType);
 
                 bool value = true;
                 if (value == true) {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                   customSnackbar(context, value, 'Added ');
                 } else {
                   customSnackbar(context, value, 'Added');

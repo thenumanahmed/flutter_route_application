@@ -26,6 +26,8 @@ class _EditUserState extends State<EditUser> {
   late final TextEditingController email;
   late final TextEditingController phoneNo;
   late final TextEditingController password;
+  late List<String> usernames;
+  late List<String> emails;
   String defaultUsername = "";
   String defaultEmail = "0";
   String defaultPhoneNo = "0";
@@ -55,6 +57,22 @@ class _EditUserState extends State<EditUser> {
     email.text = defaultEmail;
     phoneNo.text = defaultPhoneNo;
     password.text = defaultPassword;
+
+    final UsersController uc = Get.find();
+
+    if (uc.usersState.value == UserType.admin) {
+      usernames = uc.existingAdminUsernames;
+      emails = uc.existingAdminEmails;
+    } else if (uc.usersState.value == UserType.driver) {
+      usernames = uc.existingDriverUsernames;
+      emails = uc.existingDriverEmails;
+    } else {
+      usernames = uc.existingMemberUsernames;
+      emails = uc.existingMemberEmails;
+    }
+
+    emails.remove(defaultEmail);
+    usernames.remove(defaultUsername);
   }
 
   @override
@@ -76,21 +94,23 @@ class _EditUserState extends State<EditUser> {
             defaultEmail: defaultEmail,
             defaultPhoneNo: defaultPhoneNo,
             defaultPassword: defaultPassword,
+            existingUsernames: usernames,
+            existingEmails: emails,
           ),
           kHeightSpace,
           CustomAlertButton(
             title: 'Save',
             onTap: () async {
               if (key.currentState!.validate()) {
-                user.username = username.text;
-                user.password = password.text;
-                user.phoneNo = phoneNo.text;
-                user.email = email.text;
+                user.username = username.text.trim();
+                user.password = password.text.trim();
+                user.phoneNo = phoneNo.text.trim();
+                user.email = email.text.trim();
 
                 if (widget.userType == UserType.admin) {
                   await uc.updateUser(user, UserType.admin).then((value) {
                     if (value == true) {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                       customSnackbar(context, value, 'Update user');
                     } else {
                       customSnackbar(context, value, 'Update user');
@@ -99,7 +119,7 @@ class _EditUserState extends State<EditUser> {
                 } else if (widget.userType == UserType.driver) {
                   await uc.updateUser(user, UserType.driver).then((value) {
                     if (value == true) {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                       customSnackbar(context, value, 'Update Driver');
                     } else {
                       customSnackbar(context, value, 'Update Driver');
@@ -108,7 +128,7 @@ class _EditUserState extends State<EditUser> {
                 } else if (widget.userType == UserType.member) {
                   await uc.updateUser(user, UserType.member).then((value) {
                     if (value == true) {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                       customSnackbar(context, value, 'Update Member');
                     } else {
                       customSnackbar(context, value, 'Update Member');
