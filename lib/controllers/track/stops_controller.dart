@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dashboard_route_app/controllers/track/edit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
@@ -31,9 +32,12 @@ class StopsController extends GetxController {
   void _loadStops() {
     api.stream.listen((data) {
       fetching.value = FetchingState.getting;
+      TracksController.loading.value = true;
+      EditController.selectedIndexes.value = [];
+      EditController.editBodyState.value = EditBodyState.map;
       stops.clear();
       stops.addAll(data);
-      fetching.value = FetchingState.done;
+      TracksController.loading.value = false;
       doUpdate();
       Get.find<TracksController>().signalStopsUpdate();
       // add the data to the _socketStream for other listeners

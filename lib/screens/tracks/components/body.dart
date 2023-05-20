@@ -13,7 +13,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<TracksController>();
     return Obx(() {
-      return controller.loading.value == true
+      return TracksController.loading.value == true
           ? const CircularProgressIndicator()
           : showTrackState(controller);
     });

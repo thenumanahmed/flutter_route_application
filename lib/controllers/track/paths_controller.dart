@@ -32,8 +32,10 @@ class PathsController extends GetxController {
     api.stream.listen((data) {
       print('path $data');
       fetching.value = FetchingState.getting;
+      TracksController.loading.value = true;
       paths.clear();
       paths.addAll(data);
+      TracksController.loading.value = false;
       fetching.value = FetchingState.done;
       Get.find<TracksController>().signalStopsUpdate();
       // add the data to the _socketStream for other listeners

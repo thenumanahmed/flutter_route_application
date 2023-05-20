@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dashboard_route_app/controllers/track/edit_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class TracksController extends GetxController {
   final pathUpdate = false.obs;
   final id = mongo.ObjectId().obs;
   List<String> get names => tracks.map((track) => track.name).toList();
-  final loading = true.obs;
+  static final loading = true.obs;
 
   final tracks = <Track>[].obs;
 
@@ -37,11 +38,13 @@ class TracksController extends GetxController {
   void _loadTracks() {
     api.stream.listen((data) {
       print('Stream Updated');
-
+      print('Tracks');
       loading.value = true;
       tracks.clear();
       tracks.addAll(data);
       loading.value = false;
+      EditController.selectedIndexes.value = [];
+      EditController.editBodyState.value = EditBodyState.map;
       // add the data to the _socketStream for other listeners
       _socketStream.add(data);
     });

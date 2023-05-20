@@ -8,8 +8,8 @@ enum EditBodyState { map, single, multiple }
 class EditController extends GetxController {
   final selectionState = SelectionState.inActive.obs;
   final RxInt tIndex = RxInt(-1);
-  final selectedIndexes = <int>[].obs;
-  final editBodyState = EditBodyState.map.obs;
+  static final selectedIndexes = <int>[].obs;
+  static final editBodyState = EditBodyState.map.obs;
   final toUpdate = false.obs;
 
   @override

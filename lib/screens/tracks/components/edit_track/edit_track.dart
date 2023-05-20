@@ -39,6 +39,7 @@ class EditTrack extends StatelessWidget {
         // ec.setSelectedIndexed([]);
         ec.toUpdate.value;
         tc.stopsUpdate.value;
+        // tc.loading.value;
         pc.paths.value;
         sc.stops.value;
         final stops = sc.getStopByTrackID(tc.tracks[ec.tIndex.value].id).obs;
@@ -88,21 +89,22 @@ class EditTrack extends StatelessWidget {
                 },
               ),
               body: Obx(() {
-                ec.selectedIndexes.value;
-                if (ec.editBodyState.value == EditBodyState.map) {
+                EditController.selectedIndexes.value;
+                if (EditController.editBodyState.value == EditBodyState.map) {
                   return ViewTrackMap(
                     stops: stops,
                     path: path.path,
                   );
-                } else if (ec.editBodyState.value == EditBodyState.single) {
+                } else if (EditController.editBodyState.value ==
+                    EditBodyState.single) {
                   return EditStop(
                     key: UniqueKey(),
-                    stop: stops[ec.selectedIndexes[0]],
+                    stop: stops[EditController.selectedIndexes[0]],
                     tIndex: trackIndex,
                   );
                 } else {
                   return EditStop(
-                    stop: stops[ec.selectedIndexes[0]],
+                    stop: stops[EditController.selectedIndexes[0]],
                     tIndex: trackIndex,
                     key: UniqueKey(),
                   );
