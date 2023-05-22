@@ -7,7 +7,7 @@ import './api.dart';
 
 class DriversSocketApi {
   DriversSocketApi()
-      : _api = WebSocketChannel.connect(Uri.parse(kDriversWsUrl));
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kDriversWsUrl));
 
   final WebSocketChannel _api;
 

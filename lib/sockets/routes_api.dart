@@ -6,7 +6,8 @@ import '../../../models/route.dart' as r;
 import 'api.dart';
 
 class RoutesSocketApi {
-  RoutesSocketApi() : _api = WebSocketChannel.connect(Uri.parse(kRoutesWsUrl));
+  RoutesSocketApi()
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kRoutesWsUrl));
 
   final WebSocketChannel _api;
 

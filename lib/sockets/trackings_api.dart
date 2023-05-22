@@ -7,7 +7,7 @@ import 'api.dart';
 
 class TrackingsSocketApi {
   TrackingsSocketApi()
-      : _api = WebSocketChannel.connect(Uri.parse(kTrackingsWsUrl));
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kTrackingsWsUrl));
 
   final WebSocketChannel _api;
 

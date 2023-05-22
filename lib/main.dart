@@ -6,12 +6,13 @@ import './bindings/initial_bindings.dart';
 import './routes/routes.dart';
 import './configs/themes/app_dark_theme.dart';
 import './configs/themes/app_light_theme.dart';
-// import './dbHelper/mongo_db.dart';
+
+import 'sockets/api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Get x Controller initialization
-
+  await SocketApi.updateUrl();
   InitialBindings().dependencies();
   await dotenv.load(fileName: "assets/config/.env");
 

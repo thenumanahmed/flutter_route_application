@@ -24,6 +24,8 @@ dependencies:
   marquee: ^2.2.3
   encrypt: ^5.0.1
   web_socket_channel: ^2.1.0
+  http: ^0.13.6
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

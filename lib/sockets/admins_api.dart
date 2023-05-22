@@ -6,7 +6,8 @@ import '../models/users.dart';
 import './api.dart';
 
 class AdminsSocketApi {
-  AdminsSocketApi() : _api = WebSocketChannel.connect(Uri.parse(kAdminsWsUrl));
+  AdminsSocketApi()
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kAdminsWsUrl));
 
   final WebSocketChannel _api;
 

@@ -6,7 +6,8 @@ import '../../../models/bus.dart';
 import 'api.dart';
 
 class BusesSocketApi {
-  BusesSocketApi() : _api = WebSocketChannel.connect(Uri.parse(kBusesWsUrl));
+  BusesSocketApi()
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kBusesWsUrl));
 
   final WebSocketChannel _api;
 

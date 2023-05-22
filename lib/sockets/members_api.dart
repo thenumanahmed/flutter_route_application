@@ -7,7 +7,7 @@ import './api.dart';
 
 class MembersSocketApi {
   MembersSocketApi()
-      : _api = WebSocketChannel.connect(Uri.parse(kMembersWsUrl));
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kMembersWsUrl));
 
   final WebSocketChannel _api;
 

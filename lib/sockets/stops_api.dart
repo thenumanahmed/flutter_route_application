@@ -6,7 +6,8 @@ import '../models/track.dart';
 import 'api.dart';
 
 class StopsSocketApi {
-  StopsSocketApi() : _api = WebSocketChannel.connect(Uri.parse(kStopsWsUrl));
+  StopsSocketApi()
+      : _api = WebSocketChannel.connect(Uri.parse(SocketApi.kStopsWsUrl));
 
   final WebSocketChannel _api;
 
